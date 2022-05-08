@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\DCB.Extensions\DCB.Extensions.csproj" />
+    </ItemGroup>
+
 </Project>
