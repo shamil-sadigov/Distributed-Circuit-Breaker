@@ -2,6 +2,11 @@
 
 namespace DCB.Core;
 
+public interface ICircuitBreakerManager
+{
+    // TODO: Add methods    
+}
+
 
 public class DistributedCircuitBreaker:AsyncPolicy
 {

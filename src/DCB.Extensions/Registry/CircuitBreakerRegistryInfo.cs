@@ -11,6 +11,8 @@ public class CircuitBreakerRegistryInfo
         int exceptionsAllowedBeforeBreaking,
         TimeSpan durationOfBreak)
     {
+        // TODO: Add validation
+        
         Name = name;
         ExceptionsAllowedBeforeBreaking = exceptionsAllowedBeforeBreaking;
         DurationOfBreak = durationOfBreak;
