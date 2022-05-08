@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Core", "DCB.Core\DCB.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Extensions", "DCB.Extensions\DCB.Extensions.csproj", "{3AEEA9FF-F16A-4867-ABFC-97D7621A3323}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Extensions.SqlServer", "DCB.Extensions.SqlServer\DCB.Extensions.SqlServer.csproj", "{1200CAF4-36C4-44F1-B94B-7A4FD005ED87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{3AEEA9FF-F16A-4867-ABFC-97D7621A3323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AEEA9FF-F16A-4867-ABFC-97D7621A3323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AEEA9FF-F16A-4867-ABFC-97D7621A3323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1200CAF4-36C4-44F1-B94B-7A4FD005ED87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1200CAF4-36C4-44F1-B94B-7A4FD005ED87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1200CAF4-36C4-44F1-B94B-7A4FD005ED87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1200CAF4-36C4-44F1-B94B-7A4FD005ED87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
