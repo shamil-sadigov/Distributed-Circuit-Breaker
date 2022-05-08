@@ -1,21 +1,21 @@
-namespace DCB.Extensions;
+namespace DCB.Extensions.Registry;
 
 /// <summary>
 /// TODO: Write unit tests
 /// </summary>
 public class CircuitBreakerRegistry
 {
-    private readonly Dictionary<string, CircuitBreakerRegistryInfo> _circuitBreakers = new();
+    private readonly Dictionary<string, CircuitBreakerRegistryInfo> _registryInfos = new();
     
     public void Add(CircuitBreakerRegistryInfo registryInfo)
     {
         if (registryInfo is null)
             throw new ArgumentNullException(nameof(registryInfo));
 
-        if (_circuitBreakers.ContainsKey(registryInfo.Name))
+        if (_registryInfos.ContainsKey(registryInfo.Name))
             throw new CircuitBreakerRegistryException(
                 $"CircuitBreaker with '{registryInfo.Name}' has been already registered");
 
-        _circuitBreakers.Add(registryInfo.Name, registryInfo);
+        _registryInfos.Add(registryInfo.Name, registryInfo);
     }
 }

@@ -1,4 +1,4 @@
-namespace DCB.Extensions;
+namespace DCB.Extensions.Registry;
 
 public class CircuitBreakerRegistryInfo
 {
