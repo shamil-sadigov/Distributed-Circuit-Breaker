@@ -18,6 +18,8 @@ public sealed class CircuitBreakerRegistry
         _registry.Add(options.Name, options);
     }
 
+    public IReadOnlyCollection<CircuitBreakerOptionsBase> GetAll() => _registry.Values;
+
     private void ValidateOptions(CircuitBreakerOptionsBase options)
     {
         if (options is null)
