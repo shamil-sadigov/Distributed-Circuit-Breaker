@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace DCB.Extensions;
+namespace DCB.Helpers;
 
 public static class ThrowingExtensions
 {
