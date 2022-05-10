@@ -4,16 +4,8 @@ using DCB.Helpers;
 
 namespace DCB.Core.CircuitBreakerOptions;
 
-public partial class CircuitBreakerOptions<TResult>
+public abstract partial class CircuitBreakerOptions<TResult>:CircuitBreakerOptionsBase
 {
-    public string Name { get; }
-    
     internal ExceptionHandlers? ExceptionHandlers { get; set; }
     internal ResultHandlers<TResult>? ResultHandlers { get; set; }
-    
-    protected CircuitBreakerOptions(string name)
-    {
-        name.ThrowIfNull();
-        Name = name;
-    }
 }
