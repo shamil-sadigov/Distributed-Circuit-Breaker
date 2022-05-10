@@ -1,20 +1,21 @@
-﻿using Polly;
+﻿namespace DCB.Core;
 
-namespace DCB.Core;
-
-public interface ICircuitBreakerManager
+// Make ir partial
+public class DistributedCircuitBreaker<TResult>
 {
-    // TODO: Add methods    
-}
+    private readonly ICircuitBreakerStorage _circuitBreakerStorage;
+    public CircuitBreakerOptions.CircuitBreakerOptions<TResult> Options;
 
+    protected DistributedCircuitBreaker(
+        ICircuitBreakerStorage circuitBreakerStorage, CircuitBreakerOptions.CircuitBreakerOptions<TResult> options)
+    {
+        _circuitBreakerStorage = circuitBreakerStorage;
+        Options = options;
+    }
 
-public class DistributedCircuitBreaker:AsyncPolicy
-{
-    protected override Task<TResult> ImplementationAsync<TResult>(
-        Func<Context, CancellationToken, Task<TResult>> action,
-        Context context,
-        CancellationToken cancellationToken,
-        bool continueOnCapturedContext)
+    protected Task<TResult> ExecuteAsync(
+        Func<CancellationToken, Task<TResult>> action,
+        CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
