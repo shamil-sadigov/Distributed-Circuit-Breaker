@@ -21,13 +21,8 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton(context);
         
-        foreach (var option in context.CircuitBreakerOptions)
-        {
-            var typedOptions = typeof(CircuitBreakerOptions<>)
-                .MakeGenericType(option.GetType());
-            
-            services.AddTransient(typedOptions, option.GetType());
-        }
+        foreach (var option in context.CircuitBreakerOptions) 
+            services.AddTransient(option.GetType());
 
         services.AddScoped(typeof(ICircuitBreakerStorage), context.StorageType);
         
