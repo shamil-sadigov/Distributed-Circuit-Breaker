@@ -14,10 +14,16 @@ public static class ThrowingExtensions
         }
     }
     
-
-
+    public static void ThrowIfNull<T>(
+        this T obj,
+        [CallerArgumentExpression("obj")] string argName = "")
+    {
+        if (obj is null)
+        {
+            throw new ArgumentNullException(argName);
+        }
+    }
     
-
     public static void ThrowIfLessThan(
         this int value,
         int value2,
