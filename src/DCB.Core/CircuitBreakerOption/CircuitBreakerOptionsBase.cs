@@ -1,4 +1,4 @@
-namespace DCB.Core.CircuitBreakerOptions;
+namespace DCB.Core.CircuitBreakerOption;
 
 public abstract class CircuitBreakerOptionsBase
 {

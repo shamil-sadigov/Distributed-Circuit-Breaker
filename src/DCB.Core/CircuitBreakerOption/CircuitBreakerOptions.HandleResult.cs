@@ -1,8 +1,7 @@
-﻿using DCB.Core.Handlers.ExceptionHandlers;
-using DCB.Core.Handlers.ResultHandlers;
+﻿using DCB.Core.Handlers.ResultHandlers;
 using DCB.Helpers;
 
-namespace DCB.Core.CircuitBreakerOptions;
+namespace DCB.Core.CircuitBreakerOption;
 
 public partial class CircuitBreakerOptions
 {
