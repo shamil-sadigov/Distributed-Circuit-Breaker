@@ -1,5 +1,5 @@
 using DCB.Core;
-using DCB.Core.CircuitBreakerOptions;
+using DCB.Core.CircuitBreakerOption;
 using DCB.Helpers;
 
 namespace DCB.Extensions;

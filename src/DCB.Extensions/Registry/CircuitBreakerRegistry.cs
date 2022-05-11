@@ -1,4 +1,4 @@
-using DCB.Core.CircuitBreakerOptions;
+using DCB.Core.CircuitBreakerOption;
 using MoreLinq;
 
 namespace DCB.Extensions.Registry;

@@ -1,5 +1,4 @@
 ﻿using DCB.Core;
-using DCB.Core.CircuitBreakerOptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DCB.Extensions;
