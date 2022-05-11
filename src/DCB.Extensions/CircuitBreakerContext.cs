@@ -12,8 +12,8 @@ public class CircuitBreakerContext
     {
         storageType.ThrowIfNull();
         
-        if (!storageType.IsAssignableFrom(typeof(ICircuitBreakerStorage)))
-            throw new ArgumentException($"Should be of type '{nameof(ICircuitBreakerStorage)}'", nameof(storageType));
+        if (!storageType.IsAssignableFrom(typeof(ICircuitBreakerStore)))
+            throw new ArgumentException($"Should be of type '{nameof(ICircuitBreakerStore)}'", nameof(storageType));
 
         if (options.Count == 0)
             throw new ArgumentException("Should contain at least one option", nameof(options));
@@ -34,7 +34,7 @@ public class CircuitBreakerContext
     
     
     /// <summary>
-    /// Implementation type of <see cref="ICircuitBreakerStorage"/>
+    /// Implementation type of <see cref="ICircuitBreakerStore"/>
     /// </summary>
     public Type StorageType { get; }
 }

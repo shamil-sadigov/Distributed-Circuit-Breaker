@@ -8,7 +8,7 @@ public static class DistributedCircuitBreakerOptionsExtensions
     {
         // configure DBContext here
         
-        builder.UseStorage<SqlServerStorage>();
+        builder.UseStorage<SqlServerStore>();
         
         return builder;
     }

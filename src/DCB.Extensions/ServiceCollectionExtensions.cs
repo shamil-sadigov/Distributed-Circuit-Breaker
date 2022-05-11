@@ -24,9 +24,8 @@ public static class ServiceCollectionExtensions
         foreach (var option in context.CircuitBreakerOptions) 
             services.AddTransient(option.GetType());
 
-        services.AddScoped(typeof(ICircuitBreakerStorage), context.StorageType);
+        services.AddScoped(typeof(ICircuitBreakerStore), context.StorageType);
         
         return services;
     }
 }
-

@@ -17,7 +17,7 @@ public class CircuitBreakerContextBuilder
     }
 
     public CircuitBreakerContextBuilder UseStorage<TStorage>()
-        where TStorage: ICircuitBreakerStorage
+        where TStorage: ICircuitBreakerStore
     {
         _circuitBreakerStorageType = typeof(TStorage);
         return this;

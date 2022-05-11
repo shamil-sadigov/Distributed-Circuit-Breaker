@@ -2,11 +2,11 @@
 
 namespace DCB.Extensions.SqlServer;
 
-public class SqlServerStorage:ICircuitBreakerStorage
+public class SqlServerStore:ICircuitBreakerStore
 {
     private readonly CircuitBreakerContext _circuitBreakerContext;
 
-    public SqlServerStorage(CircuitBreakerContext circuitBreakerContext)
+    public SqlServerStore(CircuitBreakerContext circuitBreakerContext)
     {
         _circuitBreakerContext = circuitBreakerContext;
     }
