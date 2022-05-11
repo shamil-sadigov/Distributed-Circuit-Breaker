@@ -4,9 +4,9 @@ using DCB.Helpers;
 
 namespace DCB.Core.CircuitBreakerOptions;
 
-public partial class CircuitBreakerOptions<TResult>
+public partial class CircuitBreakerOptions
 {
-    public CircuitBreakerOptions<TResult> HandleResult(Func<TResult, bool> resultHandler) 
+    public CircuitBreakerOptions HandleResult<TResult>(Func<TResult, bool> resultHandler) 
     {
         resultHandler.ThrowIfNull();
         var handler = new DelegateBasedResultHandler<TResult>(resultHandler);
@@ -14,10 +14,10 @@ public partial class CircuitBreakerOptions<TResult>
         return this;
     }
 
-    public CircuitBreakerOptions<TResult> HandleResult(IResultHandler<TResult> resultHandler)
+    public CircuitBreakerOptions HandleResult<TResult>(IResultHandler<TResult> resultHandler)
     {
         resultHandler.ThrowIfNull();
-        ResultHandlers ??= new ResultHandlers<TResult>();
+        ResultHandlers ??= new ResultHandlers();
         ResultHandlers.Add(resultHandler);
         return this;
     }

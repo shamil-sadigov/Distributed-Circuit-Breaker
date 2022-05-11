@@ -3,9 +3,9 @@ using DCB.Helpers;
 
 namespace DCB.Core.CircuitBreakerOptions;
 
-public partial class CircuitBreakerOptions<TResult>
+public partial class CircuitBreakerOptions
 {
-    public CircuitBreakerOptions<TResult> HandleException<TException>() 
+    public CircuitBreakerOptions HandleException<TException>() 
         where TException : Exception
     {
         var handler = new DelegateBasedExceptionHandler(ex => ex is TException);
@@ -13,7 +13,7 @@ public partial class CircuitBreakerOptions<TResult>
         return this;
     }
     
-    public CircuitBreakerOptions<TResult> HandleException<TException>(Func<TException, bool> exceptionHandler) 
+    public CircuitBreakerOptions HandleException<TException>(Func<TException, bool> exceptionHandler) 
         where TException : Exception
     {
         exceptionHandler.ThrowIfNull();
@@ -22,7 +22,7 @@ public partial class CircuitBreakerOptions<TResult>
         return this;
     }
 
-    public CircuitBreakerOptions<TResult> HandleException(IExceptionHandler exceptionHandler)
+    public CircuitBreakerOptions HandleException(IExceptionHandler exceptionHandler)
     {
         exceptionHandler.ThrowIfNull();
         ExceptionHandlers ??= new ExceptionHandlers();
