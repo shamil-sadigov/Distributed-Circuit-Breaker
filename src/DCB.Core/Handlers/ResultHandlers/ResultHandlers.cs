@@ -6,17 +6,26 @@ namespace DCB.Core.Handlers.ResultHandlers;
 /// TODO: Write tests
 /// </summary>
 /// <typeparam name="TResult"></typeparam>
-internal class ResultHandlers
+public class ResultHandlers
 {
     protected readonly List<object> _resultHandlers = new();
     
-    internal void Add<TResult>(IResultHandler<TResult> resultHandler)
+    public ResultHandlers Handle<TResult>(Func<TResult, bool> resultHandler)
+    {
+        resultHandler.ThrowIfNull();
+        var handler = new DelegateBasedResultHandler<TResult>(resultHandler);
+        _resultHandlers.Add(handler);
+        return this;
+    }
+    
+    public ResultHandlers Handle<TResult>(IResultHandler<TResult> resultHandler)
     {
         resultHandler.ThrowIfNull();
         _resultHandlers.Add(resultHandler);
+        return this;
     }
     
-    internal bool CanBeHandled<TResult>(TResult result)
+    public bool CanHandle<TResult>(TResult result)
     {
         return _resultHandlers
             .OfType<IResultHandler<TResult>>()

@@ -17,15 +17,14 @@ public partial class CircuitBreakerOptions
         where TException : Exception
     {
         exceptionHandler.ThrowIfNull();
-        var handler = new DelegateBasedExceptionHandler(ex => ex is TException typedEx && exceptionHandler(typedEx));
-        HandleException(handler);
+        HandleException(exceptionHandler);
         return this;
     }
 
     public CircuitBreakerOptions HandleException(IExceptionHandler exceptionHandler)
     {
         exceptionHandler.ThrowIfNull();
-        ExceptionHandlers.Add(exceptionHandler);
+        ExceptionHandlers.Handle(exceptionHandler);
         return this;
     }
 }
