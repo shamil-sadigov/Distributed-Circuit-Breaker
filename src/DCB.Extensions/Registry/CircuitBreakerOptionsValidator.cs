@@ -14,7 +14,7 @@ public class CircuitBreakerOptionsValidator
         if (options.DurationOfBreak <= TimeSpan.Zero)
             yield return $"{options.DurationOfBreak} should be greater than zero";
         
-        if (options.ExceptionsAllowedBeforeBreaking < 1)
-            yield return $"{options.ExceptionsAllowedBeforeBreaking} should be greater than 1";
+        if (options.FailureAllowedBeforeBreaking < 1)
+            yield return $"{options.FailureAllowedBeforeBreaking} should be greater than 1";
     }
 }
