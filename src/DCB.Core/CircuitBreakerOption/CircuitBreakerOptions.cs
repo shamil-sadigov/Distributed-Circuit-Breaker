@@ -5,6 +5,6 @@ namespace DCB.Core.CircuitBreakerOption;
 
 public abstract partial class CircuitBreakerOptions:CircuitBreakerOptionsBase
 {
-    internal ExceptionHandlers? ExceptionHandlers { get; set; }
-    internal ResultHandlers? ResultHandlers { get; set; }
+    internal ExceptionHandlers ExceptionHandlers { get;  } = new();
+    internal ResultHandlers ResultHandlers { get; } = new();
 }

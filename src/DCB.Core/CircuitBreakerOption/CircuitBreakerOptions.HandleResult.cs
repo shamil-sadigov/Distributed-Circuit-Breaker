@@ -16,7 +16,6 @@ public partial class CircuitBreakerOptions
     public CircuitBreakerOptions HandleResult<TResult>(IResultHandler<TResult> resultHandler)
     {
         resultHandler.ThrowIfNull();
-        ResultHandlers ??= new ResultHandlers();
         ResultHandlers.Add(resultHandler);
         return this;
     }

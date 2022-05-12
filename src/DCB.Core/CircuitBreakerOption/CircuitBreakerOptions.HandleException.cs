@@ -25,7 +25,6 @@ public partial class CircuitBreakerOptions
     public CircuitBreakerOptions HandleException(IExceptionHandler exceptionHandler)
     {
         exceptionHandler.ThrowIfNull();
-        ExceptionHandlers ??= new ExceptionHandlers();
         ExceptionHandlers.Add(exceptionHandler);
         return this;
     }
