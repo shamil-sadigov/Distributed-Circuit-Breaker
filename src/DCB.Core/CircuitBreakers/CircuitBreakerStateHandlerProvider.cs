@@ -6,24 +6,26 @@ namespace DCB.Core.CircuitBreakers;
 
 
 // Instead of creating it, it's better to inject it
-internal sealed class CircuitBreakerStateHandlerProvider
+public sealed class CircuitBreakerStateHandlerProvider
 {
-    private Dictionary<CircuitBreakerStateEnum, Func<ICircuitBreakerStateHandler>> stateMapper = new();
+    private readonly IEnumerable<ICircuitBreakerStateHandler> _stateHandlers;
 
-    internal CircuitBreakerStateHandlerProvider()
+    public CircuitBreakerStateHandlerProvider(IEnumerable<ICircuitBreakerStateHandler> stateHandlers)
     {
-        stateMapper[CircuitBreakerStateEnum.Open] = () => new OpenCircuitBreakerStateHandler();
-        stateMapper[CircuitBreakerStateEnum.HalfOpen] = () => new HalfOpenCircuitBreakerStateHandler();
-        stateMapper[CircuitBreakerStateEnum.Closed] = () => new ClosedCircuitBreakerStateHandler();
+        _stateHandlers = stateHandlers;
     }
     
     // TODO: Write test to ensure that StateMapper maps all necessary enums
 
-    internal ICircuitBreakerStateHandler Map(CircuitBreakerStateEnum stateNum)
+    internal ICircuitBreakerStateHandler GetHandler(CircuitBreakerContext context)
     {
-        if (stateMapper.TryGetValue(stateNum, out var stateFactory))
-            return stateFactory();
+        // TODO: What to do if there is more than one handler ?
+        
+        var stateHandler = _stateHandlers.SingleOrDefault(x => x.CanHandle(context));
 
-        throw new InvalidOperationException($"No state is provided for {stateNum}");
+        if (stateHandler is null)
+            throw new InvalidOperationException("No handler is found that can handle context");
+        
+        return stateHandler;
     }
 }

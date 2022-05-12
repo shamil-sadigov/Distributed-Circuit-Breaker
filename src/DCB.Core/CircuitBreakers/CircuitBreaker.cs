@@ -10,28 +10,32 @@ public enum CircuitBreakerStateEnum
 
 public class CircuitBreaker<TOptions> where TOptions: CircuitBreakerOptions
 {
-    internal readonly ICircuitBreakerStore Store;
+    private readonly ICircuitBreakerContextGetter _contextGetter;
+    private readonly CircuitBreakerStateHandlerProvider _handlerProvider;
     public readonly TOptions Options;
-    private readonly CircuitBreakerStateMapper _stateMapper = new();
 
     // TODO: Add context property
     
     protected CircuitBreaker(
-        ICircuitBreakerStore store,
+        ICircuitBreakerContextGetter contextGetter,
+        CircuitBreakerStateHandlerProvider handlerProvider,
         TOptions options)
     {
-        Store = store;
+        _contextGetter = contextGetter;
+        _handlerProvider = handlerProvider;
         Options = options;
     }
 
-    public Task<TResult> ExecuteAsync<TResult>(
+    public async Task<TResult> ExecuteAsync<TResult>(
         Func<CancellationToken, Task<TResult>> action,
         CancellationToken cancellationToken)
     {
-        var stateEnum = Store.GetState(circuitBreakerName: Options.Name);
+        CircuitBreakerContext stateEnum = await _contextGetter.GetAsync(circuitBreakerName: Options.Name);
 
-        ICircuitBreakerState state = _stateMapper.Map(stateEnum);
+        ICircuitBreakerStateHandler stateHandler = _handlerProvider.GetHandler(stateEnum);
 
-        return state.ExecuteAsync<TResult>(Options, Store);
+        // return stateHandler.HandleAsync<TResult>(Options, Store, TODO, TODO);
+
+        throw new NotImplementedException();
     }
 }

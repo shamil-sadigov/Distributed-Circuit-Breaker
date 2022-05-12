@@ -2,11 +2,12 @@
 
 namespace DCB.Core.CircuitBreakers.States;
 
-internal interface ICircuitBreakerStateHandler
+public interface ICircuitBreakerStateHandler
 {
     Task<TResult> HandleAsync<TResult>(
         CircuitBreakerOptions options,
-        ICircuitBreakerStore store, 
         Func<Task<TResult>> action, 
-        CircuitBreakerData data);
+        CircuitBreakerContext context);
+
+    public bool CanHandle(CircuitBreakerContext context);
 }
