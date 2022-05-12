@@ -9,7 +9,7 @@ public partial class CircuitBreakerOptions
         where TException : Exception
     {
         var handler = new DelegateBasedExceptionHandler(ex => ex is TException);
-        HandleException(handler);
+        ExceptionHandlers.Handle(handler);
         return this;
     }
     
@@ -17,7 +17,7 @@ public partial class CircuitBreakerOptions
         where TException : Exception
     {
         exceptionHandler.ThrowIfNull();
-        HandleException(exceptionHandler);
+        ExceptionHandlers.Handle(exceptionHandler);
         return this;
     }
 
