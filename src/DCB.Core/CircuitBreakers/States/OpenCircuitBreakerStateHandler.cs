@@ -6,19 +6,16 @@ namespace DCB.Core.CircuitBreakers.States;
 // TODO: Register in IoC
 public interface ISystemClock
 {
-    DateTime UtcNow { get; }
+    DateTime CurrentTime { get; }
 }
-
 
 internal sealed class OpenCircuitBreakerStateHandler:ICircuitBreakerStateHandler
 {
     private readonly ISystemClock _systemClock;
-    private readonly ICircuitBreakerStore _store;
 
-    public OpenCircuitBreakerStateHandler(ISystemClock systemClock, ICircuitBreakerStore store)
+    public OpenCircuitBreakerStateHandler(ISystemClock systemClock)
     {
         _systemClock = systemClock;
-        _store = store;
     }
     
     public Task<TResult> HandleAsync<TResult>(
@@ -26,15 +23,22 @@ internal sealed class OpenCircuitBreakerStateHandler:ICircuitBreakerStateHandler
         Func<Task<TResult>> action, 
         CircuitBreakerContext circuitBreaker)
     {
-        // TODO: Should throw CircuitBreakerIsOpenException();
+
+        EnsureCircuitBreakerIsOpen(circuitBreaker);
         
-        throw new NotImplementedException();
+        // TODO: More descriptive Exception message is needed 
+        throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' is open");
     }
 
-    // TODO: Write unit tests to it
     public bool CanHandle(CircuitBreakerContext context)
     {
         return context.State != CircuitBreakerStateEnum.Closed 
-            && context.TransitionDateToHalfOpenState <= _systemClock.UtcNow;
+            && context.TransitionDateToHalfOpenState <= _systemClock.CurrentTime;
+    }
+    
+    private void EnsureCircuitBreakerIsOpen(CircuitBreakerContext context)
+    {
+        if (!CanHandle(context))
+            throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerStateEnum.Open);
     }
 }

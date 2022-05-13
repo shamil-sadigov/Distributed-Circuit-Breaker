@@ -27,8 +27,9 @@ internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandl
 
             if (!options.ResultHandlers.CanHandle(result)) 
                 return result;
+
+            circuitBreaker.Failed(currentTime: _systemClock.CurrentTime);
             
-            RecordFailure(circuitBreaker);
             await _contextSaver.SaveAsync(circuitBreaker).ConfigureAwait(false);
             return result;
         }
@@ -37,24 +38,9 @@ internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandl
             if (!options.ExceptionHandlers.CanHandle(ex)) 
                 throw;
             
-            RecordFailure(circuitBreaker);
+            circuitBreaker.Failed(currentTime: _systemClock.CurrentTime);
             await _contextSaver.SaveAsync(circuitBreaker).ConfigureAwait(false);
             throw;
-        }
-        
-        void RecordFailure(CircuitBreakerContext breaker)
-        {
-            breaker.FailedCount++;
-
-            if (breaker.FailedCount < breaker.FailureAllowedBeforeBreaking) 
-                return;
-
-            var now = _systemClock.UtcNow;
-
-            breaker.State = CircuitBreakerStateEnum.Open;
-            breaker.TransitionDateToHalfOpenState = now.Add(options.DurationOfBreak);
-            breaker.LastTimeStateChanged = now;
-            
         }
     }
 

@@ -32,6 +32,6 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
     public bool CanHandle(CircuitBreakerContext context)
     {
         return context.State != CircuitBreakerStateEnum.Closed 
-               && context.TransitionDateToHalfOpenState >= _systemClock.UtcNow;
+               && context.TransitionDateToHalfOpenState >= _systemClock.CurrentTime;
     }
 }
