@@ -24,7 +24,7 @@ internal sealed class OpenCircuitBreakerStateHandler:ICircuitBreakerStateHandler
     public Task<TResult> HandleAsync<TResult>(
         CircuitBreakerOptions options,
         Func<Task<TResult>> action, 
-        CircuitBreakerContext context)
+        CircuitBreakerContext circuitBreaker)
     {
         // TODO: Should throw CircuitBreakerIsOpenException();
         

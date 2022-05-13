@@ -17,11 +17,15 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
     }
     
     
+    
     public Task<TResult> HandleAsync<TResult>(
         CircuitBreakerOptions options,
-        Func<Task<TResult>> action, CircuitBreakerContext context)
+        Func<Task<TResult>> action, CircuitBreakerContext circuitBreaker)
     {
         throw new NotImplementedException();
+        
+        // If action is succeed then FaileCount is set to 0
+        // TransitionDateToHalfOpenState = null
     }
 
     // TODO: Write unit tests to it

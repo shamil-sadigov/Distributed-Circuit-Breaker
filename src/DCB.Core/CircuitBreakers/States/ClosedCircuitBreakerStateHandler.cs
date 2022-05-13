@@ -3,7 +3,6 @@
 namespace DCB.Core.CircuitBreakers.States;
 
 // TODO: Add logging
-
 internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandler
 {
     private readonly ICircuitBreakerContextSaver _contextSaver;
@@ -18,9 +17,9 @@ internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandl
     public async Task<TResult> HandleAsync<TResult>(
         CircuitBreakerOptions options,
         Func<Task<TResult>> action, 
-        CircuitBreakerContext context)
+        CircuitBreakerContext circuitBreaker)
     {
-        EnsureCircuitBreakerIsClosed(context);
+        EnsureCircuitBreakerIsClosed(circuitBreaker);
         
         try
         {
@@ -29,8 +28,8 @@ internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandl
             if (!options.ResultHandlers.CanHandle(result)) 
                 return result;
             
-            RecordFailure(context);
-            await _contextSaver.SaveAsync(context).ConfigureAwait(false);
+            RecordFailure(circuitBreaker);
+            await _contextSaver.SaveAsync(circuitBreaker).ConfigureAwait(false);
             return result;
         }
         catch (Exception ex)
@@ -38,8 +37,8 @@ internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandl
             if (!options.ExceptionHandlers.CanHandle(ex)) 
                 throw;
             
-            RecordFailure(context);
-            await _contextSaver.SaveAsync(context).ConfigureAwait(false);
+            RecordFailure(circuitBreaker);
+            await _contextSaver.SaveAsync(circuitBreaker).ConfigureAwait(false);
             throw;
         }
         
