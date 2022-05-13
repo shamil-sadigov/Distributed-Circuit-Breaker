@@ -4,7 +4,7 @@ namespace DCB.Helpers;
 
 public static class ThrowingExtensions
 {
-    public static void ThrowIfNull(
+    public static string ThrowIfNull(
         this string str,
         [CallerArgumentExpression("str")] string argName = "")
     {
@@ -12,11 +12,13 @@ public static class ThrowingExtensions
         {
             throw new ArgumentNullException(argName);
         }
+
+        return str;
     }
     
     public static void ThrowIfNull<T>(
         this T obj,
-        [CallerArgumentExpression("obj")] string argName = "")
+        [CallerArgumentExpression("obj")] string argName = "") where T
     {
         if (obj is null)
         {
@@ -24,41 +26,58 @@ public static class ThrowingExtensions
         }
     }
     
+    public static void ThrowIfDefault(
+        this DateTime value,
+        [CallerArgumentExpression("value")] string argName = "")
+    {
+        if (value == default)
+        {
+            throw new ArgumentException("Should not have default value", argName);
+        }
+    }
+    
+    public static void ThrowIfGreaterOrEqualTo(
+        this int value,
+        int value2,
+        [CallerArgumentExpression("value")] string valueName = "",
+        [CallerArgumentExpression("value2")] string value2Name = "")
+    {
+        if (value >= value2)
+            throw new ArgumentException($"Expected to be less than {nameof(value2Name)}", valueName);
+    }
+    
     public static void ThrowIfLessThan(
         this int value,
         int value2,
-        [CallerArgumentExpression("value")] string argName = "")
+        [CallerArgumentExpression("value")] string valueName = "",
+        [CallerArgumentExpression("value2")] string value2Name = "")
     {
         if (value < value2)
-        {
-            throw new ArgumentOutOfRangeException(argName);
-        }
+            throw new ArgumentException($"Expected to be greater than {nameof(value2Name)}", valueName);
     }
     
-    public static void ThrowIfLessOrEqualThan(
+    public static void ThrowIfLessOrEqualTo(
         this int value,
         int value2,
-        [CallerArgumentExpression("value")] string argName = "")
+        [CallerArgumentExpression("value")] string valueName = "",
+        [CallerArgumentExpression("value2")] string value2Name = "")
     {
         if (value <= value2)
-        {
-            throw new ArgumentOutOfRangeException(argName);
-        }
+            throw new ArgumentException($"Expected to be greater than or equal to {nameof(value2Name)}", valueName);
     }
-    
     
     public static void ThrowIfLessThan(
         this TimeSpan value,
         TimeSpan value2,
-        [CallerArgumentExpression("value")] string argName = "")
+        [CallerArgumentExpression("value")] string valueName = "")
     {
         if (value < value2)
         {
-            throw new ArgumentOutOfRangeException(argName);
+            throw new ArgumentOutOfRangeException(valueName);
         }
     }
     
-    public static void ThrowIfLessOrEqualThan(
+    public static void ThrowIfLessOrEqualTo(
         this TimeSpan value,
         TimeSpan value2,
         [CallerArgumentExpression("value")] string argName = "")
