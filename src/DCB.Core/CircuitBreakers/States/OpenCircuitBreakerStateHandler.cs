@@ -4,7 +4,7 @@ namespace DCB.Core.CircuitBreakers.States;
 
 
 // TODO: Register in IoC
-internal interface ISystemClock
+public interface ISystemClock
 {
     DateTime UtcNow { get; }
 }
