@@ -1,10 +1,11 @@
 using System.Net;
 using DCB.Core.CircuitBreakers;
 using DCB.Core.CircuitBreakers.States;
-using DCB.Core.Tests.HandlerTests;
+using DCB.Core.Tests.ResultHandler.Helpers;
+using DCB.Core.Tests.StateHandlers.Helpers;
 using FluentAssertions;
 
-namespace DCB.Core.Tests;
+namespace DCB.Core.Tests.StateHandlers;
 
 public class ClosedCircuitBreakerStateTests
 {
@@ -104,14 +105,8 @@ public class ClosedCircuitBreakerStateTests
         savedCircuitBreaker!.TransitionDateToHalfOpenState.Should().Be(expectedTransitionDateToHalfOpenState);
     }
     
-    [Theory]
-    [InlineData(3, 0, 0)]
-    [InlineData(4, 0, 0)]
-    [InlineData(5, 0, 0)]
-    public async Task CircuitBreaker_is_not_changed_if_no_exception_handling_specified(
-        int failureAllowedBeforeBreaking,
-        int currentFailedCount,
-        int expectedFailedCount)
+    [Fact]
+    public async Task CircuitBreaker_is_not_changed_if_no_exception_handling_specified()
     {
         // Arrange
         var saverSpy = new CircuitBreakerSaverSpy();
@@ -121,8 +116,8 @@ public class ClosedCircuitBreakerStateTests
         var circuitBreakerContext = new CircuitBreakerContext()
         {
             State = CircuitBreakerStateEnum.Closed,
-            FailedCount = currentFailedCount,
-            FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking
+            FailedCount = 1,
+            FailureAllowedBeforeBreaking = 3
         };
         
         var closedStateHandler = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
@@ -144,7 +139,7 @@ public class ClosedCircuitBreakerStateTests
     
     
     [Fact]
-    public async Task Cannot_handle_circuit_breaker_which_is_not_closed()
+    public void Cannot_handle_circuit_breaker_which_is_not_closed()
     {
         // Arrange
         var saverSpy = new CircuitBreakerSaverSpy();
