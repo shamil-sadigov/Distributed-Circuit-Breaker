@@ -8,7 +8,7 @@ public partial class CircuitBreakerOptions
     public CircuitBreakerOptions HandleResult<TResult>(Func<TResult, bool> resultHandler) 
     {
         resultHandler.ThrowIfNull();
-        HandleResult(resultHandler);
+        ResultHandlers.Handle(resultHandler);
         return this;
     }
 

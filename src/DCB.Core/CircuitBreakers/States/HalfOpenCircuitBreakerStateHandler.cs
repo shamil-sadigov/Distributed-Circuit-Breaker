@@ -29,9 +29,6 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
     }
 
     // TODO: Write unit tests to it
-    public bool CanHandle(CircuitBreakerContext context)
-    {
-        return context.State != CircuitBreakerStateEnum.Closed 
-               && context.TransitionDateToHalfOpenState >= _systemClock.CurrentTime;
-    }
+    public bool CanHandle(CircuitBreakerContext context) 
+        => context.State == CircuitBreakerStateEnum.HalfOpen;
 }

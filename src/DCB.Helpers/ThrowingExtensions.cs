@@ -18,7 +18,7 @@ public static class ThrowingExtensions
     
     public static void ThrowIfNull<T>(
         this T obj,
-        [CallerArgumentExpression("obj")] string argName = "") where T
+        [CallerArgumentExpression("obj")] string argName = "")
     {
         if (obj is null)
         {
@@ -36,6 +36,16 @@ public static class ThrowingExtensions
         }
     }
     
+    public static void ThrowIfDefault(
+        this TimeSpan value,
+        [CallerArgumentExpression("value")] string argName = "")
+    {
+        if (value == default)
+        {
+            throw new ArgumentException("Should not have default value", argName);
+        }
+    }
+    
     public static void ThrowIfGreaterOrEqualTo(
         this int value,
         int value2,
@@ -43,7 +53,7 @@ public static class ThrowingExtensions
         [CallerArgumentExpression("value2")] string value2Name = "")
     {
         if (value >= value2)
-            throw new ArgumentException($"Expected to be less than {nameof(value2Name)}", valueName);
+            throw new ArgumentException($"Expected to be less than {value2Name}", valueName);
     }
     
     public static void ThrowIfLessThan(
@@ -53,7 +63,7 @@ public static class ThrowingExtensions
         [CallerArgumentExpression("value2")] string value2Name = "")
     {
         if (value < value2)
-            throw new ArgumentException($"Expected to be greater than {nameof(value2Name)}", valueName);
+            throw new ArgumentException($"Expected to be greater than {value2Name}", valueName);
     }
     
     public static void ThrowIfLessOrEqualTo(
@@ -63,7 +73,7 @@ public static class ThrowingExtensions
         [CallerArgumentExpression("value2")] string value2Name = "")
     {
         if (value <= value2)
-            throw new ArgumentException($"Expected to be greater than or equal to {nameof(value2Name)}", valueName);
+            throw new ArgumentException($"Expected to be greater than or equal to {value2Name}", valueName);
     }
     
     public static void ThrowIfLessThan(

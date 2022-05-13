@@ -2,40 +2,22 @@
 
 namespace DCB.Core.CircuitBreakers.States;
 
-
-// TODO: Register in IoC
-public interface ISystemClock
-{
-    DateTime CurrentTime { get; }
-}
-
 internal sealed class OpenCircuitBreakerStateHandler:ICircuitBreakerStateHandler
 {
-    private readonly ISystemClock _systemClock;
-
-    public OpenCircuitBreakerStateHandler(ISystemClock systemClock)
-    {
-        _systemClock = systemClock;
-    }
-    
     public Task<TResult> HandleAsync<TResult>(
         CircuitBreakerOptions options,
         Func<Task<TResult>> action, 
         CircuitBreakerContext circuitBreaker)
     {
-
         EnsureCircuitBreakerIsOpen(circuitBreaker);
         
-        // TODO: More descriptive Exception message is needed 
-        throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' is open");
+        throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' cannot be used" +
+                                                $"while it's in open state");
     }
 
-    public bool CanHandle(CircuitBreakerContext context)
-    {
-        return context.State != CircuitBreakerStateEnum.Closed 
-            && context.TransitionDateToHalfOpenState <= _systemClock.CurrentTime;
-    }
-    
+    public bool CanHandle(CircuitBreakerContext context) 
+        => context.State == CircuitBreakerStateEnum.Open;
+
     private void EnsureCircuitBreakerIsOpen(CircuitBreakerContext context)
     {
         if (!CanHandle(context))
