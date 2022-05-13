@@ -6,7 +6,7 @@ public class SystemClockStub:ISystemClock
 {
     private DateTime? _utcNow;
     
-    public DateTime UtcNow => _utcNow ?? DateTime.UtcNow;
+    public DateTime CurrentTime => _utcNow ?? DateTime.UtcNow;
 
     public void SetUtcDate(DateTime utcNowTime)
     {

@@ -4,12 +4,12 @@ using DCB.Core.CircuitBreakers.States;
 using DCB.Core.Tests.ResultHandler.Helpers;
 using DCB.Core.Tests.StateHandlers.Helpers;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 
 namespace DCB.Core.Tests.StateHandlers;
 
 public class ClosedCircuitBreakerStateTests
 {
-    
     // TODO: come up with better test name
     [Theory]
     [InlineData(4, 0, 1)]
@@ -26,19 +26,21 @@ public class ClosedCircuitBreakerStateTests
         var options = new TestCircuitBreakerOptions();
         
         options.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
-        
-        var circuitBreakerContext = new CircuitBreakerContext()
-        {
-            State = CircuitBreakerStateEnum.Closed,
-            FailedCount = currentFailedCount,
-            FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking
-        };
-        
-        var closedStateHandler = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+
+        var circuitBreakerContext = CircuitBreakerContext.CreateFromData(
+            new CircuitBreakerContextData()
+            {
+                Name = "Default",
+                IsCircuitBreakerClosed = true,
+                FailedCount = currentFailedCount,
+                FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
+                DurationOfBreak = 5.Seconds()
+            }, clock.CurrentTime);
+
+        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
         
         // Act
-        await closedStateHandler
-            .Invoking(x => x.HandleAsync<CustomResult>(
+        await sut.Invoking(x => x.HandleAsync<CustomResult>(
                             options,
                             () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
                             circuitBreakerContext))
@@ -65,43 +67,40 @@ public class ClosedCircuitBreakerStateTests
     {
         // Arrange
         var saverSpy = new CircuitBreakerSaverSpy();
-
-        var now = DateTime.UtcNow;
-
-        var clock = new SystemClockStub();
         
-        clock.SetUtcDate(now);
+        var clock = new SystemClockStub();
+        clock.SetUtcDate(DateTime.UtcNow);
         
         var options = new TestCircuitBreakerOptions();
-        
         options.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
         
-        var circuitBreakerContext = new CircuitBreakerContext()
-        {
-            State = CircuitBreakerStateEnum.Closed,
-            FailedCount = currentFailedCount,
-            FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking
-        };
+        var circuitBreakerContext = CircuitBreakerContext.CreateFromData(
+            new CircuitBreakerContextData()
+            {
+                Name = "Default",
+                IsCircuitBreakerClosed = true,
+                FailedCount = currentFailedCount,
+                FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
+                DurationOfBreak = 5.Seconds()
+            }, clock.CurrentTime);
         
-        var closedStateHandler = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
         
-        // Act
-        await closedStateHandler
-            .Invoking(x => x.HandleAsync<CustomResult>(
+        // Act & Assert
+        await sut.Invoking(x => x.HandleAsync<CustomResult>(
                 options,
                 () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
                 circuitBreakerContext))
             .Should()
             .ThrowAsync<CustomHttpException>();
         
-        // Assert
         var savedCircuitBreaker = saverSpy.SavedCircuitBreaker;
 
-        var expectedTransitionDateToHalfOpenState = now + options.DurationOfBreak;
+        var expectedTransitionDateToHalfOpenState = clock.CurrentTime + options.DurationOfBreak;
 
         savedCircuitBreaker.Should().NotBeNull();
         savedCircuitBreaker!.ShouldBeOpenWithFailedCount(expectedFailedCount);
-        savedCircuitBreaker!.LastTimeStateChanged.Should().Be(now);
+        savedCircuitBreaker!.LastTimeStateChanged.Should().Be(clock.CurrentTime);
         savedCircuitBreaker!.TransitionDateToHalfOpenState.Should().Be(expectedTransitionDateToHalfOpenState);
     }
     
@@ -113,18 +112,20 @@ public class ClosedCircuitBreakerStateTests
         var clock = new SystemClockStub();
         var options = new TestCircuitBreakerOptions();
         
-        var circuitBreakerContext = new CircuitBreakerContext()
-        {
-            State = CircuitBreakerStateEnum.Closed,
-            FailedCount = 1,
-            FailureAllowedBeforeBreaking = 3
-        };
+        var circuitBreakerContext = CircuitBreakerContext.CreateFromData(
+            new CircuitBreakerContextData()
+            {
+                Name = "Default",
+                IsCircuitBreakerClosed = true,
+                FailedCount = 1,
+                FailureAllowedBeforeBreaking = 3,
+                DurationOfBreak = 5.Seconds()
+            }, clock.CurrentTime);
         
-        var closedStateHandler = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
         
         // Act
-        await closedStateHandler
-            .Invoking(x => x.HandleAsync<CustomResult>(
+        await sut.Invoking(x => x.HandleAsync<CustomResult>(
                 options,
                 () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
                 circuitBreakerContext))
@@ -146,17 +147,22 @@ public class ClosedCircuitBreakerStateTests
         var clock = new SystemClockStub();
         var options = new TestCircuitBreakerOptions();
         
-        var circuitBreakerContext = new CircuitBreakerContext()
-        {
-            State = CircuitBreakerStateEnum.Open,
-            FailedCount = 3,
-            FailureAllowedBeforeBreaking = 3
-        };
+        var circuitBreakerContext = CircuitBreakerContext.CreateFromData(
+            new CircuitBreakerContextData()
+            {
+                Name = "Default",
+                IsCircuitBreakerClosed = false,
+                FailedCount = 3,
+                FailureAllowedBeforeBreaking = 3,
+                DurationOfBreak = 5.Minutes(),
+                TransitionDateToHalfOpenState = clock.CurrentTime + 5.Minutes(),
+                LastTimeStateChanged = clock.CurrentTime - 10.Seconds()
+            }, clock.CurrentTime);
         
-        var closedStateHandler = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
         
         // Act
-        closedStateHandler.Invoking(x => x.HandleAsync(
+        sut.Invoking(x => x.HandleAsync(
                 options,
                 () => Task.FromResult(new CustomResult(IsSuccessful: true)),
                 circuitBreakerContext))

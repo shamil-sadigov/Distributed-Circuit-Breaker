@@ -17,7 +17,8 @@ public partial class CircuitBreakerContext
             FailedCount = data.FailedCount,
             FailureAllowedBeforeBreaking = data.FailureAllowedBeforeBreaking,
             LastTimeStateChanged = data.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState
+            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState,
+            DurationOfBreak = data.DurationOfBreak
         };
     }
       
@@ -32,7 +33,8 @@ public partial class CircuitBreakerContext
             FailedCount = data.FailedCount,
             FailureAllowedBeforeBreaking = data.FailureAllowedBeforeBreaking,
             LastTimeStateChanged = data.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState
+            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState,
+            DurationOfBreak = data.DurationOfBreak
         };
     }
 
@@ -49,7 +51,8 @@ public partial class CircuitBreakerContext
             FailedCount = data.FailedCount,
             FailureAllowedBeforeBreaking = data.FailureAllowedBeforeBreaking,
             LastTimeStateChanged = data.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState
+            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState,
+            DurationOfBreak = data.DurationOfBreak
         };
     }
 }
