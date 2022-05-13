@@ -2,7 +2,7 @@
 
 namespace DCB.Core.CircuitBreakers.States;
 
-internal sealed class OpenCircuitBreakerStateHandler:ICircuitBreakerStateHandler
+internal sealed class OpenCircuitBreakerHandler:ICircuitBreakerStateHandler
 {
     public Task<TResult> HandleAsync<TResult>(
         CircuitBreakerOptions options,

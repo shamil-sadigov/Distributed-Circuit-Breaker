@@ -3,12 +3,14 @@
 namespace DCB.Core.CircuitBreakers.States;
 
 // TODO: Add logging
-internal sealed class ClosedCircuitBreakerStateHandler:ICircuitBreakerStateHandler
+
+
+internal sealed class ClosedCircuitBreakerHandler:ICircuitBreakerStateHandler
 {
     private readonly ICircuitBreakerContextSaver _contextSaver;
     private readonly ISystemClock _systemClock;
 
-    public ClosedCircuitBreakerStateHandler(ICircuitBreakerContextSaver contextSaver, ISystemClock systemClock)
+    public ClosedCircuitBreakerHandler(ICircuitBreakerContextSaver contextSaver, ISystemClock systemClock)
     {
         _contextSaver = contextSaver;
         _systemClock = systemClock;

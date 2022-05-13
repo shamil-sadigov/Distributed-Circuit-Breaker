@@ -37,7 +37,7 @@ public class ClosedCircuitBreakerStateTests
                 DurationOfBreak = 5.Seconds()
             }, clock.CurrentTime);
 
-        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerHandler(saverSpy, clock);
         
         // Act
         await sut.Invoking(x => x.HandleAsync<CustomResult>(
@@ -84,7 +84,7 @@ public class ClosedCircuitBreakerStateTests
                 DurationOfBreak = 5.Seconds()
             }, clock.CurrentTime);
         
-        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerHandler(saverSpy, clock);
         
         // Act & Assert
         await sut.Invoking(x => x.HandleAsync<CustomResult>(
@@ -122,7 +122,7 @@ public class ClosedCircuitBreakerStateTests
                 DurationOfBreak = 5.Seconds()
             }, clock.CurrentTime);
         
-        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerHandler(saverSpy, clock);
         
         // Act
         await sut.Invoking(x => x.HandleAsync<CustomResult>(
@@ -159,7 +159,7 @@ public class ClosedCircuitBreakerStateTests
                 LastTimeStateChanged = clock.CurrentTime - 10.Seconds()
             }, clock.CurrentTime);
         
-        var sut = new ClosedCircuitBreakerStateHandler(saverSpy, clock);
+        var sut = new ClosedCircuitBreakerHandler(saverSpy, clock);
         
         // Act
         sut.Invoking(x => x.HandleAsync(

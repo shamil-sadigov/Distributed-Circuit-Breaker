@@ -32,7 +32,7 @@ public class OpenCircuitBreakerStateTests
                 LastTimeStateChanged = clock.CurrentTime - 10.Seconds()
             }, clock.CurrentTime);
         
-        var sut = new OpenCircuitBreakerStateHandler();
+        var sut = new OpenCircuitBreakerHandler();
 
         // Act & Assert
 
@@ -64,7 +64,7 @@ public class OpenCircuitBreakerStateTests
                 TransitionDateToHalfOpenState = clock.CurrentTime - 10.Seconds(),
             }, clock.CurrentTime);
         
-        var sut = new OpenCircuitBreakerStateHandler();
+        var sut = new OpenCircuitBreakerHandler();
 
         // Act & Assert
 
@@ -96,7 +96,7 @@ public class OpenCircuitBreakerStateTests
                 TransitionDateToHalfOpenState = clock.CurrentTime + 5.Seconds(),
             }, clock.CurrentTime);
         
-        var sut = new OpenCircuitBreakerStateHandler();
+        var sut = new OpenCircuitBreakerHandler();
 
         // Act & Assert
 
@@ -134,7 +134,7 @@ public class OpenCircuitBreakerStateTests
                 LastTimeStateChanged = clock.CurrentTime - 10.Seconds()
             }, clock.CurrentTime);
         
-        var sut = new OpenCircuitBreakerStateHandler();
+        var sut = new OpenCircuitBreakerHandler();
 
         // Act & Assert
         await sut.Invoking(x => x.HandleAsync(
