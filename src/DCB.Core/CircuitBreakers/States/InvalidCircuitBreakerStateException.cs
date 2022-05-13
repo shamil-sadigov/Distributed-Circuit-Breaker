@@ -1,6 +1,6 @@
 namespace DCB.Core.CircuitBreakers.States;
 
-public class InvalidCircuitBreakerStateException:Exception
+public class InvalidCircuitBreakerStateException:CircuitBreakerException
 {
     public string CircuitBreakerName { get; }
     public CircuitBreakerStateEnum ExpectedState { get; }
