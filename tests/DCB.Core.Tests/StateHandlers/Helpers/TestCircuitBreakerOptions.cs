@@ -1,7 +1,7 @@
 ﻿using DCB.Core.CircuitBreakerOption;
 using FluentAssertions.Extensions;
 
-namespace DCB.Core.Tests;
+namespace DCB.Core.Tests.StateHandlers.Helpers;
 
 public class TestCircuitBreakerOptions:CircuitBreakerOptions
 {

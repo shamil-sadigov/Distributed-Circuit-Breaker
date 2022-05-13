@@ -1,6 +1,6 @@
 ﻿using DCB.Core.CircuitBreakers.States;
 
-namespace DCB.Core.Tests;
+namespace DCB.Core.Tests.StateHandlers.Helpers;
 
 public class SystemClockStub:ISystemClock
 {

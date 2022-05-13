@@ -1,9 +1,10 @@
 ﻿using System.Data;
 using System.Net;
 using DCB.Core.Handlers.ExceptionHandlers;
+using DCB.Core.Tests.ResultHandler.Helpers;
 using FluentAssertions;
 
-namespace DCB.Core.Tests.HandlerTests;
+namespace DCB.Core.Tests.ResultHandler;
 
 public class ExceptionHandlerTests
 {

@@ -1,7 +1,8 @@
 ﻿using DCB.Core.Handlers.ResultHandlers;
+using DCB.Core.Tests.ResultHandler.Helpers;
 using FluentAssertions;
 
-namespace DCB.Core.Tests.HandlerTests;
+namespace DCB.Core.Tests.ResultHandler;
 
 public class ResultHandlerTests
 {

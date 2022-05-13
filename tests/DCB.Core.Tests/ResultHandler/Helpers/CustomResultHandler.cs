@@ -1,7 +1,6 @@
-using DCB.Core.Handlers.ExceptionHandlers;
 using DCB.Core.Handlers.ResultHandlers;
 
-namespace DCB.Core.Tests.HandlerTests;
+namespace DCB.Core.Tests.ResultHandler.Helpers;
 
 public class CustomResultHandler:IResultHandler<CustomResult>
 {

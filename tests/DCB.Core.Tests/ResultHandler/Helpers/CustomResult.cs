@@ -1,4 +1,4 @@
-namespace DCB.Core.Tests.HandlerTests;
+namespace DCB.Core.Tests.ResultHandler.Helpers;
 
 public record CustomResult(bool IsSuccessful);
 

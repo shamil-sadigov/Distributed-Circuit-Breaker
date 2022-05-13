@@ -2,7 +2,7 @@
 using DCB.Core.CircuitBreakers.States;
 using FluentAssertions;
 
-namespace DCB.Core.Tests;
+namespace DCB.Core.Tests.StateHandlers.Helpers;
 
 public static class CircuitBreakerContextTestExtensions
 {
