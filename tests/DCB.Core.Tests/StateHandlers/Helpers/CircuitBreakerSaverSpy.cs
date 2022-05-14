@@ -4,12 +4,11 @@ namespace DCB.Core.Tests.StateHandlers.Helpers;
 
 internal class CircuitBreakerSaverSpy:ICircuitBreakerContextSaver
 {
-    internal CircuitBreakerContext? SavedCircuitBreaker { get; private set; }
+    internal CircuitBreakerContextSnapshot? SavedCircuitBreaker { get; private set; }
     
-    public Task SaveAsync(CircuitBreakerContext context)
+    public Task SaveAsync(CircuitBreakerContextSnapshot snapshot)
     {
-        SavedCircuitBreaker = context;
-        
+        SavedCircuitBreaker = snapshot;
         return Task.CompletedTask;
     }
 }
