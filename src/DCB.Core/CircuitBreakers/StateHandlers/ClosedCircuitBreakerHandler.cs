@@ -1,6 +1,7 @@
 ﻿using DCB.Core.CircuitBreakerOption;
+using DCB.Core.CircuitBreakers.States;
 
-namespace DCB.Core.CircuitBreakers.States;
+namespace DCB.Core.CircuitBreakers.StateHandlers;
 
 // TODO: Add logging
 
@@ -30,9 +31,8 @@ internal sealed class ClosedCircuitBreakerHandler:ICircuitBreakerStateHandler
             if (!options.ResultHandlers.CanHandle(result)) 
                 return result;
 
-            circuitBreaker.Failed(currentTime: _systemClock.CurrentTime);
-            
-            await _contextSaver.SaveAsync(circuitBreaker).ConfigureAwait(false);
+            circuitBreaker.Failed(_systemClock.CurrentTime);
+            await SaveAsync(circuitBreaker);
             return result;
         }
         catch (Exception ex)
@@ -40,10 +40,16 @@ internal sealed class ClosedCircuitBreakerHandler:ICircuitBreakerStateHandler
             if (!options.ExceptionHandlers.CanHandle(ex)) 
                 throw;
             
-            circuitBreaker.Failed(currentTime: _systemClock.CurrentTime);
-            await _contextSaver.SaveAsync(circuitBreaker).ConfigureAwait(false);
+            circuitBreaker.Failed(_systemClock.CurrentTime);
+            await SaveAsync(circuitBreaker);
             throw;
         }
+    }
+
+    private async Task SaveAsync(CircuitBreakerContext circuitBreaker)
+    {
+        var snapshot = circuitBreaker.GetSnapshot();
+        await _contextSaver.SaveAsync(snapshot).ConfigureAwait(false);
     }
 
     private void EnsureCircuitBreakerIsClosed(CircuitBreakerContext context)

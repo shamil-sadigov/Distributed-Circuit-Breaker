@@ -36,19 +36,40 @@ public partial class CircuitBreakerContext
         TransitionDateToHalfOpenState = currentTime + DurationOfBreak;
         LastTimeStateChanged = currentTime;
     }
-    
-    public static CircuitBreakerContext CreateFromData(CircuitBreakerContextData data, DateTime currentTime)
-    {
-        data.ThrowIfNull();
-        currentTime.ThrowIfNull();
-        data.DurationOfBreak.ThrowIfDefault();
-            
-        if (data.IsCircuitBreakerClosed)
-            return CreateInClosedState(data);
 
-        if (data.TransitionDateToHalfOpenState <= currentTime)
-            return CreateInHalfOpenState(data);
+    public void Close(DateTime currentTime)
+    {
+        if (State != CircuitBreakerStateEnum.HalfOpen)
+            throw new InvalidCircuitBreakerStateException(Name, State, CircuitBreakerStateEnum.HalfOpen);
         
-        return CreateInOpenState(data);
+        State = CircuitBreakerStateEnum.Closed;
+        FailedCount = 0;
+        TransitionDateToHalfOpenState = null;
+        LastTimeStateChanged = currentTime;
     }
+    
+    public static CircuitBreakerContext CreateFromSnapshot(CircuitBreakerContextSnapshot snapshot, DateTime currentTime)
+    {
+        snapshot.ThrowIfNull();
+        currentTime.ThrowIfNull();
+        snapshot.DurationOfBreak.ThrowIfDefault();
+            
+        if (snapshot.IsCircuitBreakerClosed)
+            return CreateInClosedState(snapshot);
+
+        if (snapshot.TransitionDateToHalfOpenState <= currentTime)
+            return CreateInHalfOpenState(snapshot);
+        
+        return CreateInOpenState(snapshot);
+    }
+
+    public CircuitBreakerContextSnapshot GetSnapshot() =>
+        new
+        (
+            Name, 
+            FailureAllowedBeforeBreaking, 
+            FailedCount, 
+            State == CircuitBreakerStateEnum.Closed,
+            TransitionDateToHalfOpenState, LastTimeStateChanged, DurationOfBreak
+        );
 }

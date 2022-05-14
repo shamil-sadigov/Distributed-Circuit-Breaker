@@ -1,6 +1,7 @@
 ﻿using DCB.Core.CircuitBreakerOption;
+using DCB.Core.CircuitBreakers.States;
 
-namespace DCB.Core.CircuitBreakers.States;
+namespace DCB.Core.CircuitBreakers.StateHandlers;
 
 internal sealed class OpenCircuitBreakerHandler:ICircuitBreakerStateHandler
 {

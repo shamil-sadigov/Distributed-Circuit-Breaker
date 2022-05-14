@@ -4,54 +4,54 @@ namespace DCB.Core.CircuitBreakers.States;
 
 public partial class CircuitBreakerContext
 {
-      private static CircuitBreakerContext CreateInOpenState(CircuitBreakerContextData data)
+      private static CircuitBreakerContext CreateInOpenState(CircuitBreakerContextSnapshot snapshot)
     {
-        data.FailedCount.ThrowIfLessThan(data.FailureAllowedBeforeBreaking);
-        data.LastTimeStateChanged.ThrowIfNull();
-        data.TransitionDateToHalfOpenState.ThrowIfNull();
+        snapshot.FailedCount.ThrowIfLessThan(snapshot.FailureAllowedBeforeBreaking);
+        snapshot.LastTimeStateChanged.ThrowIfNull();
+        snapshot.TransitionDateToHalfOpenState.ThrowIfNull();
 
         return new CircuitBreakerContext
         {
-            Name = data.Name,
+            Name = snapshot.Name,
             State = CircuitBreakerStateEnum.Open,
-            FailedCount = data.FailedCount,
-            FailureAllowedBeforeBreaking = data.FailureAllowedBeforeBreaking,
-            LastTimeStateChanged = data.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState,
-            DurationOfBreak = data.DurationOfBreak
+            FailedCount = snapshot.FailedCount,
+            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
+            LastTimeStateChanged = snapshot.LastTimeStateChanged,
+            TransitionDateToHalfOpenState = snapshot.TransitionDateToHalfOpenState,
+            DurationOfBreak = snapshot.DurationOfBreak
         };
     }
       
-    private static CircuitBreakerContext CreateInClosedState(CircuitBreakerContextData data)
+    private static CircuitBreakerContext CreateInClosedState(CircuitBreakerContextSnapshot snapshot)
     {
-        data.FailedCount.ThrowIfGreaterOrEqualTo(data.FailureAllowedBeforeBreaking);
+        snapshot.FailedCount.ThrowIfGreaterOrEqualTo(snapshot.FailureAllowedBeforeBreaking);
         
         return new CircuitBreakerContext
         {
-            Name = data.Name,
+            Name = snapshot.Name,
             State = CircuitBreakerStateEnum.Closed,
-            FailedCount = data.FailedCount,
-            FailureAllowedBeforeBreaking = data.FailureAllowedBeforeBreaking,
-            LastTimeStateChanged = data.LastTimeStateChanged,
-            DurationOfBreak = data.DurationOfBreak
+            FailedCount = snapshot.FailedCount,
+            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
+            LastTimeStateChanged = snapshot.LastTimeStateChanged,
+            DurationOfBreak = snapshot.DurationOfBreak
         };
     }
 
-    private static CircuitBreakerContext CreateInHalfOpenState(CircuitBreakerContextData data)
+    private static CircuitBreakerContext CreateInHalfOpenState(CircuitBreakerContextSnapshot snapshot)
     {
-        data.FailedCount.ThrowIfLessThan(data.FailureAllowedBeforeBreaking);
-        data.LastTimeStateChanged.ThrowIfNull();
-        data.TransitionDateToHalfOpenState.ThrowIfNull();
+        snapshot.FailedCount.ThrowIfLessThan(snapshot.FailureAllowedBeforeBreaking);
+        snapshot.LastTimeStateChanged.ThrowIfNull();
+        snapshot.TransitionDateToHalfOpenState.ThrowIfNull();
 
         return new CircuitBreakerContext
         {
-            Name = data.Name,
+            Name = snapshot.Name,
             State = CircuitBreakerStateEnum.HalfOpen,
-            FailedCount = data.FailedCount,
-            FailureAllowedBeforeBreaking = data.FailureAllowedBeforeBreaking,
-            LastTimeStateChanged = data.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = data.TransitionDateToHalfOpenState,
-            DurationOfBreak = data.DurationOfBreak
+            FailedCount = snapshot.FailedCount,
+            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
+            LastTimeStateChanged = snapshot.LastTimeStateChanged,
+            TransitionDateToHalfOpenState = snapshot.TransitionDateToHalfOpenState,
+            DurationOfBreak = snapshot.DurationOfBreak
         };
     }
 }
