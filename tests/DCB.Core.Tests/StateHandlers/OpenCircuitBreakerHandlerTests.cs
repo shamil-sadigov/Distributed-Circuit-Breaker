@@ -6,11 +6,21 @@ using DCB.Core.Tests.StateHandlers.Helpers;
 using FluentAssertions;
 using static DCB.Core.Tests.StateHandlers.Helpers.CircuitBreakerBuilder;
 
-
 namespace DCB.Core.Tests.StateHandlers;
 
 public class OpenCircuitBreakerStateTests
 {
+    [Fact]
+    public void Can_handle_open_circuit_breaker()
+    {
+        var circuitBreaker = BuildOpenCircuitBreaker();
+         
+        var sut = new OpenCircuitBreakerHandler();
+         
+        sut.CanHandle(circuitBreaker)
+            .Should().BeTrue();
+    }
+    
     [Fact]
     public void Cannot_handle_closed_circuit_breaker()
     {
@@ -34,17 +44,6 @@ public class OpenCircuitBreakerStateTests
              .Should().BeFalse();
      }
      
-     [Fact]
-     public void Can_handle_open_circuit_breaker()
-     {
-         var circuitBreaker = BuildOpenCircuitBreaker();
-         
-         var sut = new OpenCircuitBreakerHandler();
-         
-         sut.CanHandle(circuitBreaker)
-             .Should().BeTrue();
-     }
-
      [Fact]
      public async Task When_circuit_breaker_is_open_then_action_is_impossible_to_invoke()
      {

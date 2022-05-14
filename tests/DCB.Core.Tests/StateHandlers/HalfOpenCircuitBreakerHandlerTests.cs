@@ -11,6 +11,51 @@ namespace DCB.Core.Tests.StateHandlers;
 
 public class HalfOpenCircuitBreakerHandlerTests
 {
+    [Fact]
+    public void Can_handle_half_open_circuit_breaker()
+    {
+        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var systemClock = Substitute.For<ISystemClock>();
+         
+        var halfOpenCircuitBreaker = BuildHalfOpenCircuitBreaker();
+        
+        var sut = new HalfOpenCircuitBreakerStateHandler(systemClock, saver);
+         
+        sut.CanHandle(halfOpenCircuitBreaker)
+            .Should().BeTrue();
+    }
+    
+    [Fact]
+    public void Cannot_handle_closed_circuit_breaker()
+    {
+        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var systemClock = Substitute.For<ISystemClock>();
+         
+        var closedCircuitBreaker = BuildClosedCircuitBreaker();
+        
+        var sut = new HalfOpenCircuitBreakerStateHandler(systemClock, saver);
+
+        // Act & Assert
+        sut.CanHandle(closedCircuitBreaker)
+            .Should()
+            .BeFalse();
+    }
+    
+    [Fact]
+    public void Cannot_handle_open_circuit_breaker()
+    {
+        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var systemClock = Substitute.For<ISystemClock>();
+         
+        var closedCircuitBreaker = BuildOpenCircuitBreaker();
+        
+        var sut = new HalfOpenCircuitBreakerStateHandler(systemClock, saver);
+
+        // Act & Assert
+        sut.CanHandle(closedCircuitBreaker)
+            .Should()
+            .BeFalse();
+    }
     
      [Theory]
      [InlineData(3)]
@@ -118,49 +163,4 @@ public class HalfOpenCircuitBreakerHandlerTests
              .WillNotTransitToHalfOpenState();
      }
      
-     [Fact]
-     public void Cannot_handle_closed_circuit_breaker()
-     {
-         var saver = Substitute.For<ICircuitBreakerContextSaver>();
-         var systemClock = Substitute.For<ISystemClock>();
-         
-         var closedCircuitBreaker = BuildClosedCircuitBreaker();
-        
-         var sut = new HalfOpenCircuitBreakerStateHandler(systemClock, saver);
-
-         // Act & Assert
-         sut.CanHandle(closedCircuitBreaker)
-             .Should()
-             .BeFalse();
-     }
-     
-     [Fact]
-     public void Can_handle_half_open_circuit_breaker()
-     {
-         var saver = Substitute.For<ICircuitBreakerContextSaver>();
-         var systemClock = Substitute.For<ISystemClock>();
-         
-         var halfOpenCircuitBreaker = BuildHalfOpenCircuitBreaker();
-        
-         var sut = new HalfOpenCircuitBreakerStateHandler(systemClock, saver);
-         
-         sut.CanHandle(halfOpenCircuitBreaker)
-             .Should().BeTrue();
-     }
-     
-     [Fact]
-     public void Cannot_handle_open_circuit_breaker()
-     {
-         var saver = Substitute.For<ICircuitBreakerContextSaver>();
-         var systemClock = Substitute.For<ISystemClock>();
-         
-         var closedCircuitBreaker = BuildOpenCircuitBreaker();
-        
-         var sut = new HalfOpenCircuitBreakerStateHandler(systemClock, saver);
-
-         // Act & Assert
-         sut.CanHandle(closedCircuitBreaker)
-             .Should()
-             .BeFalse();
-     }
 }

@@ -6,12 +6,61 @@ using DCB.Core.Tests.ResultHandler.Helpers;
 using DCB.Core.Tests.StateHandlers.Helpers;
 using FluentAssertions;
 using FluentAssertions.Extensions;
-
+using NSubstitute;
 using static DCB.Core.Tests.StateHandlers.Helpers.CircuitBreakerBuilder;
 namespace DCB.Core.Tests.StateHandlers;
 
 public class ClosedCircuitBreakerStateTests
 {
+    
+        
+    [Fact]
+    public void Can_handle_closed_circuit_breaker()
+    {
+        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var systemClock = Substitute.For<ISystemClock>();
+         
+        var closedCircuitBreaker = BuildClosedCircuitBreaker();
+        
+        var sut = new ClosedCircuitBreakerHandler(saver, systemClock);
+
+        // Act & Assert
+        sut.CanHandle(closedCircuitBreaker)
+            .Should()
+            .BeTrue();
+    }
+     
+    [Fact]
+    public void Cannot_handle_half_open_circuit_breaker()
+    {
+        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var systemClock = Substitute.For<ISystemClock>();
+         
+        var halfOpenCircuitBreaker = BuildHalfOpenCircuitBreaker();
+        
+        var sut = new ClosedCircuitBreakerHandler(saver, systemClock);
+         
+        sut.CanHandle(halfOpenCircuitBreaker)
+            .Should().BeFalse();
+    }
+     
+    [Fact]
+    public void Cannot_handle_open_circuit_breaker()
+    {
+        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var systemClock = Substitute.For<ISystemClock>();
+         
+        var closedCircuitBreaker = BuildOpenCircuitBreaker();
+        
+        var sut = new ClosedCircuitBreakerHandler(saver, systemClock);
+
+        // Act & Assert
+        sut.CanHandle(closedCircuitBreaker)
+            .Should()
+            .BeFalse();
+    }
+    
+    
     // TODO: come up with better test name
     [Theory]
     [InlineData(4, 0, 1)]
@@ -158,4 +207,5 @@ public class ClosedCircuitBreakerStateTests
     
         savedCircuitBreaker.Should().BeNull();
     }
+
 }
