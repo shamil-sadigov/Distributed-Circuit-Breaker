@@ -1,5 +1,4 @@
 using DCB.Core;
-using DCB.Core.CircuitBreakers.States;
 
 namespace DCB.Extensions.Registry;
 

@@ -121,7 +121,7 @@ public class ClosedCircuitBreakerStateTests
         var circuitBreakerContext = BuildClosedCircuitBreaker()
             .WithAllowedNumberOfFailures(failureAllowedBeforeBreaking)
             .WithFailedCount(currentFailedCount)
-            .WithSystemClock(clock);
+            .UsingSystemClock(clock);
         
         var sut = new ClosedCircuitBreakerHandler(saverSpy, clock);
         

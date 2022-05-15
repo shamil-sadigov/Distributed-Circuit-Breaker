@@ -74,7 +74,7 @@ public class HalfOpenCircuitBreakerHandlerTests
          var circuitBreakerContext = BuildHalfOpenCircuitBreaker()
              .WithFailedCount(failedCount)
              .WithAllowedNumberOfFailures(failedCount)
-             .WithSystemClock(clock);
+             .UsingSystemClock(clock);
          
          var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
          
@@ -111,7 +111,7 @@ public class HalfOpenCircuitBreakerHandlerTests
          var circuitBreakerContext = BuildHalfOpenCircuitBreaker()
              .WithFailedCount(failedCount)
              .WithAllowedNumberOfFailures(failedCount)
-             .WithSystemClock(clock);
+             .UsingSystemClock(clock);
          
          var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
          
@@ -142,7 +142,7 @@ public class HalfOpenCircuitBreakerHandlerTests
          clock.SetUtcDate(DateTime.UtcNow);
          
          var circuitBreakerContext = BuildHalfOpenCircuitBreaker()
-             .WithSystemClock(clock);
+             .UsingSystemClock(clock);
          
          var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
          

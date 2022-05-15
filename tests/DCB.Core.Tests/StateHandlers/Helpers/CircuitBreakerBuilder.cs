@@ -80,7 +80,7 @@ public class CircuitBreakerBuilder
         return this;
     }
 
-    public CircuitBreakerBuilder WithSystemClock(ISystemClock systemClock)
+    public CircuitBreakerBuilder UsingSystemClock(ISystemClock systemClock)
     {
         _systemClock = systemClock;
         return this;
