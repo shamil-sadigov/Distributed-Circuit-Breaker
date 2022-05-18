@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
 using DCB.Core.CircuitBreakers.Context;
 using DCB.Extensions.SqlServer.Tests.Helpers;
-using DotNet.Testcontainers.Containers.Modules.Databases;
 using FluentAssertions;
-using FluentAssertions.Execution;
 using FluentAssertions.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Polly;
 
 namespace DCB.Extensions.SqlServer.Tests;
 
