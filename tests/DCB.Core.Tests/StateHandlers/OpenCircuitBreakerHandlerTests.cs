@@ -58,9 +58,8 @@ public class OpenCircuitBreakerStateTests
          var sut = new OpenCircuitBreakerHandler();
 
          // Act & Assert
-         await sut.Invoking(x => x.HandleAsync(
-                             options, () => Task.FromResult(new CustomResult(IsSuccessful: true)),
-                             circuitBreakerContext))
+         await sut.Invoking(x => x.HandleAsync(_ => Task.FromResult(new CustomResult(IsSuccessful: true)),
+                             circuitBreakerContext, options, CancellationToken.None))
              .Should()
              .ThrowAsync<CircuitBreakerIsOpenException>();
      }

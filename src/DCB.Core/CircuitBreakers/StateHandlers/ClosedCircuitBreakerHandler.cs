@@ -17,16 +17,16 @@ internal sealed class ClosedCircuitBreakerHandler:ICircuitBreakerStateHandler
         _systemClock = systemClock;
     }
     
-    public async Task<TResult> HandleAsync<TResult>(
+    public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
+        CircuitBreakerContext circuitBreaker,
         CircuitBreakerOptions options,
-        Func<Task<TResult>> action, 
-        CircuitBreakerContext circuitBreaker)
+        CancellationToken token)
     {
         EnsureCircuitBreakerIsClosed(circuitBreaker);
         
         try
         {
-            var result = await action().ConfigureAwait(false);
+            var result = await action(token).ConfigureAwait(false);
 
             if (!options.ResultHandlers.CanHandle(result)) 
                 return result;

@@ -79,10 +79,8 @@ public class HalfOpenCircuitBreakerHandlerTests
          var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
          
          // Act
-         await sut.Invoking(x => x.HandleAsync<CustomResult>(
-                 options,
-                 () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
-                 circuitBreakerContext))
+         await sut.Invoking(x => x.HandleAsync<CustomResult>(_ => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
+                 circuitBreakerContext, options, CancellationToken.None))
              .Should()
              .ThrowAsync<CustomHttpException>();
          
@@ -116,10 +114,8 @@ public class HalfOpenCircuitBreakerHandlerTests
          var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
          
          // Act
-         await sut.Invoking(x => x.HandleAsync<CustomResult>(
-                 options,
-                 () => throw new InvalidOperationException(),
-                 circuitBreakerContext))
+         await sut.Invoking(x => x.HandleAsync<CustomResult>(_ => throw new InvalidOperationException(),
+                 circuitBreakerContext, options, CancellationToken.None))
              .Should()
              .ThrowAsync<InvalidOperationException>();
          
@@ -147,10 +143,8 @@ public class HalfOpenCircuitBreakerHandlerTests
          var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
          
          // Act
-          await sut.HandleAsync(
-              options, 
-              () => Task.FromResult(new CustomResult(IsSuccessful: true)), 
-              circuitBreakerContext);
+          await sut.HandleAsync(_ => Task.FromResult(new CustomResult(IsSuccessful: true)), 
+              circuitBreakerContext, options, CancellationToken.None);
          
          // Assert
          var savedCircuitBreaker = saverSpy.SavedCircuitBreaker;
@@ -160,7 +154,8 @@ public class HalfOpenCircuitBreakerHandlerTests
          savedCircuitBreaker!.ShouldBe()
              .Closed()
              .LastTimeStateChangedAt(clock.CurrentTime)
-             .WillNotTransitToHalfOpenState();
+             .WillNotTransitToHalfOpenState()
+             .WithFailedCount(0);
      }
      
 }

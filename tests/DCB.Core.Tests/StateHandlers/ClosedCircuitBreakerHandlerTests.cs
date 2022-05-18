@@ -12,8 +12,6 @@ namespace DCB.Core.Tests.StateHandlers;
 
 public class ClosedCircuitBreakerStateTests
 {
-    
-        
     [Fact]
     public void Can_handle_closed_circuit_breaker()
     {
@@ -86,9 +84,10 @@ public class ClosedCircuitBreakerStateTests
         
         // Act
         await sut.Invoking(x => x.HandleAsync<CustomResult>(
-                            options,
-                            () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
-                            circuitBreakerContext))
+                _ => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
+                circuitBreakerContext, 
+                options, 
+                CancellationToken.None))
             .Should()
             .ThrowAsync<CustomHttpException>();
         
@@ -127,9 +126,10 @@ public class ClosedCircuitBreakerStateTests
         
         // Act & Assert
         await sut.Invoking(x => x.HandleAsync<CustomResult>(
+                _ => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
+                circuitBreakerContext,
                 options,
-                () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
-                circuitBreakerContext))
+                CancellationToken.None))
             .Should()
             .ThrowAsync<CustomHttpException>();
         
@@ -160,9 +160,10 @@ public class ClosedCircuitBreakerStateTests
         
         // Act
         await sut.Invoking(x => x.HandleAsync<CustomResult>(
+                _ => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
+                circuitBreakerContext,
                 options,
-                () => throw new CustomHttpException(HttpStatusCode.ServiceUnavailable),
-                circuitBreakerContext))
+                CancellationToken.None))
             .Should()
             .ThrowAsync<CustomHttpException>();
         
@@ -191,9 +192,10 @@ public class ClosedCircuitBreakerStateTests
         
         // Act
         sut.Invoking(x => x.HandleAsync(
+                _ => Task.FromResult(new CustomResult(IsSuccessful: true)),
+                circuitBreakerContext,
                 options,
-                () => Task.FromResult(new CustomResult(IsSuccessful: true)),
-                circuitBreakerContext))
+                CancellationToken.None))
             .Should()
             .ThrowAsync<InvalidCircuitBreakerStateException>()
             .Result
@@ -207,5 +209,4 @@ public class ClosedCircuitBreakerStateTests
     
         savedCircuitBreaker.Should().BeNull();
     }
-
 }

@@ -17,15 +17,15 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
         _contextSaver = contextSaver;
     }
     
-    public async Task<TResult> HandleAsync<TResult>(
-        CircuitBreakerOptions options,
-        Func<Task<TResult>> action, CircuitBreakerContext circuitBreaker)
+    public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
+        CircuitBreakerContext circuitBreaker,
+        CircuitBreakerOptions options, CancellationToken token)
     {
         EnsureCircuitBreakerIsHalfOpen(circuitBreaker);
         
         try
         {
-            var result = await action().ConfigureAwait(false);
+            var result = await action(token).ConfigureAwait(false);
 
             if (!options.ResultHandlers.CanHandle(result))
             {

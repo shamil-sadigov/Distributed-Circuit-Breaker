@@ -5,9 +5,10 @@ namespace DCB.Core.CircuitBreakers.States;
 public interface ICircuitBreakerStateHandler
 {
     Task<TResult> HandleAsync<TResult>(
+        Func<CancellationToken, Task<TResult>> action,
+        CircuitBreakerContext circuitBreaker,
         CircuitBreakerOptions options,
-        Func<Task<TResult>> action, 
-        CircuitBreakerContext circuitBreaker);
+        CancellationToken token);
 
     public bool CanHandle(CircuitBreakerContext context);
 }

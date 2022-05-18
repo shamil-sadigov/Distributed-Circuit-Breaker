@@ -5,10 +5,9 @@ namespace DCB.Core.CircuitBreakers.StateHandlers;
 
 internal sealed class OpenCircuitBreakerHandler:ICircuitBreakerStateHandler
 {
-    public Task<TResult> HandleAsync<TResult>(
-        CircuitBreakerOptions options,
-        Func<Task<TResult>> action, 
-        CircuitBreakerContext circuitBreaker)
+    public Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
+        CircuitBreakerContext circuitBreaker,
+        CircuitBreakerOptions options, CancellationToken token)
     {
         EnsureCircuitBreakerIsOpen(circuitBreaker);
         
