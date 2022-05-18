@@ -1,4 +1,4 @@
-namespace DCB.Core.CircuitBreakers.States;
+namespace DCB.Core;
 
 /// <summary>
 /// Register in IoC
