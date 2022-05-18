@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{43A32F93
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Core.Tests", "..\tests\DCB.Core.Tests\DCB.Core.Tests.csproj", "{8B2A3FF0-0E02-44E8-9802-F55738A2216E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Extensions.SqlServer.Tests", "DCB.Extensions.SqlServer.Tests\DCB.Extensions.SqlServer.Tests.csproj", "{BF8D6C73-0050-47AA-BB4E-856FD525ED81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,8 +52,13 @@ Global
 		{8B2A3FF0-0E02-44E8-9802-F55738A2216E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B2A3FF0-0E02-44E8-9802-F55738A2216E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B2A3FF0-0E02-44E8-9802-F55738A2216E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF8D6C73-0050-47AA-BB4E-856FD525ED81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF8D6C73-0050-47AA-BB4E-856FD525ED81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF8D6C73-0050-47AA-BB4E-856FD525ED81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF8D6C73-0050-47AA-BB4E-856FD525ED81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8B2A3FF0-0E02-44E8-9802-F55738A2216E} = {43A32F93-8515-4F69-AA00-07943139A323}
+		{BF8D6C73-0050-47AA-BB4E-856FD525ED81} = {43A32F93-8515-4F69-AA00-07943139A323}
 	EndGlobalSection
 EndGlobal
