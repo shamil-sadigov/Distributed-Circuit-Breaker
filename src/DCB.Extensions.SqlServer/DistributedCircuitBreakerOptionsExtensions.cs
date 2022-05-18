@@ -15,7 +15,7 @@ public static class DistributedCircuitBreakerOptionsExtensions
             ops.UseSqlServer(connectionString);
         });
 
-        builder.Services.AddAutoMapper(typeof(DataModelMapper));
+        builder.Services.AddAutoMapper(typeof(DataModelProfile));
         
        return builder.UseStorage<SqlServerStorage>();
     }

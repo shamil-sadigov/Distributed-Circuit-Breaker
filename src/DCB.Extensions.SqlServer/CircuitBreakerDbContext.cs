@@ -5,12 +5,8 @@ namespace DCB.Extensions.SqlServer;
 
 public class CircuitBreakerDbContext:DbContext
 {
-    private readonly string _connectionString;
-
-    public CircuitBreakerDbContext(string connectionString)
+    public CircuitBreakerDbContext(DbContextOptions<CircuitBreakerDbContext> ops):base(ops)
     {
-        _connectionString?.ThrowIfNull();
-        _connectionString = connectionString;
     }
     
     public DbSet<CircuitBreakerDataModel> CircuitBreakers { get; set; }
@@ -18,6 +14,4 @@ public class CircuitBreakerDbContext:DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder) 
         => modelBuilder.Entity<CircuitBreakerDataModel>(ops => ops.HasKey(x => x.Name));
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
-        => optionsBuilder.UseSqlServer(_connectionString);
 }

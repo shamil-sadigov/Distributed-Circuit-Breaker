@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using DCB.Core;
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.CircuitBreakers.Context;
+using DCB.Core.Exceptions;
+using DCB.Core.Storage;
 using DCB.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 
 namespace DCB.Extensions.SqlServer;
 
@@ -19,12 +22,31 @@ public class SqlServerStorage:ICircuitBreakerStorage
     
     public async Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var dataModel = await _context.CircuitBreakers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x=> x.Name == circuitBreakerName, token);
+        
+        return _mapper.Map<CircuitBreakerContextSnapshot>(dataModel);
     }
 
-    public Task SaveAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
+    public async Task UpdateAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
     {
-        throw new NotImplementedException();
+        var foundModel = await _context.CircuitBreakers.FirstOrDefaultAsync(x=> x.Name == snapshot.Name, token);
+
+        if (foundModel is null)
+            throw new CircuitBreakerSnapshotNotFoundException(snapshot.Name);
+
+        _mapper.Map(snapshot, foundModel);
+        
+        await _context.SaveChangesAsync(token);
     }
-    
+
+    public async Task AddAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
+    {
+        var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
+
+        await _context.CircuitBreakers.AddAsync(dataModel, token);
+
+        await _context.SaveChangesAsync(token);
+    }
 }
