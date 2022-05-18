@@ -1,4 +1,6 @@
-namespace DCB.Core.CircuitBreakers.States;
+using DCB.Core.CircuitBreakers;
+
+namespace DCB.Core.Exceptions;
 
 public class InvalidCircuitBreakerStateException:CircuitBreakerException
 {

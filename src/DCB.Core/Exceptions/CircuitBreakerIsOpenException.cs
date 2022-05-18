@@ -1,4 +1,4 @@
-namespace DCB.Core.CircuitBreakers.States;
+namespace DCB.Core.Exceptions;
 
 public class CircuitBreakerIsOpenException:CircuitBreakerException
 {
