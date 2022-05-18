@@ -21,6 +21,25 @@ public partial class CircuitBreakerContext
             DurationOfBreak = snapshot.DurationOfBreak
         };
     }
+
+      internal static CircuitBreakerContext CreateNew(
+          string name,
+          int failureAllowedBeforeBreaking,
+          TimeSpan durationOfBreak)
+      {
+          name.ThrowIfNull();
+          failureAllowedBeforeBreaking.ThrowIfGreaterOrEqualTo(0);
+          durationOfBreak.ThrowIfLessOrEqualTo(TimeSpan.Zero);
+
+          return new CircuitBreakerContext()
+          {
+              Name = name,
+              State = CircuitBreakerStateEnum.Closed,
+              FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
+              DurationOfBreak = durationOfBreak
+          };
+      }
+      
       
     private static CircuitBreakerContext CreateInClosedState(CircuitBreakerContextSnapshot snapshot)
     {

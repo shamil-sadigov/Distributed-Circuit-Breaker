@@ -1,4 +1,3 @@
-using DCB.Core.CircuitBreakers;
 using DCB.Core.CircuitBreakers.States;
 
 namespace DCB.Core;
@@ -13,10 +12,11 @@ public interface ICircuitBreakerStore
 
 public interface ICircuitBreakerContextGetter
 {
-    Task<CircuitBreakerContext> GetAsync(string circuitBreakerName);
+    Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName);
 }
 
 public interface ICircuitBreakerContextSaver
 {
-    Task SaveAsync(CircuitBreakerContext context);
+    // snapshot can be new or existing one
+    Task SaveAsync(CircuitBreakerContextSnapshot snapshot);
 }
