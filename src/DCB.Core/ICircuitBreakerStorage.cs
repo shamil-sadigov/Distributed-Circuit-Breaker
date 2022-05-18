@@ -3,7 +3,7 @@ using DCB.Core.CircuitBreakers.States;
 namespace DCB.Core;
 
 // TODO: Register in IoC
-public interface ICircuitBreakerStore
+public interface ICircuitBreakerStorage
     :ICircuitBreakerContextGetter, ICircuitBreakerContextSaver
 {
 
