@@ -1,6 +1,4 @@
-﻿using DCB.Core.CircuitBreakers.States;
-
-namespace DCB.Core.Tests.StateHandlers.Helpers;
+﻿namespace DCB.Core.Tests.StateHandlers.Helpers;
 
 public class SystemClockStub:ISystemClock
 {

@@ -1,5 +1,5 @@
 using AutoMapper;
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.CircuitBreakers.Context;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 
@@ -11,7 +11,7 @@ public class MappingTests
 
     public MappingTests()
     {
-        _mapper = new Mapper(new MapperConfiguration(x=> x.AddMaps(typeof(DataModelMapper))));
+        _mapper = new Mapper(new MapperConfiguration(x=> x.AddMaps(typeof(DataModelProfile))));
     }
     
     [Fact]
