@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DCB.Extensions.SqlServer\DCB.Extensions.SqlServer.csproj" />
+      <ProjectReference Include="..\DCB.Tests.Shared\DCB.Tests.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

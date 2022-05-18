@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using DCB.Core.CircuitBreakers.Context;
 using DCB.Extensions.SqlServer.Tests.Helpers;
+using DCB.Tests.Shared;
 using FluentAssertions;
-using FluentAssertions.Extensions;
 
 namespace DCB.Extensions.SqlServer.Tests;
 
@@ -25,7 +24,7 @@ public class SqlServerStorageTests:IClassFixture<DbContextProvider>
     {
         // Arrange
         var circuitBreakerName = $"CircuitBreakerName-{Guid.NewGuid()}";
-        var snapshot = CreateSampleSnapshot(circuitBreakerName);
+        var snapshot = SnapshotHelper.CreateSampleSnapshot(circuitBreakerName);
         var sut = new SqlServerStorage(_dbContextProvider.Context, _mapper);
 
         // Act
@@ -47,7 +46,7 @@ public class SqlServerStorageTests:IClassFixture<DbContextProvider>
         var foundSnapshot = await sut.GetAsync(circuitBreakerName, CancellationToken.None);
         
         // Act
-        var modifiedSnapshot = ModifySnapshot(foundSnapshot!);
+        var modifiedSnapshot = SnapshotHelper.ChangeValues(foundSnapshot!);
         await sut.UpdateAsync(modifiedSnapshot, CancellationToken.None);
         
         // Assert
@@ -55,33 +54,15 @@ public class SqlServerStorageTests:IClassFixture<DbContextProvider>
         foundSnapshot.Should().BeEquivalentTo(modifiedSnapshot);
     }
 
-    private static CircuitBreakerContextSnapshot ModifySnapshot(CircuitBreakerContextSnapshot foundSnapshot) =>
-        foundSnapshot with
-        {
-            FailedCount = 1000,
-            FailureAllowedBeforeBreaking = 1000,
-            IsCircuitBreakerClosed = false,
-            LastTimeStateChanged = DateTime.UtcNow - 10.Minutes(),
-            TransitionDateToHalfOpenState = DateTime.Now + 10.Minutes(),
-            DurationOfBreak = 20.Minutes(),
-        };
 
     private async Task SeedCircuitBreakerAsync(string circuitBreakerName)
     {
-        var snapshot = CreateSampleSnapshot(circuitBreakerName);
+        var snapshot = SnapshotHelper.CreateSampleSnapshot(circuitBreakerName);
         var sut = new SqlServerStorage(_dbContextProvider.Context, _mapper);
         await sut.AddAsync(snapshot, CancellationToken.None);
     }
-
-    private static CircuitBreakerContextSnapshot CreateSampleSnapshot(string circuitBreakerName) =>
-        new
-        (
-            Name: circuitBreakerName,
-            FailureAllowedBeforeBreaking: 5,
-            FailedCount: 5,
-            IsCircuitBreakerClosed: true,
-            TransitionDateToHalfOpenState: DateTime.UtcNow + 10.Seconds(),
-            LastTimeStateChanged: DateTime.UtcNow - 10.Seconds(),
-            DurationOfBreak: 20.Seconds()
-        );
+    
+   
+    
+   
 }
