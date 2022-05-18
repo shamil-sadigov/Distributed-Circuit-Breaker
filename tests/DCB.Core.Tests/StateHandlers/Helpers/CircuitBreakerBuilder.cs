@@ -89,7 +89,7 @@ public class CircuitBreakerBuilder
     public CircuitBreakerContext Build()
     {
         DateTime currentTime = _systemClock?.CurrentTime ?? DateTime.UtcNow;
-        return  CircuitBreakerContext.CreateFromSnapshot(_snapshot, currentTime);
+        return  CircuitBreakerContext.BuildFromSnapshot(_snapshot, currentTime);
     }
 
     public static implicit operator CircuitBreakerContext(CircuitBreakerBuilder builder)

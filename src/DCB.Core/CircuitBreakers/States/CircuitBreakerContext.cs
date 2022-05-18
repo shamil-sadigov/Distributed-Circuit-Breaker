@@ -48,7 +48,7 @@ public partial class CircuitBreakerContext
         LastTimeStateChanged = currentTime;
     }
     
-    public static CircuitBreakerContext CreateFromSnapshot(CircuitBreakerContextSnapshot snapshot, DateTime currentTime)
+    public static CircuitBreakerContext BuildFromSnapshot(CircuitBreakerContextSnapshot snapshot, DateTime currentTime)
     {
         snapshot.ThrowIfNull();
         currentTime.ThrowIfNull();
