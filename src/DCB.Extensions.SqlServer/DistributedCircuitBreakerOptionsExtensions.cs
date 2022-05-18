@@ -10,12 +10,9 @@ public static class DistributedCircuitBreakerOptionsExtensions
         CircuitBreakerBuilder builder, 
         string connectionString)
     {
-        builder.Services.AddDbContext<CircuitBreakerDbContext>(ops =>
-        {
-            ops.UseSqlServer(connectionString);
-        });
-
-        builder.Services.AddAutoMapper(typeof(DataModelProfile));
+        builder.Services
+            .AddAutoMapper(typeof(DataModelProfile))
+            .AddDbContext<CircuitBreakerDbContext>(ops => ops.UseSqlServer(connectionString));
         
        return builder.UseStorage<SqlServerStorage>();
     }

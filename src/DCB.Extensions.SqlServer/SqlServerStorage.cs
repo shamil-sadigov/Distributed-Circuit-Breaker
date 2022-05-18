@@ -21,29 +21,32 @@ public class SqlServerStorage:ICircuitBreakerStorage
     {
         var dataModel = await _context.CircuitBreakers
             .AsNoTracking()
-            .FirstOrDefaultAsync(x=> x.Name == circuitBreakerName, token);
+            .FirstOrDefaultAsync(x => x.Name == circuitBreakerName, token)
+            .ConfigureAwait(false);
         
         return _mapper.Map<CircuitBreakerContextSnapshot>(dataModel);
     }
 
     public async Task UpdateAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
     {
-        var foundModel = await _context.CircuitBreakers.FirstOrDefaultAsync(x=> x.Name == snapshot.Name, token);
+        var foundModel = await _context.CircuitBreakers
+            .FirstOrDefaultAsync(x => x.Name == snapshot.Name, token)
+            .ConfigureAwait(false);
 
         if (foundModel is null)
             throw new CircuitBreakerSnapshotNotFoundException(snapshot.Name);
 
         _mapper.Map(snapshot, foundModel);
-        
-        await _context.SaveChangesAsync(token);
+
+        await _context.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     public async Task AddAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
     {
         var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
 
-        await _context.CircuitBreakers.AddAsync(dataModel, token);
+        await _context.CircuitBreakers.AddAsync(dataModel, token).ConfigureAwait(false);
 
-        await _context.SaveChangesAsync(token);
+        await _context.SaveChangesAsync(token).ConfigureAwait(false);
     }
 }
