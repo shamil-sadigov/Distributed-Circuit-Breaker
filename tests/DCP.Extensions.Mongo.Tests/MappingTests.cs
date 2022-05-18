@@ -12,28 +12,28 @@ public class MappingTests
 
     public MappingTests()
     {
-        _mapper = new Mapper(new MapperConfiguration(x=> x.AddMaps(typeof(DataModelProfile))));
+        _mapper = new Mapper(new MapperConfiguration(x => x.AddMaps(typeof(DataModelProfile))));
     }
-    
+
     [Fact]
     public void Snapshot_is_correctly_mapped_to_data_model()
     {
         var snapshot = new CircuitBreakerContextSnapshot
         (
-            Name: "CircuitBreakerName",
-            FailureAllowedBeforeBreaking: 5,
-            FailedCount: 5,
-            IsCircuitBreakerClosed: true,
-            TransitionDateToHalfOpenState: DateTime.UtcNow + 10.Seconds(),
-            LastTimeStateChanged: DateTime.UtcNow - 10.Seconds(),
-            DurationOfBreak: 20.Seconds()
+            "CircuitBreakerName",
+            5,
+            5,
+            true,
+            DateTime.UtcNow + 10.Seconds(),
+            DateTime.UtcNow - 10.Seconds(),
+            20.Seconds()
         );
-        
+
         var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
 
         dataModel.Should().BeEquivalentTo(snapshot);
     }
-    
+
     [Fact]
     public void Datamodel_is_correctly_mapped_to_snapshot()
     {
@@ -46,7 +46,7 @@ public class MappingTests
             LastTimeStateChanged = DateTime.UtcNow - 10.Seconds(),
             DurationOfBreak = 20.Seconds()
         };
-            
+
         var snapshot = _mapper.Map<CircuitBreakerContextSnapshot>(dataModel);
 
         snapshot.Should().BeEquivalentTo(dataModel);

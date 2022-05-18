@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DCB.Extensions.SqlServer;
 
-public class SqlServerStorage:ICircuitBreakerStorage
+public class SqlServerStorage : ICircuitBreakerStorage
 {
     private readonly CircuitBreakerDbContext _context;
     private readonly IMapper _mapper;
@@ -16,14 +16,14 @@ public class SqlServerStorage:ICircuitBreakerStorage
         _context = context;
         _mapper = mapper;
     }
-    
+
     public async Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token)
     {
         var dataModel = await _context.CircuitBreakers
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Name == circuitBreakerName, token)
             .ConfigureAwait(false);
-        
+
         return _mapper.Map<CircuitBreakerContextSnapshot>(dataModel);
     }
 

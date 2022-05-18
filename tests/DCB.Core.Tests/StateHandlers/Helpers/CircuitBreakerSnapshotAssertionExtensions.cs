@@ -17,7 +17,7 @@ public class CircuitBreakerSnapshotAssertion
         _context.IsCircuitBreakerClosed.Should().BeTrue();
         return this;
     }
-    
+
     public CircuitBreakerSnapshotAssertion NotClosed()
     {
         _context.IsCircuitBreakerClosed.Should().BeFalse();
@@ -35,13 +35,13 @@ public class CircuitBreakerSnapshotAssertion
         _context.LastTimeStateChanged.Should().Be(stateChangedAt);
         return this;
     }
-    
+
     public CircuitBreakerSnapshotAssertion WillTransitToHalfOpenState(DateTime stateChangedAt)
     {
         _context.TransitionDateToHalfOpenState.Should().Be(stateChangedAt);
         return this;
     }
-    
+
     public CircuitBreakerSnapshotAssertion WillNotTransitToHalfOpenState()
     {
         _context.TransitionDateToHalfOpenState.Should().Be(null);
@@ -49,11 +49,10 @@ public class CircuitBreakerSnapshotAssertion
     }
 }
 
-
 public static class CircuitBreakerSnapshotAssertionExtensions
 {
     public static CircuitBreakerSnapshotAssertion ShouldBe(this CircuitBreakerContextSnapshot snapshot)
     {
         return new CircuitBreakerSnapshotAssertion(snapshot);
-    } 
+    }
 }

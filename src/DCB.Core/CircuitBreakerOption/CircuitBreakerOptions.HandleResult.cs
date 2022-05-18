@@ -5,7 +5,7 @@ namespace DCB.Core.CircuitBreakerOption;
 
 public partial class CircuitBreakerOptions
 {
-    public CircuitBreakerOptions HandleResult<TResult>(Func<TResult, bool> resultHandler) 
+    public CircuitBreakerOptions HandleResult<TResult>(Func<TResult, bool> resultHandler)
     {
         resultHandler.ThrowIfNull();
         ResultHandlers.Handle(resultHandler);

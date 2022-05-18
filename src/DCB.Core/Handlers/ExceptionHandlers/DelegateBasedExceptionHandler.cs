@@ -8,10 +8,10 @@ public class DelegateBasedExceptionHandler : IExceptionHandler
     {
         _func = func;
     }
-    
-    
+
+
     public bool HandleException<TException>(TException ex) where TException : Exception
     {
-       return _func(ex);
+        return _func(ex);
     }
 }

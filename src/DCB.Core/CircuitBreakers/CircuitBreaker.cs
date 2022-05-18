@@ -1,29 +1,30 @@
 ﻿using DCB.Core.CircuitBreakerOption;
 using DCB.Core.CircuitBreakers.Context;
-using DCB.Core.CircuitBreakers.StateHandlers;
 using DCB.Core.Storage;
 
 namespace DCB.Core.CircuitBreakers;
 
 public enum CircuitBreakerStateEnum
 {
-    None, Open, HalfOpen, Closed
+    None,
+    Open,
+    HalfOpen,
+    Closed
 }
 
 internal struct Void
 {
-    
 }
 
-public class CircuitBreaker<TOptions> where TOptions: CircuitBreakerOptions
+public class CircuitBreaker<TOptions> where TOptions : CircuitBreakerOptions
 {
     private readonly ICircuitBreakerContextGetter _contextGetter;
     private readonly CircuitBreakerStateHandlerProvider _handlerProvider;
-    public readonly TOptions CircuitBreakerOptions;
     private readonly ISystemClock _systemClock;
+    public readonly TOptions CircuitBreakerOptions;
 
     // TODO: Add context property
-    
+
     protected CircuitBreaker(
         ICircuitBreakerContextGetter contextGetter,
         CircuitBreakerStateHandlerProvider handlerProvider,
@@ -40,14 +41,14 @@ public class CircuitBreaker<TOptions> where TOptions: CircuitBreakerOptions
         Func<CancellationToken, Task<TResult>> action,
         CancellationToken cancellationToken)
     {
-        CircuitBreakerContextSnapshot? snapshot = await _contextGetter
-            .GetAsync(circuitBreakerName: CircuitBreakerOptions.Name, cancellationToken)
+        var snapshot = await _contextGetter
+            .GetAsync(CircuitBreakerOptions.Name, cancellationToken)
             .ConfigureAwait(false);
-        
-        CircuitBreakerContext context = BuildOrCreateCircuitBreaker<TResult>(snapshot);
-        
-        ICircuitBreakerStateHandler stateHandler = _handlerProvider.GetHandler(context);
-        
+
+        var context = BuildOrCreateCircuitBreaker<TResult>(snapshot);
+
+        var stateHandler = _handlerProvider.GetHandler(context);
+
         var result = await stateHandler.HandleAsync(action, context, CircuitBreakerOptions, cancellationToken);
 
         return result;
@@ -65,5 +66,4 @@ public class CircuitBreaker<TOptions> where TOptions: CircuitBreakerOptions
                 CircuitBreakerOptions.DurationOfBreak);
         return context;
     }
-    
 }

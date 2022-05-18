@@ -7,13 +7,13 @@ namespace DCB.Extensions.SqlServer;
 public static class DistributedCircuitBreakerOptionsExtensions
 {
     public static CircuitBreakerOptionsBuilder UseSqlServer(
-        CircuitBreakerBuilder builder, 
+        CircuitBreakerBuilder builder,
         string connectionString)
     {
         builder.Services
             .AddAutoMapper(typeof(DataModelProfile))
             .AddDbContext<CircuitBreakerDbContext>(ops => ops.UseSqlServer(connectionString));
-        
-       return builder.UseStorage<SqlServerStorage>();
+
+        return builder.UseStorage<SqlServerStorage>();
     }
 }

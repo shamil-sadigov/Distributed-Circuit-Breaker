@@ -8,15 +8,17 @@ public sealed class DbContextProvider : IAsyncLifetime
     private const string ConfigFileName = "test-config.json";
 
     public CircuitBreakerDbContext Context { get; private set; } = null!;
-    
+
     public async Task InitializeAsync()
     {
         var connectionString = GetConnectionStringFromConfiguration();
         await InitializeDbContextAsync(connectionString);
     }
-    
-    public async Task DisposeAsync() 
-        => await Context.Database.EnsureDeletedAsync();
+
+    public async Task DisposeAsync()
+    {
+        await Context.Database.EnsureDeletedAsync();
+    }
 
     private async Task InitializeDbContextAsync(string? connectionString)
     {

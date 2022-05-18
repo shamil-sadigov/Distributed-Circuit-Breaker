@@ -12,21 +12,21 @@ public class CircuitBreakerBuilder
     {
         _snapshot = snapshot;
     }
-    
+
     public static CircuitBreakerBuilder BuildClosedCircuitBreaker()
     {
         var closedCircuitBreaker = new CircuitBreakerContextSnapshot("Default", 3, 0, true, null, null, 5.Seconds());
         return new CircuitBreakerBuilder(closedCircuitBreaker);
     }
-    
-    
+
+
     public static CircuitBreakerBuilder BuildOpenCircuitBreaker()
     {
         var closedCircuitBreaker = new CircuitBreakerContextSnapshot(
             "Default", 3, 3, false, DateTime.UtcNow + 5.Seconds(), DateTime.UtcNow, 5.Seconds());
         return new CircuitBreakerBuilder(closedCircuitBreaker);
     }
-    
+
     public static CircuitBreakerBuilder BuildHalfOpenCircuitBreaker()
     {
         var closedCircuitBreaker = new CircuitBreakerContextSnapshot(
@@ -42,7 +42,7 @@ public class CircuitBreakerBuilder
         };
         return this;
     }
-    
+
     public CircuitBreakerBuilder WillTransitToHalfOpenStateAt(DateTime transitionToHalfOpenStateAt)
     {
         _snapshot = _snapshot with
@@ -51,7 +51,7 @@ public class CircuitBreakerBuilder
         };
         return this;
     }
-    
+
     public CircuitBreakerBuilder LastTimeStateChangedAt(DateTime lastTimeStateChangedAt)
     {
         _snapshot = _snapshot with
@@ -60,7 +60,7 @@ public class CircuitBreakerBuilder
         };
         return this;
     }
-    
+
     public CircuitBreakerBuilder WithAllowedNumberOfFailures(int allowedFailures)
     {
         _snapshot = _snapshot with
@@ -88,8 +88,8 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerContext Build()
     {
-        DateTime currentTime = _systemClock?.CurrentTime ?? DateTime.UtcNow;
-        return  CircuitBreakerContext.BuildFromSnapshot(_snapshot, currentTime);
+        var currentTime = _systemClock?.CurrentTime ?? DateTime.UtcNow;
+        return CircuitBreakerContext.BuildFromSnapshot(_snapshot, currentTime);
     }
 
     public static implicit operator CircuitBreakerContext(CircuitBreakerBuilder builder)

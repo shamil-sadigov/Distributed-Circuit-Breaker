@@ -4,7 +4,7 @@ namespace DCB.Core.CircuitBreakers.Context;
 
 public partial class CircuitBreakerContext
 {
-      private static CircuitBreakerContext CreateInOpenState(CircuitBreakerContextSnapshot snapshot)
+    private static CircuitBreakerContext CreateInOpenState(CircuitBreakerContextSnapshot snapshot)
     {
         snapshot.FailedCount.ThrowIfLessThan(snapshot.FailureAllowedBeforeBreaking);
         snapshot.LastTimeStateChanged.ThrowIfNull();
@@ -22,29 +22,29 @@ public partial class CircuitBreakerContext
         };
     }
 
-      internal static CircuitBreakerContext CreateNew(
-          string name,
-          int failureAllowedBeforeBreaking,
-          TimeSpan durationOfBreak)
-      {
-          name.ThrowIfNull();
-          failureAllowedBeforeBreaking.ThrowIfGreaterOrEqualTo(0);
-          durationOfBreak.ThrowIfLessOrEqualTo(TimeSpan.Zero);
+    internal static CircuitBreakerContext CreateNew(
+        string name,
+        int failureAllowedBeforeBreaking,
+        TimeSpan durationOfBreak)
+    {
+        name.ThrowIfNull();
+        failureAllowedBeforeBreaking.ThrowIfGreaterOrEqualTo(0);
+        durationOfBreak.ThrowIfLessOrEqualTo(TimeSpan.Zero);
 
-          return new CircuitBreakerContext()
-          {
-              Name = name,
-              State = CircuitBreakerStateEnum.Closed,
-              FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
-              DurationOfBreak = durationOfBreak
-          };
-      }
-      
-      
+        return new CircuitBreakerContext
+        {
+            Name = name,
+            State = CircuitBreakerStateEnum.Closed,
+            FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
+            DurationOfBreak = durationOfBreak
+        };
+    }
+
+
     private static CircuitBreakerContext CreateInClosedState(CircuitBreakerContextSnapshot snapshot)
     {
         snapshot.FailedCount.ThrowIfGreaterOrEqualTo(snapshot.FailureAllowedBeforeBreaking);
-        
+
         return new CircuitBreakerContext
         {
             Name = snapshot.Name,

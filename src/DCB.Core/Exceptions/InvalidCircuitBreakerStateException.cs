@@ -2,22 +2,22 @@ using DCB.Core.CircuitBreakers;
 
 namespace DCB.Core.Exceptions;
 
-public class InvalidCircuitBreakerStateException:CircuitBreakerException
+public class InvalidCircuitBreakerStateException : CircuitBreakerException
 {
-    public string CircuitBreakerName { get; }
-    public CircuitBreakerStateEnum ExpectedState { get; }
-    public CircuitBreakerStateEnum ActualState { get; }
-
     public InvalidCircuitBreakerStateException(
         string circuitBreakerName,
         CircuitBreakerStateEnum actualState,
-        CircuitBreakerStateEnum expectedState) 
+        CircuitBreakerStateEnum expectedState)
         : base(BuildExceptionMessage(circuitBreakerName, actualState, expectedState))
     {
         CircuitBreakerName = circuitBreakerName;
         ExpectedState = expectedState;
         ActualState = actualState;
     }
+
+    public string CircuitBreakerName { get; }
+    public CircuitBreakerStateEnum ExpectedState { get; }
+    public CircuitBreakerStateEnum ActualState { get; }
 
     private static string BuildExceptionMessage(
         string circuitBreakerName,

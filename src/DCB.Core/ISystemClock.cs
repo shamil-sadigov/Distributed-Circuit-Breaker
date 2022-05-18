@@ -1,7 +1,7 @@
 namespace DCB.Core;
 
 /// <summary>
-/// Register in IoC
+///     Register in IoC
 /// </summary>
 public interface ISystemClock
 {

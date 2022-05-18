@@ -8,16 +8,14 @@ public class OptionsExtensions
     {
         if (extension is null)
             throw new ArgumentNullException(nameof(extension));
-        
+
         var extensionType = typeof(TExtension);
-        
+
         if (_extensions.ContainsKey(extensionType))
-        {
             throw new ArgumentException(
                 nameof(extension),
                 $"Extension of type '{_extensions.GetType().Name}' ");
-        }
-        
+
         _extensions.Add(extensionType, extension);
     }
 }

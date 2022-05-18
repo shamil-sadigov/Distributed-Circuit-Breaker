@@ -8,10 +8,10 @@ public class CircuitBreakerBuildResult
     {
         if (circuitBreakerOptions.Count == 0)
             throw new ArgumentException("Should contain at least one option", nameof(circuitBreakerOptions));
-        
+
         CircuitBreakerOptions = circuitBreakerOptions;
     }
-    
-    public IReadOnlyCollection<CircuitBreakerOptionsBase> CircuitBreakerOptions { get;  }
+
+    public IReadOnlyCollection<CircuitBreakerOptionsBase> CircuitBreakerOptions { get; }
     public OptionsExtensions Extensions { get; } = new();
 }

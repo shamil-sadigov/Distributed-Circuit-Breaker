@@ -10,7 +10,7 @@ public sealed class MongoOptionsProvider : IAsyncLifetime
 
     public MongoClient MongoClient { get; private set; } = null!;
     public CircuitBreakerDbOptions Options { get; set; } = null!;
-    
+
     public Task InitializeAsync()
     {
         var connectionString = GetConnectionStringFromConfiguration();
@@ -18,10 +18,12 @@ public sealed class MongoOptionsProvider : IAsyncLifetime
         Options = new CircuitBreakerDbOptions("DistributedCircuitBreakerTestDB", "CircuitBreakers");
         return Task.CompletedTask;
     }
-    
-    public async Task DisposeAsync() 
-        => await MongoClient.DropDatabaseAsync(Options.DatabaseName);
-    
+
+    public async Task DisposeAsync()
+    {
+        await MongoClient.DropDatabaseAsync(Options.DatabaseName);
+    }
+
     private static string GetConnectionStringFromConfiguration()
     {
         var config = new ConfigurationBuilder()
