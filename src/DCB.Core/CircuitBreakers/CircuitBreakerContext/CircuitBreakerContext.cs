@@ -1,6 +1,7 @@
+using DCB.Core.Exceptions;
 using DCB.Helpers;
 
-namespace DCB.Core.CircuitBreakers.States;
+namespace DCB.Core.CircuitBreakers.CircuitBreakerContext;
 
 // TODO: Add tests
 
@@ -51,7 +52,7 @@ public partial class CircuitBreakerContext
     public static CircuitBreakerContext BuildFromSnapshot(CircuitBreakerContextSnapshot snapshot, DateTime currentTime)
     {
         snapshot.ThrowIfNull();
-        currentTime.ThrowIfNull();
+        currentTime.ThrowIfDefault();
         snapshot.DurationOfBreak.ThrowIfDefault();
             
         if (snapshot.IsCircuitBreakerClosed)
@@ -70,6 +71,8 @@ public partial class CircuitBreakerContext
             FailureAllowedBeforeBreaking, 
             FailedCount, 
             State == CircuitBreakerStateEnum.Closed,
-            TransitionDateToHalfOpenState, LastTimeStateChanged, DurationOfBreak
+            TransitionDateToHalfOpenState, 
+            LastTimeStateChanged, 
+            DurationOfBreak
         );
 }
