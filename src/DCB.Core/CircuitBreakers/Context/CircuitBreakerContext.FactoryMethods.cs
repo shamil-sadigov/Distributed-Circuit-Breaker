@@ -1,6 +1,6 @@
 using DCB.Helpers;
 
-namespace DCB.Core.CircuitBreakers.CircuitBreakerContext;
+namespace DCB.Core.CircuitBreakers.Context;
 
 public partial class CircuitBreakerContext
 {

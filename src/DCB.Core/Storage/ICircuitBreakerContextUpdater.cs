@@ -1,4 +1,4 @@
-using DCB.Core.CircuitBreakers.CircuitBreakerContext;
+using DCB.Core.CircuitBreakers.Context;
 using DCB.Core.Exceptions;
 
 namespace DCB.Core.Storage;

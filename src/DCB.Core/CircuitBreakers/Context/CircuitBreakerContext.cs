@@ -1,7 +1,7 @@
 using DCB.Core.Exceptions;
 using DCB.Helpers;
 
-namespace DCB.Core.CircuitBreakers.CircuitBreakerContext;
+namespace DCB.Core.CircuitBreakers.Context;
 
 // TODO: Add tests
 

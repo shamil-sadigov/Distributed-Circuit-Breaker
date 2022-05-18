@@ -1,4 +1,4 @@
-namespace DCB.Core.CircuitBreakers.CircuitBreakerContext;
+namespace DCB.Core.CircuitBreakers.Context;
 
 /// <summary>
 ///     Data of <see cref="CircuitBreakerContext" />
