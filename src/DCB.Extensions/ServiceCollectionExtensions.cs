@@ -1,4 +1,5 @@
 ﻿using DCB.Core;
+using DCB.Extensions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DCB.Extensions;
@@ -8,22 +9,21 @@ public static class ServiceCollectionExtensions
     // TODO: Test it 
     public static IServiceCollection AddDistributedCircuitBreaker(
         this IServiceCollection services, 
-        Action<CircuitBreakerContextBuilder> configBuilder)
+        Action<CircuitBreakerBuilder> configBuilder)
     {
         // configure here
 
-        var builder = new CircuitBreakerContextBuilder();
+        var builder = new CircuitBreakerBuilder(services);
 
         configBuilder(builder);
         
-        CircuitBreakerContext context = builder.Build();
+        // TODO: Maybe we should rename it
+        CircuitBreakerBuildResult buildResult = builder.Build();
         
-        services.AddSingleton(context);
+        services.AddSingleton(buildResult);
         
-        foreach (var option in context.CircuitBreakerOptions) 
+        foreach (var option in buildResult.CircuitBreakerOptions) 
             services.AddTransient(option.GetType());
-
-        services.AddScoped(typeof(ICircuitBreakerStore), context.StorageType);
         
         return services;
     }
