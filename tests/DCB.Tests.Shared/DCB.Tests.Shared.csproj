@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\DCB.Core\DCB.Core.csproj" />
       <ProjectReference Include="..\DCB.Core\DCB.Core.csproj" />
     </ItemGroup>
 
