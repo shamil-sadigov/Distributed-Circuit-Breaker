@@ -8,11 +8,11 @@ public class CircuitBreakerDbOptions
     {
         databaseName.ThrowIfNull();
         collectionName.ThrowIfNull();
-        
+
         DatabaseName = databaseName;
         CollectionName = collectionName;
     }
-    
-    public string DatabaseName { get;  init;}
-    public string CollectionName { get; init;} 
+
+    public string DatabaseName { get; init; }
+    public string CollectionName { get; init; }
 }

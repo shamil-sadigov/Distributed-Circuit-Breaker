@@ -3,7 +3,7 @@ using DCB.Core.CircuitBreakers.Context;
 
 namespace DCB.Extensions.Mongo;
 
-public class DataModelProfile:Profile
+public class DataModelProfile : Profile
 {
     public DataModelProfile()
     {

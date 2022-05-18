@@ -8,14 +8,14 @@ namespace DCB.Extensions.Mongo;
 public static class DistributedCircuitBreakerOptionsExtensions
 {
     public static CircuitBreakerOptionsBuilder UseMongo(
-        CircuitBreakerBuilder builder, 
+        CircuitBreakerBuilder builder,
         string connectionString)
     {
         builder.Services
             .AddSingleton(new CircuitBreakerDbOptions("DistributedCircuitBreaker", "CircuitBreakers"))
             .AddSingleton(new MongoClient(connectionString))
             .AddAutoMapper(typeof(DataModelProfile));
-        
+
         return builder.UseStorage<MongoStorage>();
     }
 }
