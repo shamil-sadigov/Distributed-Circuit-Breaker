@@ -1,5 +1,6 @@
 ﻿using DCB.Core.CircuitBreakerOption;
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.Exceptions;
+using DCB.Core.Storage;
 
 namespace DCB.Core.CircuitBreakers.StateHandlers;
 
@@ -7,18 +8,18 @@ namespace DCB.Core.CircuitBreakers.StateHandlers;
 internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHandler
 {
     private readonly ISystemClock _systemClock;
-    private readonly ICircuitBreakerContextSaver _contextSaver;
+    private readonly ICircuitBreakerContextUpdater _contextUpdater;
 
     public HalfOpenCircuitBreakerStateHandler(
         ISystemClock systemClock,
-        ICircuitBreakerContextSaver contextSaver)
+        ICircuitBreakerContextUpdater contextUpdater)
     {
         _systemClock = systemClock;
-        _contextSaver = contextSaver;
+        _contextUpdater = contextUpdater;
     }
     
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
-        CircuitBreakerContext circuitBreaker,
+        CircuitBreakerContext.CircuitBreakerContext circuitBreaker,
         CircuitBreakerOptions options, CancellationToken token)
     {
         EnsureCircuitBreakerIsHalfOpen(circuitBreaker);
@@ -49,17 +50,17 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
         }
     }
 
-    private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
+    private async Task SaveAsync(CircuitBreakerContext.CircuitBreakerContext circuitBreaker, CancellationToken token)
     {
         var snapshot = circuitBreaker.GetSnapshot();
-        await _contextSaver.SaveAsync(snapshot, token).ConfigureAwait(false);
+        await _contextUpdater.UpdateAsync(snapshot, token).ConfigureAwait(false);
     }
     
-    public bool CanHandle(CircuitBreakerContext context) 
+    public bool CanHandle(CircuitBreakerContext.CircuitBreakerContext context) 
         => context.State == CircuitBreakerStateEnum.HalfOpen;
     
     // TODO: Maybe it's worth to extract to some base class
-    private void EnsureCircuitBreakerIsHalfOpen(CircuitBreakerContext context)
+    private void EnsureCircuitBreakerIsHalfOpen(CircuitBreakerContext.CircuitBreakerContext context)
     {
         if (!CanHandle(context))
             throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerStateEnum.HalfOpen);

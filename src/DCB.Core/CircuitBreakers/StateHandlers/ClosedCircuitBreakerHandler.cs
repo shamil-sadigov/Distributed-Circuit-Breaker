@@ -1,5 +1,6 @@
 ﻿using DCB.Core.CircuitBreakerOption;
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.Exceptions;
+using DCB.Core.Storage;
 
 namespace DCB.Core.CircuitBreakers.StateHandlers;
 
@@ -8,17 +9,17 @@ namespace DCB.Core.CircuitBreakers.StateHandlers;
 
 internal sealed class ClosedCircuitBreakerHandler:ICircuitBreakerStateHandler
 {
-    private readonly ICircuitBreakerContextSaver _contextSaver;
+    private readonly ICircuitBreakerContextUpdater _contextUpdater;
     private readonly ISystemClock _systemClock;
 
-    public ClosedCircuitBreakerHandler(ICircuitBreakerContextSaver contextSaver, ISystemClock systemClock)
+    public ClosedCircuitBreakerHandler(ICircuitBreakerContextUpdater contextUpdater, ISystemClock systemClock)
     {
-        _contextSaver = contextSaver;
+        _contextUpdater = contextUpdater;
         _systemClock = systemClock;
     }
     
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
-        CircuitBreakerContext circuitBreaker,
+        CircuitBreakerContext.CircuitBreakerContext circuitBreaker,
         CircuitBreakerOptions options,
         CancellationToken token)
     {
@@ -46,17 +47,17 @@ internal sealed class ClosedCircuitBreakerHandler:ICircuitBreakerStateHandler
         }
     }
 
-    private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
+    private async Task SaveAsync(CircuitBreakerContext.CircuitBreakerContext circuitBreaker, CancellationToken token)
     {
         var snapshot = circuitBreaker.GetSnapshot();
-        await _contextSaver.SaveAsync(snapshot, token).ConfigureAwait(false);
+        await _contextUpdater.UpdateAsync(snapshot, token).ConfigureAwait(false);
     }
 
-    private void EnsureCircuitBreakerIsClosed(CircuitBreakerContext context)
+    private void EnsureCircuitBreakerIsClosed(CircuitBreakerContext.CircuitBreakerContext context)
     {
         if (!CanHandle(context))
             throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerStateEnum.Closed);
     }
 
-    public bool CanHandle(CircuitBreakerContext context) => context.State == CircuitBreakerStateEnum.Closed;
+    public bool CanHandle(CircuitBreakerContext.CircuitBreakerContext context) => context.State == CircuitBreakerStateEnum.Closed;
 }
