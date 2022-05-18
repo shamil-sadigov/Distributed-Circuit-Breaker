@@ -12,11 +12,11 @@ public interface ICircuitBreakerStore
 
 public interface ICircuitBreakerContextGetter
 {
-    Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName);
+    Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token);
 }
 
 public interface ICircuitBreakerContextSaver
 {
     // snapshot can be new or existing one
-    Task SaveAsync(CircuitBreakerContextSnapshot snapshot);
+    Task SaveAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token);
 }

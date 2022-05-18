@@ -30,12 +30,12 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
             if (!options.ResultHandlers.CanHandle(result))
             {
                 circuitBreaker.Close(_systemClock.CurrentTime);
-                await SaveAsync(circuitBreaker);
+                await SaveAsync(circuitBreaker, token);
                 return result;
             }
             
             circuitBreaker.Failed(_systemClock.CurrentTime);
-            await SaveAsync(circuitBreaker);
+            await SaveAsync(circuitBreaker, token);
             return result;
         }
         catch (Exception ex)
@@ -44,15 +44,15 @@ internal sealed class HalfOpenCircuitBreakerStateHandler:ICircuitBreakerStateHan
                 throw;
             
             circuitBreaker.Failed(_systemClock.CurrentTime);
-            await SaveAsync(circuitBreaker);
+            await SaveAsync(circuitBreaker, token);
             throw;
         }
     }
 
-    private async Task SaveAsync(CircuitBreakerContext circuitBreaker)
+    private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
     {
         var snapshot = circuitBreaker.GetSnapshot();
-        await _contextSaver.SaveAsync(snapshot).ConfigureAwait(false);
+        await _contextSaver.SaveAsync(snapshot, token).ConfigureAwait(false);
     }
     
     public bool CanHandle(CircuitBreakerContext context) 

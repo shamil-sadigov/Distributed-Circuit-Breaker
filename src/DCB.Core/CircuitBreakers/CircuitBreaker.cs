@@ -39,7 +39,7 @@ public class CircuitBreaker<TOptions> where TOptions: CircuitBreakerOptions
         CancellationToken cancellationToken)
     {
         CircuitBreakerContextSnapshot? snapshot = await _contextGetter
-            .GetAsync(circuitBreakerName: CircuitBreakerOptions.Name)
+            .GetAsync(circuitBreakerName: CircuitBreakerOptions.Name, cancellationToken)
             .ConfigureAwait(false);
         
         CircuitBreakerContext context = BuildOrCreateCircuitBreaker<TResult>(snapshot);
