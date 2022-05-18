@@ -1,6 +1,6 @@
 using System.Net;
 using DCB.Core.CircuitBreakers.StateHandlers;
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.Exceptions;
 using DCB.Core.Tests.ResultHandler.Helpers;
 using DCB.Core.Tests.StateHandlers.Helpers;
 using FluentAssertions;

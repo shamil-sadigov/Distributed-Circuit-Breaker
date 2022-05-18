@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using DCB.Core.CircuitBreakers.StateHandlers;
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.Storage;
 using DCB.Core.Tests.ResultHandler.Helpers;
 using DCB.Core.Tests.StateHandlers.Helpers;
 using FluentAssertions;
@@ -14,7 +14,7 @@ public class HalfOpenCircuitBreakerHandlerTests
     [Fact]
     public void Can_handle_half_open_circuit_breaker()
     {
-        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var saver = Substitute.For<ICircuitBreakerContextUpdater>();
         var systemClock = Substitute.For<ISystemClock>();
          
         var halfOpenCircuitBreaker = BuildHalfOpenCircuitBreaker();
@@ -28,7 +28,7 @@ public class HalfOpenCircuitBreakerHandlerTests
     [Fact]
     public void Cannot_handle_closed_circuit_breaker()
     {
-        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var saver = Substitute.For<ICircuitBreakerContextUpdater>();
         var systemClock = Substitute.For<ISystemClock>();
          
         var closedCircuitBreaker = BuildClosedCircuitBreaker();
@@ -44,7 +44,7 @@ public class HalfOpenCircuitBreakerHandlerTests
     [Fact]
     public void Cannot_handle_open_circuit_breaker()
     {
-        var saver = Substitute.For<ICircuitBreakerContextSaver>();
+        var saver = Substitute.For<ICircuitBreakerContextUpdater>();
         var systemClock = Substitute.For<ISystemClock>();
          
         var closedCircuitBreaker = BuildOpenCircuitBreaker();
@@ -63,7 +63,7 @@ public class HalfOpenCircuitBreakerHandlerTests
      public async Task CircuitBreaker_is_broken_in_case_of_failure(int failedCount)
      {
          // Arrange
-         var saverSpy = new CircuitBreakerSaverSpy();
+         var saverSpy = new CircuitBreakerUpdaterSpy();
          var clock = new SystemClockStub();
          var options = new TestCircuitBreakerOptions();
          
@@ -85,7 +85,7 @@ public class HalfOpenCircuitBreakerHandlerTests
              .ThrowAsync<CustomHttpException>();
          
          // Assert
-         var savedCircuitBreaker = saverSpy.SavedCircuitBreaker;
+         var savedCircuitBreaker = saverSpy.UpdatedCircuitBreaker;
 
          savedCircuitBreaker!.ShouldBe()
              .NotClosed()
@@ -100,7 +100,7 @@ public class HalfOpenCircuitBreakerHandlerTests
          int failedCount)
      {
          // Arrange
-         var saverSpy = new CircuitBreakerSaverSpy();
+         var saverSpy = new CircuitBreakerUpdaterSpy();
          var clock = new SystemClockStub();
          var options = new TestCircuitBreakerOptions();
          
@@ -120,7 +120,7 @@ public class HalfOpenCircuitBreakerHandlerTests
              .ThrowAsync<InvalidOperationException>();
          
          // Assert
-         var savedCircuitBreaker = saverSpy.SavedCircuitBreaker;
+         var savedCircuitBreaker = saverSpy.UpdatedCircuitBreaker;
 
          savedCircuitBreaker.Should().BeNull();
      }
@@ -129,7 +129,7 @@ public class HalfOpenCircuitBreakerHandlerTests
      public async Task CircuitBreaker_is_closed_when_no_failure_happened()
      {
          // Arrange
-         var saverSpy = new CircuitBreakerSaverSpy();
+         var saverSpy = new CircuitBreakerUpdaterSpy();
          var clock = new SystemClockStub();
          var options = new TestCircuitBreakerOptions();
 
@@ -147,7 +147,7 @@ public class HalfOpenCircuitBreakerHandlerTests
               circuitBreakerContext, options, CancellationToken.None);
          
          // Assert
-         var savedCircuitBreaker = saverSpy.SavedCircuitBreaker;
+         var savedCircuitBreaker = saverSpy.UpdatedCircuitBreaker;
 
          savedCircuitBreaker.Should().NotBeNull();
 

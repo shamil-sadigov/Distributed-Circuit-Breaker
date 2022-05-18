@@ -1,4 +1,4 @@
-﻿using DCB.Core.CircuitBreakers.States;
+﻿using DCB.Core.CircuitBreakers.Context;
 using FluentAssertions;
 
 namespace DCB.Core.Tests.StateHandlers.Helpers;

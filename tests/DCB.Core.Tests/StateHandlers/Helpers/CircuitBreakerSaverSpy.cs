@@ -1,14 +1,15 @@
-using DCB.Core.CircuitBreakers.States;
+using DCB.Core.CircuitBreakers.Context;
+using DCB.Core.Storage;
 
 namespace DCB.Core.Tests.StateHandlers.Helpers;
 
-internal class CircuitBreakerSaverSpy:ICircuitBreakerContextSaver
+internal class CircuitBreakerUpdaterSpy:ICircuitBreakerContextUpdater
 {
-    internal CircuitBreakerContextSnapshot? SavedCircuitBreaker { get; private set; }
+    internal CircuitBreakerContextSnapshot? UpdatedCircuitBreaker { get; private set; }
     
-    public Task SaveAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
+    public Task UpdateAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
     {
-        SavedCircuitBreaker = snapshot;
+        UpdatedCircuitBreaker = snapshot;
         return Task.CompletedTask;
     }
 }
