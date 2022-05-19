@@ -11,6 +11,7 @@ public class OptionsExtensions
 
         var extensionType = typeof(TExtension);
 
+        // TODO: Throw Duplicate exception
         if (_extensions.ContainsKey(extensionType))
             throw new ArgumentException(
                 nameof(extension),

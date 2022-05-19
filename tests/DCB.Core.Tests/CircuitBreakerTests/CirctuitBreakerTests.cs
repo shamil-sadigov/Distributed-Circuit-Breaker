@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using DCB.Core.CircuitBreakers;
 using DCB.Core.Exceptions;
+using DCB.Core.Tests.CircuitBreakerTests.Helpers;
 using DCB.Core.Tests.ResultHandlerTests.Helpers;
 using FluentAssertions;
 using FluentAssertions.Extensions;
@@ -9,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace DCB.Core.Tests.CircuitBreakerTests;
 
 // TODO: Test uniqueness of circuti Breakers
+
+// TODO: Use 'handleable' word instead of 'specified'
+
 public class CircuitBreakerTests
 {
     [Theory]
@@ -139,8 +143,7 @@ public class CircuitBreakerTests
     [InlineData(3)]
     [InlineData(4)]
     [InlineData(5)]
-    public async Task CircuitBreaker_is_switched_from_open_to_half_open_state_after_specified_duration
-        (int duration)
+    public async Task CircuitBreaker_is_switched_from_open_to_half_open_state_after_specified_duration(int duration)
     {
         // Arrange
         const int failureAllowedBeforeBreaking = 3;
@@ -148,9 +151,7 @@ public class CircuitBreakerTests
         var options = new CurrencyExchangeServiceOptions(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
-        
-        var actionInvokedTimesInOpenState = 0;
-    
+
         var circuitBreaker = new ServiceCollection()
             .ConfigureAndGetCircuitBreaker(options);
         
@@ -159,11 +160,84 @@ public class CircuitBreakerTests
         // Act
         // Let's wait till CircuitBreaker become HalfOpen
         await Task.Delay(duration.Seconds());
-    
+        
         // Assert
         await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.HalfOpen);
     }
+    
+    [Theory]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    public async Task When_circuitBreaker_is_halfOpened_and_invoked_action_is_successful_then_circuitBreaker_is_closed
+        (int duration)
+    {
+        // Arrange
+        const int failureAllowedBeforeBreaking = 3;
+        var actionInvokedTimes = 0;
 
+        var options = new CurrencyExchangeServiceOptions(
+            failureAllowedBeforeBreaking, 
+            durationOfBreak: duration.Seconds());
+        
+        var circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(options);
+        
+        await BringTillOpenState(circuitBreaker, failureAllowedBeforeBreaking);
+
+        // Let's wait till CircuitBreaker become HalfOpen
+        await Task.Delay(duration.Seconds());
+
+        // Act
+        await circuitBreaker.ExecuteAsync(_ =>
+        {
+            actionInvokedTimes++;
+            return CurrencyExchangeResponse.SuccessfulResult;
+        }, CancellationToken.None);
+        
+        // Assert
+        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Closed);
+        actionInvokedTimes.Should().Be(1);
+    }
+    
+    
+    [Theory]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    public async Task When_circuitBreaker_is_halfOpened_and_invoked_action_is_not_successful_then_circuitBreaker_is_closed
+        (int duration)
+    {
+        // Arrange
+        const int failureAllowedBeforeBreaking = 3;
+        var actionInvokedTimes = 0;
+
+        var options = new CurrencyExchangeServiceOptions(
+            failureAllowedBeforeBreaking, 
+            durationOfBreak: duration.Seconds());
+        
+        var circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(options);
+        
+        await BringTillOpenState(circuitBreaker, failureAllowedBeforeBreaking);
+
+        // Let's wait till CircuitBreaker become HalfOpen
+        await Task.Delay(duration.Seconds());
+
+        // Act
+        await circuitBreaker.Invoking(x => x.ExecuteAsync<CurrencyExchangeResponse>(_ =>
+            {
+                actionInvokedTimes++;
+                throw new CustomHttpException(HttpStatusCode.TooManyRequests);
+            }, CancellationToken.None))
+            .Should()
+            .ThrowAsync<CustomHttpException>();
+
+        // Assert
+        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Open);
+        actionInvokedTimes.Should().Be(1);
+    }
+    
     private static async Task BringTillOpenState(
         ICircuitBreaker<CurrencyExchangeServiceOptions> circuitBreaker, 
         int failureAllowedBeforeBreaking)

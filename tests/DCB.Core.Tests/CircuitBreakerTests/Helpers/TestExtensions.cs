@@ -5,8 +5,10 @@ using DCB.Extensions.Mongo;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DCB.Core.Tests.CircuitBreakerTests;
+namespace DCB.Core.Tests.CircuitBreakerTests.Helpers;
 
+// TODO: Extract mongo connection string
+// TODO: Add Dispose() that will drop database or collection
 public static class TestExtensions
 {
     public static async Task ShouldBeInStateAsync<TOptions>(

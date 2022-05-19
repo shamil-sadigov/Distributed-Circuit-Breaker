@@ -3,6 +3,7 @@ using MoreLinq;
 
 namespace DCB.Extensions.Registry;
 
+// TODO: Rename it to CircuitBreakerOptionsRegistry
 /// <summary>
 ///     TODO: Write unit tests
 /// </summary>
