@@ -88,7 +88,7 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerContext Build()
     {
-        var currentTime = _systemClock?.CurrentTime ?? DateTime.UtcNow;
+        var currentTime = _systemClock?.GetCurrentTime() ?? DateTime.UtcNow;
         return CircuitBreakerContext.BuildFromSnapshot(_snapshot, currentTime);
     }
 

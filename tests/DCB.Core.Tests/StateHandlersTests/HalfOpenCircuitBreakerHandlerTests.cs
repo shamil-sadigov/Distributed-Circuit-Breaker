@@ -91,7 +91,7 @@ public class HalfOpenCircuitBreakerHandlerTests
         savedCircuitBreaker!.ShouldBe()
             .NotClosed()
             .WithFailedCount(++failedCount)
-            .LastTimeStateChangedAt(clock.CurrentTime);
+            .LastTimeStateChangedAt(clock.GetCurrentTime());
     }
 
     [Theory]
@@ -154,7 +154,7 @@ public class HalfOpenCircuitBreakerHandlerTests
 
         savedCircuitBreaker!.ShouldBe()
             .Closed()
-            .LastTimeStateChangedAt(clock.CurrentTime)
+            .LastTimeStateChangedAt(clock.GetCurrentTime())
             .WillNotTransitToHalfOpenState()
             .WithFailedCount(0);
     }

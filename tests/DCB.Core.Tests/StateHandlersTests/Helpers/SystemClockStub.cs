@@ -3,11 +3,11 @@
 public class SystemClockStub : ISystemClock
 {
     private DateTime? _utcNow;
-
-    public DateTime CurrentTime => _utcNow ?? DateTime.UtcNow;
-
+    
     public void SetUtcDate(DateTime utcNowTime)
     {
         _utcNow = utcNowTime;
     }
+
+    public DateTime GetCurrentTime() =>  _utcNow ?? DateTime.UtcNow;
 }

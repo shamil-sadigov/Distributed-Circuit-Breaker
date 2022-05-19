@@ -32,7 +32,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
             if (!options.ResultHandlers.CanHandle(result))
                 return result;
 
-            circuitBreaker.Failed(_systemClock.CurrentTime);
+            circuitBreaker.Failed(_systemClock.GetCurrentTime());
             await SaveAsync(circuitBreaker, token);
             return result;
         }
@@ -41,7 +41,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
             if (!options.ExceptionHandlers.CanHandle(ex))
                 throw;
 
-            circuitBreaker.Failed(_systemClock.CurrentTime);
+            circuitBreaker.Failed(_systemClock.GetCurrentTime());
             await SaveAsync(circuitBreaker, token);
             throw;
         }
