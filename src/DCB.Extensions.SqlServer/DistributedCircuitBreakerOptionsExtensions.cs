@@ -7,7 +7,7 @@ namespace DCB.Extensions.SqlServer;
 public static class DistributedCircuitBreakerOptionsExtensions
 {
     public static CircuitBreakerOptionsBuilder UseSqlServer(
-        CircuitBreakerBuilder builder,
+        this CircuitBreakerBuilder builder,
         string connectionString)
     {
         builder.Services

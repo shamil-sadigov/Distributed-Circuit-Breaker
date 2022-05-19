@@ -8,7 +8,7 @@ namespace DCB.Extensions.Mongo;
 public static class DistributedCircuitBreakerOptionsExtensions
 {
     public static CircuitBreakerOptionsBuilder UseMongo(
-        CircuitBreakerBuilder builder,
+        this CircuitBreakerBuilder builder,
         string connectionString)
     {
         builder.Services

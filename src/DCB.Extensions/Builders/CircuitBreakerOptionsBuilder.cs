@@ -10,8 +10,15 @@ public class CircuitBreakerOptionsBuilder
         CircuitBreakerRegistry = circuitBreakerRegistry;
     }
 
-    public CircuitBreakerRegistry CircuitBreakerRegistry { get; }
+    internal CircuitBreakerRegistry CircuitBreakerRegistry { get; }
 
+    public CircuitBreakerOptionsBuilder AddCircuitBreaker<TOptions>()
+        where TOptions : CircuitBreakerOptionsBase, new()
+    {
+        CircuitBreakerRegistry.Add(new TOptions());
+        return this;
+    }
+    
     public CircuitBreakerOptionsBuilder AddCircuitBreaker<TOptions>(TOptions options)
         where TOptions : CircuitBreakerOptionsBase
     {

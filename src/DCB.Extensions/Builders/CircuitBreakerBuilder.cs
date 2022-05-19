@@ -18,6 +18,11 @@ public class CircuitBreakerBuilder
         where TStorage : class, ICircuitBreakerStorage
     {
         Services.AddScoped<ICircuitBreakerStorage, TStorage>();
+        
+        Services.AddScoped<ICircuitBreakerContextGetter, TStorage>();
+        Services.AddScoped<ICircuitBreakerContextAdder, TStorage>();
+        Services.AddScoped<ICircuitBreakerContextUpdater, TStorage>();
+        
         return new CircuitBreakerOptionsBuilder(CircuitBreakerRegistry);
     }
 
