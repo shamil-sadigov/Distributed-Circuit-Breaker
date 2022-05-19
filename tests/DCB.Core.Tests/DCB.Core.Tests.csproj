@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.6.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
         <PackageReference Include="NSubstitute" Version="4.3.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
@@ -25,10 +26,9 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\DCB.Core\DCB.Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="FunctionalTests" />
+        <ProjectReference Include="..\..\src\DCB.Extensions.Mongo\DCB.Extensions.Mongo.csproj" />
+        <ProjectReference Include="..\..\src\DCB.Extensions.SqlServer\DCB.Extensions.SqlServer.csproj" />
+        <ProjectReference Include="..\..\src\DCB.Extensions\DCB.Extensions.csproj" />
     </ItemGroup>
 
 </Project>
