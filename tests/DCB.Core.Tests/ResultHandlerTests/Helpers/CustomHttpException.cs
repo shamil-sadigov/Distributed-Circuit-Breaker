@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace DCB.Core.Tests.ResultHandler.Helpers;
+namespace DCB.Core.Tests.ResultHandlerTests.Helpers;
 
 public class CustomHttpException : Exception
 {

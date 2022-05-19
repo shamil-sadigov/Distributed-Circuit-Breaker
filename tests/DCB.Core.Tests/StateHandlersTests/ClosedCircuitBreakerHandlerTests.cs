@@ -4,14 +4,14 @@ using DCB.Core.CircuitBreakers.Context;
 using DCB.Core.CircuitBreakers.StateHandlers;
 using DCB.Core.Exceptions;
 using DCB.Core.Storage;
-using DCB.Core.Tests.ResultHandler.Helpers;
-using DCB.Core.Tests.StateHandlers.Helpers;
+using DCB.Core.Tests.ResultHandlerTests.Helpers;
+using DCB.Core.Tests.StateHandlersTests.Helpers;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using NSubstitute;
-using static DCB.Core.Tests.StateHandlers.Helpers.CircuitBreakerBuilder;
+using static DCB.Core.Tests.StateHandlersTests.Helpers.CircuitBreakerBuilder;
 
-namespace DCB.Core.Tests.StateHandlers;
+namespace DCB.Core.Tests.StateHandlersTests;
 
 public class ClosedCircuitBreakerStateTests
 {

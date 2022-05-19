@@ -5,7 +5,7 @@ using DCB.Extensions.Mongo;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DCB.Core.Tests.FunctionalTests;
+namespace DCB.Core.Tests.CircuitBreakerTests;
 
 public static class TestExtensions
 {

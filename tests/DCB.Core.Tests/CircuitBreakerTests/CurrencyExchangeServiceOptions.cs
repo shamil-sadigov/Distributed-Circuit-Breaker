@@ -1,8 +1,8 @@
 using System.Net;
 using DCB.Core.CircuitBreakerOption;
-using DCB.Core.Tests.ResultHandler.Helpers;
+using DCB.Core.Tests.ResultHandlerTests.Helpers;
 
-namespace DCB.Core.Tests.FunctionalTests;
+namespace DCB.Core.Tests.CircuitBreakerTests;
 
 public class CurrencyExchangeResponse
 {

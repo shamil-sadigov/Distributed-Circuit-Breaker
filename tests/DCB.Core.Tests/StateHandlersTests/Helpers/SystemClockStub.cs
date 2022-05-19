@@ -1,4 +1,4 @@
-﻿namespace DCB.Core.Tests.StateHandlers.Helpers;
+﻿namespace DCB.Core.Tests.StateHandlersTests.Helpers;
 
 public class SystemClockStub : ISystemClock
 {

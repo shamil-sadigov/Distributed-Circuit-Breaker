@@ -1,12 +1,12 @@
 using System.Net;
 using DCB.Core.CircuitBreakers.StateHandlers;
 using DCB.Core.Exceptions;
-using DCB.Core.Tests.ResultHandler.Helpers;
-using DCB.Core.Tests.StateHandlers.Helpers;
+using DCB.Core.Tests.ResultHandlerTests.Helpers;
+using DCB.Core.Tests.StateHandlersTests.Helpers;
 using FluentAssertions;
-using static DCB.Core.Tests.StateHandlers.Helpers.CircuitBreakerBuilder;
+using static DCB.Core.Tests.StateHandlersTests.Helpers.CircuitBreakerBuilder;
 
-namespace DCB.Core.Tests.StateHandlers;
+namespace DCB.Core.Tests.StateHandlersTests;
 
 public class OpenCircuitBreakerStateTests
 {

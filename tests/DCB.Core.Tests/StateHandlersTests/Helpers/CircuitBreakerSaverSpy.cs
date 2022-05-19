@@ -1,7 +1,7 @@
 using DCB.Core.CircuitBreakers.Context;
 using DCB.Core.Storage;
 
-namespace DCB.Core.Tests.StateHandlers.Helpers;
+namespace DCB.Core.Tests.StateHandlersTests.Helpers;
 
 internal class CircuitBreakerUpdaterSpy : ICircuitBreakerContextUpdater
 {

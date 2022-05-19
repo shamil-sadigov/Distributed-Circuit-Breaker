@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using DCB.Core.CircuitBreakers;
 using DCB.Core.Exceptions;
-using DCB.Core.Tests.ResultHandler.Helpers;
+using DCB.Core.Tests.ResultHandlerTests.Helpers;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DCB.Core.Tests.FunctionalTests;
+namespace DCB.Core.Tests.CircuitBreakerTests;
 
 // TODO: Test uniqueness of circuti Breakers
 public class CircuitBreakerTests

@@ -1,6 +1,6 @@
 using DCB.Core.Handlers.ResultHandlers;
 
-namespace DCB.Core.Tests.ResultHandler.Helpers;
+namespace DCB.Core.Tests.ResultHandlerTests.Helpers;
 
 public class CustomResultHandler : IResultHandler<CustomResult>
 {
