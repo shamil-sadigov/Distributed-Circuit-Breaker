@@ -25,6 +25,7 @@ public class ResultHandlers
         return this;
     }
 
+    // TODO: Rename it. Maybe HandleAvailable ?
     public bool CanHandle<TResult>(TResult result)
     {
         return _resultHandlers
