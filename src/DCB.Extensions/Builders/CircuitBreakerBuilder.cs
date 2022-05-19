@@ -6,10 +6,8 @@ namespace DCB.Extensions.Builders;
 
 public class CircuitBreakerBuilder
 {
-    public CircuitBreakerBuilder(IServiceCollection services)
-    {
-        Services = services;
-    }
+    public CircuitBreakerBuilder(IServiceCollection services) 
+        => Services = services;
 
     public IServiceCollection Services { get; }
     internal CircuitBreakerRegistry CircuitBreakerRegistry { get; } = new();
@@ -17,17 +15,14 @@ public class CircuitBreakerBuilder
     public CircuitBreakerOptionsBuilder UseStorage<TStorage>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
         where TStorage : class, ICircuitBreakerStorage
     {
-        Services.AddScoped<ICircuitBreakerStorage, TStorage>();
-        
-        Services.AddScoped<ICircuitBreakerContextGetter, TStorage>();
-        Services.AddScoped<ICircuitBreakerContextAdder, TStorage>();
-        Services.AddScoped<ICircuitBreakerContextUpdater, TStorage>();
+        Services
+            .AddScoped<ICircuitBreakerStorage, TStorage>()
+            .AddScoped<ICircuitBreakerContextGetter, TStorage>()
+            .AddScoped<ICircuitBreakerContextAdder, TStorage>()
+            .AddScoped<ICircuitBreakerContextUpdater, TStorage>();
         
         return new CircuitBreakerOptionsBuilder(CircuitBreakerRegistry);
     }
 
-    public CircuitBreakerBuildResult Build()
-    {
-        return new(CircuitBreakerRegistry.GetAll());
-    }
+    public CircuitBreakerBuildResult Build() => new(CircuitBreakerRegistry.GetAll());
 }
