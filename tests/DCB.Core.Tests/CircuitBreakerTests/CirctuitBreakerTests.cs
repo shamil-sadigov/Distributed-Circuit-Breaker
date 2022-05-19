@@ -57,7 +57,7 @@ public class CircuitBreakerTests
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
         {
-            await circuitBreaker.Invoking(x => x.ExecuteAsync<CurrencyExchangeResponse>(token =>
+            await circuitBreaker.Invoking(x => x.ExecuteAsync(_ =>
             {
                 // a ton of logic...
                 throw new ArgumentException("Pretty descriptive message");
@@ -88,7 +88,7 @@ public class CircuitBreakerTests
         // Act and Assert
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)
             await circuitBreaker.Invoking(
-                    x => x.ExecuteAsync<CurrencyExchangeResponse>(
+                    x => x.ExecuteAsync(
                         _ =>
                         {
                             throw new CustomHttpException(HttpStatusCode.ServiceUnavailable);
@@ -225,7 +225,7 @@ public class CircuitBreakerTests
         await Task.Delay(duration.Seconds());
 
         // Act
-        await circuitBreaker.Invoking(x => x.ExecuteAsync<CurrencyExchangeResponse>(_ =>
+        await circuitBreaker.Invoking(x => x.ExecuteAsync(_ =>
             {
                 actionInvokedTimes++;
                 throw new CustomHttpException(HttpStatusCode.TooManyRequests);

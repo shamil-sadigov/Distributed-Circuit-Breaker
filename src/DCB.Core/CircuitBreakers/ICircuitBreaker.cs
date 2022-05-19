@@ -6,7 +6,11 @@ public interface ICircuitBreaker<TOptions> where TOptions : CircuitBreakerOption
 {
     Task<CircuitBreakerState> GetStateAsync();
     
+    Task ExecuteAsync(
+        Func<CancellationToken, Task> action,
+        CancellationToken cancellationToken);
+    
     Task<TResult> ExecuteAsync<TResult>(
-        Func<CancellationToken, Task<TResult>> action,
+        Func<CancellationToken, Task<TResult>> action, 
         CancellationToken cancellationToken);
 }
