@@ -6,8 +6,8 @@ public class InvalidCircuitBreakerStateException : CircuitBreakerException
 {
     public InvalidCircuitBreakerStateException(
         string circuitBreakerName,
-        CircuitBreakerStateEnum actualState,
-        CircuitBreakerStateEnum expectedState)
+        CircuitBreakerState actualState,
+        CircuitBreakerState expectedState)
         : base(BuildExceptionMessage(circuitBreakerName, actualState, expectedState))
     {
         CircuitBreakerName = circuitBreakerName;
@@ -16,13 +16,13 @@ public class InvalidCircuitBreakerStateException : CircuitBreakerException
     }
 
     public string CircuitBreakerName { get; }
-    public CircuitBreakerStateEnum ExpectedState { get; }
-    public CircuitBreakerStateEnum ActualState { get; }
+    public CircuitBreakerState ExpectedState { get; }
+    public CircuitBreakerState ActualState { get; }
 
     private static string BuildExceptionMessage(
         string circuitBreakerName,
-        CircuitBreakerStateEnum actualState,
-        CircuitBreakerStateEnum expectedState)
+        CircuitBreakerState actualState,
+        CircuitBreakerState expectedState)
     {
         return $"Expected CircuitBreaker with name '{circuitBreakerName}' " +
                $"to be in {expectedState} state " +

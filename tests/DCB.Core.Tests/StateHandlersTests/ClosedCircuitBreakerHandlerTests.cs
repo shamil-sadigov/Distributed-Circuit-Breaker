@@ -202,8 +202,8 @@ public class ClosedCircuitBreakerStateTests
             .ThrowAsync<InvalidCircuitBreakerStateException>()
             .Result
             .Which.Should().Match<InvalidCircuitBreakerStateException>
-            (ex => ex.ActualState == CircuitBreakerStateEnum.Open &&
-                   ex.ExpectedState == CircuitBreakerStateEnum.Closed &&
+            (ex => ex.ActualState == CircuitBreakerState.Open &&
+                   ex.ExpectedState == CircuitBreakerState.Closed &&
                    ex.CircuitBreakerName == circuitBreakerContext.Name);
 
         // Assert

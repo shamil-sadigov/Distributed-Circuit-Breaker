@@ -13,17 +13,17 @@ internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler
         EnsureCircuitBreakerIsOpen(circuitBreaker);
 
         throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' cannot be used" +
-                                                "while it's in open state");
+                                                " while it's in open state");
     }
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.State == CircuitBreakerStateEnum.Open;
+        return context.State == CircuitBreakerState.Open;
     }
 
     private void EnsureCircuitBreakerIsOpen(CircuitBreakerContext context)
     {
         if (!CanHandle(context))
-            throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerStateEnum.Open);
+            throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerState.Open);
     }
 }

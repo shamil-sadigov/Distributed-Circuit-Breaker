@@ -13,7 +13,7 @@ public partial class CircuitBreakerContext
         return new CircuitBreakerContext
         {
             Name = snapshot.Name,
-            State = CircuitBreakerStateEnum.Open,
+            State = CircuitBreakerState.Open,
             FailedCount = snapshot.FailedCount,
             FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
             LastTimeStateChanged = snapshot.LastTimeStateChanged,
@@ -28,13 +28,13 @@ public partial class CircuitBreakerContext
         TimeSpan durationOfBreak)
     {
         name.ThrowIfNull();
-        failureAllowedBeforeBreaking.ThrowIfGreaterOrEqualTo(0);
+        failureAllowedBeforeBreaking.ThrowIfLessOrEqualTo(0);
         durationOfBreak.ThrowIfLessOrEqualTo(TimeSpan.Zero);
 
         return new CircuitBreakerContext
         {
             Name = name,
-            State = CircuitBreakerStateEnum.Closed,
+            State = CircuitBreakerState.Closed,
             FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
             DurationOfBreak = durationOfBreak
         };
@@ -48,7 +48,7 @@ public partial class CircuitBreakerContext
         return new CircuitBreakerContext
         {
             Name = snapshot.Name,
-            State = CircuitBreakerStateEnum.Closed,
+            State = CircuitBreakerState.Closed,
             FailedCount = snapshot.FailedCount,
             FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
             LastTimeStateChanged = snapshot.LastTimeStateChanged,
@@ -65,7 +65,7 @@ public partial class CircuitBreakerContext
         return new CircuitBreakerContext
         {
             Name = snapshot.Name,
-            State = CircuitBreakerStateEnum.HalfOpen,
+            State = CircuitBreakerState.HalfOpen,
             FailedCount = snapshot.FailedCount,
             FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
             LastTimeStateChanged = snapshot.LastTimeStateChanged,

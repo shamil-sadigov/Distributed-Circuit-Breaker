@@ -14,7 +14,7 @@ public partial class CircuitBreakerContext
     public string Name { get; private init; }
     public int FailureAllowedBeforeBreaking { get; private init; }
     public int FailedCount { get; private set; }
-    public CircuitBreakerStateEnum State { get; private set; }
+    public CircuitBreakerState State { get; private set; }
     public DateTime? TransitionDateToHalfOpenState { get; private set; }
     public DateTime? LastTimeStateChanged { get; private set; }
 
@@ -32,17 +32,17 @@ public partial class CircuitBreakerContext
         if (FailedCount < FailureAllowedBeforeBreaking)
             return;
 
-        State = CircuitBreakerStateEnum.Open;
+        State = CircuitBreakerState.Open;
         TransitionDateToHalfOpenState = currentTime + DurationOfBreak;
         LastTimeStateChanged = currentTime;
     }
 
     public void Close(DateTime currentTime)
     {
-        if (State != CircuitBreakerStateEnum.HalfOpen)
-            throw new InvalidCircuitBreakerStateException(Name, State, CircuitBreakerStateEnum.HalfOpen);
+        if (State != CircuitBreakerState.HalfOpen)
+            throw new InvalidCircuitBreakerStateException(Name, State, CircuitBreakerState.HalfOpen);
 
-        State = CircuitBreakerStateEnum.Closed;
+        State = CircuitBreakerState.Closed;
         FailedCount = 0;
         TransitionDateToHalfOpenState = null;
         LastTimeStateChanged = currentTime;
@@ -70,7 +70,7 @@ public partial class CircuitBreakerContext
             Name,
             FailureAllowedBeforeBreaking,
             FailedCount,
-            State == CircuitBreakerStateEnum.Closed,
+            State == CircuitBreakerState.Closed,
             TransitionDateToHalfOpenState,
             LastTimeStateChanged,
             DurationOfBreak

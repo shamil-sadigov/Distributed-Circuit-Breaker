@@ -49,7 +49,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.State == CircuitBreakerStateEnum.Closed;
+        return context.State == CircuitBreakerState.Closed;
     }
 
     private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
@@ -61,6 +61,6 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
     private void EnsureCircuitBreakerIsClosed(CircuitBreakerContext context)
     {
         if (!CanHandle(context))
-            throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerStateEnum.Closed);
+            throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerState.Closed);
     }
 }

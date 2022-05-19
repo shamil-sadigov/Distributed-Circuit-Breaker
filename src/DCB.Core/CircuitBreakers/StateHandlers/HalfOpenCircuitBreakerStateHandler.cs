@@ -53,7 +53,7 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.State == CircuitBreakerStateEnum.HalfOpen;
+        return context.State == CircuitBreakerState.HalfOpen;
     }
 
     private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
@@ -67,6 +67,6 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
     {
         if (!CanHandle(context))
             throw new InvalidCircuitBreakerStateException(context.Name, context.State,
-                CircuitBreakerStateEnum.HalfOpen);
+                CircuitBreakerState.HalfOpen);
     }
 }

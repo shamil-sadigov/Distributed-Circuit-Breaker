@@ -4,7 +4,7 @@ using DCB.Core.Storage;
 
 namespace DCB.Core.CircuitBreakers;
 
-public enum CircuitBreakerStateEnum
+public enum CircuitBreakerState
 {
     None,
     Open,
