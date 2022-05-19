@@ -39,6 +39,18 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
         return circuitBreakerContext.State;
     }
 
+    public async Task<bool> IsClosedAsync()
+    {
+        var state = await GetStateAsync().ConfigureAwait(false);
+        return state == CircuitBreakerState.Closed;
+    }
+
+    public async Task<bool> IsOpenAsync()
+    {
+        var state = await GetStateAsync().ConfigureAwait(false);
+        return state == CircuitBreakerState.Open;
+    }
+
     public async Task<TResult> ExecuteAsync<TResult>(
         Func<CancellationToken, Task<TResult>> action,
         CancellationToken cancellationToken)
