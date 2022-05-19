@@ -1,6 +1,6 @@
 ﻿using DCB.Client.WebApi.CircuitBreakerOptions;
 
-namespace DCB.Client.WebApi.Dtos;
+namespace DCB.Client.WebApi.Dto;
 
 public class SendEventResponse
 {

@@ -1,4 +1,4 @@
-﻿namespace DCB.Client.WebApi.Dtos;
+﻿namespace DCB.Client.WebApi.Dto;
 
 public class SendEventRequest
 {

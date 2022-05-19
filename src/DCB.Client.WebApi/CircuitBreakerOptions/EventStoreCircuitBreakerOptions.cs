@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using DCB.Client.WebApi.Dtos;
+using DCB.Client.WebApi.Dto;
 
 namespace DCB.Client.WebApi.CircuitBreakerOptions;
 

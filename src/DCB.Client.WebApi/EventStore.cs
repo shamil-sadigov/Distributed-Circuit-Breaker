@@ -1,4 +1,4 @@
-﻿using DCB.Client.WebApi.Dtos;
+﻿using DCB.Client.WebApi.Dto;
 using DCB.Client.WebApi.EventSavingStrategies;
 
 namespace DCB.Client.WebApi;

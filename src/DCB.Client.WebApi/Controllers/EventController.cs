@@ -1,6 +1,6 @@
 using System.Net;
 using DCB.Client.WebApi.CircuitBreakerOptions;
-using DCB.Client.WebApi.Dtos;
+using DCB.Client.WebApi.Dto;
 using DCB.Core.CircuitBreakers;
 using Microsoft.AspNetCore.Mvc;
 
