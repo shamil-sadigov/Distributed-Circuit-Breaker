@@ -72,13 +72,13 @@ public class CircuitBreakerTests:IClassFixture<GeneralLogSaverAppFactory>, IClas
         var circuitBreakerOptions = _generalLogSaverAppFactory.GetService<LogStorageCircuitBreakerOptions>();
         
         var logStorage = _generalLogSaverAppFactory.GetService<LogStorage>();
-        logStorage.SetStrategy(new LogStorageIsOverwhelmedStrategy());
+        logStorage.SetSavingStrategy(new LogStorageIsOverwhelmedStrategy());
         
         // Act
         for (int counter = 0; counter < circuitBreakerOptions.FailureAllowedBeforeBreaking; counter++)
         {
             // Bring CircuitBreaker to Open State
-            var saveLogResponse = await traceLogSaver.SendLogRequestAsync<SavedLogResponse>(CreateCriticalLogRequest());
+            var saveLogResponse = await traceLogSaver.SendLogRequestAsync<SavedLogResponse>(CreateTraceLogRequest());
             saveLogResponse.ShouldNotBeSuccessfulBecause(LogStorageFailureReason.Overwhelmed);
         }
 

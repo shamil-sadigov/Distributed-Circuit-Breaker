@@ -17,7 +17,7 @@ public static class TestExtensions
         CircuitBreakerState expectedState)
         where TOptions : CircuitBreakerOptionsBase
     {
-        var state = await circuitBreaker.GetStateAsync();
+        var state = await circuitBreaker.GetStateAsync(CancellationToken.None);
         state.Should().Be(expectedState);
     }
 

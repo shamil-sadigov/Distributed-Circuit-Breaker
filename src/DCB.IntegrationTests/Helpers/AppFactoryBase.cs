@@ -7,12 +7,12 @@ using MongoDB.Driver;
 
 namespace DCB.IntegrationTests.Helpers;
 
-public class AppFactoryBase<TEntryPoint>:WebApplicationFactory<TEntryPoint> , IAsyncLifetime where TEntryPoint : class
+public class AppFactoryBase<TEntryPoint>:WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
     private const string ConfigFileName = "test-config.json";
 
-    public MongoClient MongoClient { get; private set; } = null!;
-    public CircuitBreakerDbOptions Options { get; set; } = null!;
+    public MongoClient MongoClient { get; }
+    public CircuitBreakerDbOptions Options { get; }
 
 
     public AppFactoryBase()
@@ -21,17 +21,7 @@ public class AppFactoryBase<TEntryPoint>:WebApplicationFactory<TEntryPoint> , IA
         MongoClient = new MongoClient(connectionString);
         Options = new CircuitBreakerDbOptions("DistributedCircuitBreakerTestDB", "CircuitBreakers");
     }
-
-    public Task InitializeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
-    Task IAsyncLifetime.DisposeAsync()
-    {
-        return Task.CompletedTask;
-    }
-
+    
     public TService GetService<TService>() where TService : notnull
     {
         return Services.GetRequiredService<TService>();
@@ -63,8 +53,8 @@ public class AppFactoryBase<TEntryPoint>:WebApplicationFactory<TEntryPoint> , IA
     {
         builder.ConfigureServices(services =>
         {
-            var service = services.FirstOrDefault(x => x.ServiceType == typeof(MongoClient));
-            services.Remove(service);
+            var mongoClient = services.FirstOrDefault(x => x.ServiceType == typeof(MongoClient));
+            services.Remove(mongoClient);
             services.AddSingleton(MongoClient);
         });
     }

@@ -2,8 +2,7 @@
 
 namespace DCB.IntegrationTests.Helpers;
 
-public class CriticalLogSaverAppFactory:AppFactoryBase<CriticalLogSaverProgram>
+public class CriticalLogSaverAppFactory : AppFactoryBase<CriticalLogSaverProgram>
 {
-    
     
 }

@@ -10,7 +10,7 @@ public class LogStorage
 {
     public ILogSavingStrategy LogSavingStrategy { get; private set; } = new SuccessfulSavingStrategy();
 
-    public void SetStrategy(ILogSavingStrategy newStrategy)
+    public void SetSavingStrategy(ILogSavingStrategy newStrategy)
     {
         LogSavingStrategy = newStrategy ?? throw new ArgumentNullException(nameof(newStrategy));
     }

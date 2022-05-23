@@ -1,6 +1,4 @@
-﻿using DCB.Client.Shared;
-
-namespace DCB.Client.CriticalLogSaver.Dto;
+﻿namespace DCB.Client.Shared;
 
 public class SavedLogResponse
 {

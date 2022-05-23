@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace DCB.Helpers;
 
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    
     private static void RegisterImplementation<TBaseType>(
         IServiceCollection services, 
         ServiceLifetime serviceLifetime,

@@ -4,7 +4,7 @@ using DCB.Client.CriticalLogSaver.Dto;
 using DCB.Client.LogSaver.Dto;
 using FluentAssertions;
 
-namespace DCB.IntegrationTests;
+namespace DCB.IntegrationTests.Helpers;
 
 public static class HttpExtensions
 {
@@ -21,7 +21,6 @@ public static class HttpExtensions
         httpResponses.Should().AllSatisfy(x => x.ShouldBe(statusCode, because));
     }
     
-    
     public static async Task<TResponse?> SendLogRequestAsync<TResponse>(
         this HttpClient httpClient,
         SaveTraceLogRequest request)
@@ -49,7 +48,7 @@ public static class HttpExtensions
         this HttpClient httpClient,
         SaveCriticalLogRequest request)
     {
-        return await httpClient.PostAsJsonAsync(LogSaverUris.SaveTraceLogPath, request);
+        return await httpClient.PostAsJsonAsync(LogSaverUris.SaveCriticalLogPath, request);
     }
     
     public static async Task<TResult?> ToJsonAsync<TResult>(this HttpResponseMessage httpResponse)
