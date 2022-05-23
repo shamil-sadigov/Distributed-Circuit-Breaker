@@ -10,6 +10,11 @@ namespace DCB.Client.WebApi;
 public class EventStore
 {
     private IEventSavingStrategy EventSavingStrategy { get; set; } = new SuccessfulSavingStrategy();
+
+    public void SetStrategy(IEventSavingStrategy newStrategy)
+    {
+        EventSavingStrategy = newStrategy ?? throw new ArgumentNullException(nameof(newStrategy));
+    }
     
     /// <summary>
     /// Sends log to remote service
