@@ -4,7 +4,8 @@ namespace DCB.Extensions.Mongo;
 
 public class CircuitBreakerDataModel
 {
-    [BsonId] public string Name { get; set; }
+    [BsonId] 
+    public string Name { get; set; }
 
     public int FailureAllowedBeforeBreaking { get; set; }
     public int FailedCount { get; set; }
