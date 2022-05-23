@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using DCB.Helpers;
 
 namespace DCB.Extensions.Mongo;
@@ -10,6 +11,9 @@ public class CircuitBreakerDbOptions
 
     public CircuitBreakerDbOptions(string databaseName, string collectionName)
     {
+        databaseName.ThrowIfNull();
+        collectionName.ThrowIfNull();
+        
         _databaseName = databaseName;
         _collectionName = collectionName;
     }
@@ -48,5 +52,17 @@ public class CircuitBreakerDbOptions
 
             _connectionString = value;
         }
+    }
+    
+    internal void Validate()
+    {
+        if (CollectionName.IsNullOrWhitespace())
+            throw new ValidationException(nameof(CollectionName) + " should have a value");
+
+        if (DatabaseName.IsNullOrWhitespace())
+            throw new ValidationException(nameof(DatabaseName) + " should have a value");
+        
+        if (ConnectionString.IsNullOrWhitespace())
+            throw new ValidationException(nameof(ConnectionString) + " should have a value");
     }
 }

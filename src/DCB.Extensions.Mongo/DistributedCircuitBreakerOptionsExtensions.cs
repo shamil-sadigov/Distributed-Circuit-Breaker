@@ -1,7 +1,5 @@
 using DCB.Extensions.Builders;
-using DCB.Helpers;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace DCB.Extensions.Mongo;
@@ -20,12 +18,14 @@ public static class DistributedCircuitBreakerOptionsExtensions
 
         configureDbOptions(options);
         
+        options.Validate();
+        
         builder.Services
-            .Configure(configureDbOptions)
+            .AddSingleton(_ => options)
             .AddSingleton(sp =>
             {
-                var dbOptions = sp.GetRequiredService<IOptions<CircuitBreakerDbOptions>>();
-                return new MongoClient(dbOptions.Value.ConnectionString);
+                var dbOptions = sp.GetRequiredService<CircuitBreakerDbOptions>();
+                return new MongoClient(dbOptions.ConnectionString);
             })
             .AddAutoMapper(typeof(DataModelProfile));
 
