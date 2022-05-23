@@ -4,11 +4,11 @@ namespace DCB.Core.CircuitBreakers;
 
 public interface ICircuitBreaker<TOptions> where TOptions : CircuitBreakerOptionsBase
 {
-    Task<CircuitBreakerState> GetStateAsync();
+    Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken);
 
-    Task<bool> IsClosedAsync();
+    Task<bool> IsClosedAsync(CancellationToken cancellationToken);
 
-    Task<bool> IsOpenAsync();
+    Task<bool> IsOpenAsync(CancellationToken cancellationToken);
     
     Task ExecuteAsync(
         Func<CancellationToken, Task> action,
