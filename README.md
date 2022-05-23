@@ -1,3 +1,21 @@
 # Distributed-Circuit-Breaker
 
-It's gonna take some time...
+### Description
+TODO
+
+
+### Context & Problem
+TODO
+
+### Solution
+TODO
+
+### Concurrency conflicts
+TODO
+
+
+### Technical debt
+TODO
+
+### Future improvements
+TODO
