@@ -1,14 +1,14 @@
-using DCB.Client.WebApi.CircuitBreakerOptions;
+using DCB.Client.Shared;
 using DCB.Extensions;
 using DCB.Extensions.Mongo;
 
-namespace DCB.Client.WebApi;
+namespace DCB.Client.LogSaver;
 
-public class Program
+public class GeneralLogSaverProgram
 {
     static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(new WebApplicationOptions());
+        var builder = WebApplication.CreateBuilder(args);
         
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -17,12 +17,12 @@ public class Program
 
         builder.Services.AddDistributedCircuitBreaker(ops =>
         {
+            // TODO: Extract connection string
             ops.UseMongo(x =>
                 {
                     x.ConnectionString = "mongodb://localhost:27017";
                 })
-                .AddCircuitBreaker<EventStoreCircuitBreakerOptions>()
-                .AddCircuitBreaker<AlertServiceCircuitBreakerOptions>();
+                .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
         });
 
         builder.Services.AddSingleton<LogStorage>();

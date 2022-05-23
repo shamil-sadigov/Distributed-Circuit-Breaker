@@ -1,4 +1,4 @@
-﻿namespace DCB.Client.WebApi.Dto;
+﻿namespace DCB.Client.Shared;
 
 public class SavedLogResult
 {

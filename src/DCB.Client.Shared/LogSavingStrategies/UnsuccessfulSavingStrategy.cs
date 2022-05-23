@@ -1,13 +1,10 @@
-﻿using DCB.Client.WebApi.CircuitBreakerOptions;
-using DCB.Client.WebApi.Dto;
-
-namespace DCB.Client.WebApi.EventSavingStrategies;
+﻿namespace DCB.Client.Shared.LogSavingStrategies;
 
 public class UnsuccessfulSavingStrategy:ILogSavingStrategy
 {
-    private readonly EventStoreFailureReason _reason;
+    private readonly LogStorageFailureReason _reason;
 
-    public UnsuccessfulSavingStrategy(EventStoreFailureReason reason)
+    public UnsuccessfulSavingStrategy(LogStorageFailureReason reason)
     {
         _reason = reason;
     }

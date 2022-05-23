@@ -1,7 +1,6 @@
-﻿using DCB.Client.WebApi.Dto;
-using DCB.Client.WebApi.EventSavingStrategies;
+﻿using DCB.Client.Shared.LogSavingStrategies;
 
-namespace DCB.Client.WebApi;
+namespace DCB.Client.Shared;
 
 /// <summary>
 /// Sample services for saving events into some EventStore.
@@ -9,7 +8,7 @@ namespace DCB.Client.WebApi;
 /// </summary>
 public class LogStorage
 {
-    private ILogSavingStrategy LogSavingStrategy { get; set; } = new SuccessfulSavingStrategy();
+    public ILogSavingStrategy LogSavingStrategy { get; private set; } = new SuccessfulSavingStrategy();
 
     public void SetStrategy(ILogSavingStrategy newStrategy)
     {

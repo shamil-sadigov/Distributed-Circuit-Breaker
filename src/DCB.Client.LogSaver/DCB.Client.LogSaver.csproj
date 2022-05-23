@@ -4,10 +4,10 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>DCB.Client.WebApi</RootNamespace>
     </PropertyGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\DCB.Client.Shared\DCB.Client.Shared.csproj" />
       <ProjectReference Include="..\DCB.Core\DCB.Core.csproj" />
       <ProjectReference Include="..\DCB.Extensions.Mongo\DCB.Extensions.Mongo.csproj" />
       <ProjectReference Include="..\DCB.Extensions\DCB.Extensions.csproj" />

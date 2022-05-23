@@ -1,6 +1,4 @@
-﻿using DCB.Client.WebApi.Dto;
-
-namespace DCB.Client.WebApi.EventSavingStrategies;
+﻿namespace DCB.Client.Shared.LogSavingStrategies;
 
 public class SuccessfulSavingStrategy:ILogSavingStrategy
 {
