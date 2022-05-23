@@ -1,8 +1,8 @@
 using System.Net;
 using DCB.Client.CriticalLogSaver.Dto;
-using DCB.Client.LogSaver.Dto;
 using DCB.Client.Shared;
 using DCB.Client.Shared.LogSavingStrategies;
+using DCB.Client.TraceLogSaver.Dto;
 using DCB.IntegrationTests.Helpers;
 using FluentAssertions;
 using Xunit.Abstractions;
@@ -15,19 +15,19 @@ public class LogSaverUris
     public const string SaveCriticalLogPath = "criticallogs"; 
 }
 
-public class CircuitBreakerTests:IClassFixture<GeneralLogSaverAppFactory>, IClassFixture<CriticalLogSaverAppFactory>
+public class CircuitBreakerTests:IClassFixture<TraceLogSaverAppFactory>, IClassFixture<CriticalLogSaverAppFactory>
 {
     
-    private readonly GeneralLogSaverAppFactory _generalLogSaverAppFactory;
+    private readonly TraceLogSaverAppFactory _traceLogSaverAppFactory;
     private readonly CriticalLogSaverAppFactory _criticalLogSaverAppFactory;
     private readonly ITestOutputHelper _testOutputHelper;
 
     public CircuitBreakerTests(
-        GeneralLogSaverAppFactory generalLogSaverAppFactory, 
+        TraceLogSaverAppFactory traceLogSaverAppFactory, 
         CriticalLogSaverAppFactory criticalLogSaverAppFactory, 
         ITestOutputHelper testOutputHelper)
     {
-        _generalLogSaverAppFactory = generalLogSaverAppFactory;
+        _traceLogSaverAppFactory = traceLogSaverAppFactory;
         _criticalLogSaverAppFactory = criticalLogSaverAppFactory;
         _testOutputHelper = testOutputHelper;
     }
@@ -36,7 +36,7 @@ public class CircuitBreakerTests:IClassFixture<GeneralLogSaverAppFactory>, IClas
     public async Task Logs_are_successfully_saved_when_circuit_log_storage_is_available()
     {
         // Arrange
-        HttpClient traceLogSaver = _generalLogSaverAppFactory.CreateClient();
+        HttpClient traceLogSaver = _traceLogSaverAppFactory.CreateClient();
         HttpClient criticalLogSaver = _criticalLogSaverAppFactory.CreateClient();
 
         var savedLogResponses = new List<SavedLogResponse>();
@@ -66,12 +66,12 @@ public class CircuitBreakerTests:IClassFixture<GeneralLogSaverAppFactory>, IClas
     public async Task When_log_storage_is_overwhelmed_then_circuitBreaker_is_opened_and_service_is_unavailable()
     {
         // Arrange
-        HttpClient traceLogSaver = _generalLogSaverAppFactory.CreateClient();
+        HttpClient traceLogSaver = _traceLogSaverAppFactory.CreateClient();
         HttpClient criticalLogSaver = _criticalLogSaverAppFactory.CreateClient();
         
-        var circuitBreakerOptions = _generalLogSaverAppFactory.GetService<LogStorageCircuitBreakerOptions>();
+        var circuitBreakerOptions = _traceLogSaverAppFactory.GetService<LogStorageCircuitBreakerOptions>();
         
-        var logStorage = _generalLogSaverAppFactory.GetService<LogStorage>();
+        var logStorage = _traceLogSaverAppFactory.GetService<LogStorage>();
         logStorage.SetSavingStrategy(new LogStorageIsOverwhelmedStrategy());
         
         // Act

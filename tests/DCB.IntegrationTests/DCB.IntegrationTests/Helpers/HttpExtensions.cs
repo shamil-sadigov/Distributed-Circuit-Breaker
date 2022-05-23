@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using DCB.Client.CriticalLogSaver.Dto;
-using DCB.Client.LogSaver.Dto;
+using DCB.Client.TraceLogSaver.Dto;
 using FluentAssertions;
 
 namespace DCB.IntegrationTests.Helpers;

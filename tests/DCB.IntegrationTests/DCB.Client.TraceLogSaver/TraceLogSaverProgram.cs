@@ -2,9 +2,9 @@ using DCB.Client.Shared;
 using DCB.Extensions;
 using DCB.Extensions.Mongo;
 
-namespace DCB.Client.LogSaver;
+namespace DCB.Client.TraceLogSaver;
 
-public class GeneralLogSaverProgram
+public class TraceLogSaverProgram
 {
     static void Main(string[] args)
     {

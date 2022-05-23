@@ -29,7 +29,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\src\DCB.Extensions.Mongo\DCB.Extensions.Mongo.csproj" />
       <ProjectReference Include="..\DCB.Client.CriticalLogSaver\DCB.Client.CriticalLogSaver.csproj" />
-      <ProjectReference Include="..\DCB.Client.LogSaver\DCB.Client.LogSaver.csproj" />
+      <ProjectReference Include="..\DCB.Client.TraceLogSaver\DCB.Client.TraceLogSaver.csproj" />
       <ProjectReference Include="..\DCB.Client.Shared\DCB.Client.Shared.csproj" />
       <ProjectReference Include="..\DCB.Extensions.Mongo\DCB.Extensions.Mongo.csproj" />
     </ItemGroup>

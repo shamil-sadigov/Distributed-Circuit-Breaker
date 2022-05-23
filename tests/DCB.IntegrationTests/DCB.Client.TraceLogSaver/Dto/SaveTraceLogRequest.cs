@@ -1,4 +1,4 @@
-﻿namespace DCB.Client.LogSaver.Dto;
+﻿namespace DCB.Client.TraceLogSaver.Dto;
 
 public class SaveTraceLogRequest
 {

@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestClients", "TestClients"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Client.CriticalLogSaver", "..\tests\DCB.IntegrationTests\DCB.Client.CriticalLogSaver\DCB.Client.CriticalLogSaver.csproj", "{B7A38956-1FF3-4ABF-93D5-86C4B561BE50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Client.LogSaver", "..\tests\DCB.IntegrationTests\DCB.Client.LogSaver\DCB.Client.LogSaver.csproj", "{7280D064-49EF-41E8-BC64-B8BB3EA60183}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Client.TraceLogSaver", "..\tests\DCB.IntegrationTests\DCB.Client.TraceLogSaver\DCB.Client.TraceLogSaver.csproj", "{7280D064-49EF-41E8-BC64-B8BB3EA60183}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCB.Client.Shared", "..\tests\DCB.IntegrationTests\DCB.Client.Shared\DCB.Client.Shared.csproj", "{B431F1B8-A855-4573-B6C3-D68D591D79F3}"
 EndProject

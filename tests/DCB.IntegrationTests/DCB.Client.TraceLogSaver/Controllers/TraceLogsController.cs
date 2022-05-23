@@ -1,11 +1,11 @@
 using System.Net;
-using DCB.Client.LogSaver.Dto;
 using DCB.Client.Shared;
 using DCB.Client.Shared.LogSavingStrategies;
+using DCB.Client.TraceLogSaver.Dto;
 using DCB.Core.CircuitBreakers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DCB.Client.LogSaver.Controllers;
+namespace DCB.Client.TraceLogSaver.Controllers;
 
 [ApiController]
 [Route("[controller]")]
