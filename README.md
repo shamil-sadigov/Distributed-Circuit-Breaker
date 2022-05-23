@@ -15,6 +15,7 @@ Circuit breaker can be thought as a resilient wrapper of the external system sta
 
 Example:
 
+![stateless-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/problem-of-in-memory-circuit-breaker.jpg)
 
 
 
