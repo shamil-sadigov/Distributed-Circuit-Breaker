@@ -10,7 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDistributedCircuitBreaker(ops =>
 {
-    ops.UseMongo("mongodb://localhost:27017")
+    ops.UseMongo(x =>
+        {
+            x.ConnectionString = "mongodb://localhost:27017";
+        })
         .AddCircuitBreaker<EventStoreCircuitBreakerOptions>()
         .AddCircuitBreaker<AlertServiceCircuitBreakerOptions>();
 });

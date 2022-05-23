@@ -9,6 +9,7 @@ namespace DCB.Core.Tests.CircuitBreakerTests.Helpers;
 
 // TODO: Extract mongo connection string
 // TODO: Add Dispose() that will drop database or collection
+
 public static class TestExtensions
 {
     public static async Task ShouldBeInStateAsync<TOptions>(
@@ -25,7 +26,10 @@ public static class TestExtensions
     {
         services.AddDistributedCircuitBreaker(ops =>
         {
-            ops.UseMongo("mongodb://localhost:27017")
+            ops.UseMongo(x =>
+                {
+                    x.ConnectionString = "mongodb://localhost:27017";
+                })
                 .AddCircuitBreaker<TOptions>();
         });
 
@@ -41,7 +45,10 @@ public static class TestExtensions
     {
         services.AddDistributedCircuitBreaker(ops =>
         {
-            ops.UseMongo("mongodb://localhost:27017")
+            ops.UseMongo(x =>
+                {
+                    x.ConnectionString = "mongodb://localhost:27017";
+                })
                 .AddCircuitBreaker(options);
         });
 
