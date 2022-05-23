@@ -1,4 +1,7 @@
-[WIP]
+## [WIP]
+
+## TODO
+- Add code samples
 
 # Distributed-Circuit-Breaker
 
@@ -6,7 +9,6 @@
 This repo is a proof of concept of distributed circuit breaker. 
 
 Distributed Circuit Breaker can be helpful if you need to share a circuit breaker among multiple services (or multiple instances of the same service), which means that circuit breaker's state is kept in external storage (Redis, Mongo and so on...) as opposed to service instance memory. Why do we beed it ? Well, go to `Problem` section.
-
 
 ## Context
 Goto solution for appliying circuit breakers is lovely [Polly](https://github.com/App-vNext/Polly) library. It allows you to nicely create/use/reuse circuit breaker that can be shared across the application code. 
@@ -59,13 +61,30 @@ Another approach for a globally accessible Circuit Brekaer is to place Log Stora
 ![proxy-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/circuit-breaker-via-side-card.jpg)
 
 
-## Concurrency conflict resolution
-TODO
+## How to use
 
+## Concurrency conflict resolution
+What happens if there are two requests that simultaniously update circuit breaker state ?
+Well, for now chosen strategy is Last-Update-Wins, because it's easier and reasonable enough (but of course not the best option).
+
+## Circuit Breaker Storage
+
+Currently available storage mechanisms are
+- MongoDB
+- MSSQL
+
+Redis is coming soon.
 
 ## Technical debt
-TODO
-- Redis instead of Mongo
+- Wrap unit tests into docker-compose
+- Add comments in code
+- Add logging in CircuitBreaker state handlers
+- Consider renaming of some classes
+- Add unit tests for untested components 
 
 ## Future improvements
-TODO
+- Ability to forcefully swtich Circuit Breaker to Open State
+- Ability to forcefully swtich Circuit Breaker to Closed State
+- Add more callbacks support during Circuit Breaker state changes
+- Instead of using DurationOfBreak to swtich CircuitBreaker to Half-Open state we can instead periodically ping remote service (health-checks) to determine whether it become available or not.
+- 
