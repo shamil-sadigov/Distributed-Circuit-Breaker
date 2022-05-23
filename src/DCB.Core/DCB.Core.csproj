@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DCB.Helpers\DCB.Helpers.csproj" />
+        <ProjectReference Include="..\DCB.Shared\DCB.Shared.csproj" />
     </ItemGroup>
 
 </Project>

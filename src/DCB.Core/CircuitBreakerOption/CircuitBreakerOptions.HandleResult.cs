@@ -1,5 +1,5 @@
 ﻿using DCB.Core.Handlers.ResultHandlers;
-using DCB.Helpers;
+using DCB.Shared;
 
 namespace DCB.Core.CircuitBreakerOption;
 

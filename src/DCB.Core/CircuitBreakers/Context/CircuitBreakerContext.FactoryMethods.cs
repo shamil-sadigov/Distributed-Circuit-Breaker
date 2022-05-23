@@ -1,4 +1,4 @@
-using DCB.Helpers;
+using DCB.Shared;
 
 namespace DCB.Core.CircuitBreakers.Context;
 
