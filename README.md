@@ -11,7 +11,7 @@ Distributed Circuit Breaker can be helpful if you need to share a circuit breake
 ### Problem
 Goto solution for appliying circuit breakers is lovely [Polly](https://github.com/App-vNext/Polly) library. It allows you to nicely create/use/reuse circuit breaker that can be shared across the application code. 
 
-Circuit breaker can be thought as a resilient wrapper of the external system state which allows you to prevent any redundant request and avoid overwheming external system when the system is not healthy. But what to do if we want to share the circuit breaker with other services in order for them to also know that the external system is unhealthy ? 
+Circuit breaker can be thought as a resilient wrapper of the external system state which allows you to prevent any redundant request and avoid overwheming external system when the system is not healthy. But what if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
 Example:
 
