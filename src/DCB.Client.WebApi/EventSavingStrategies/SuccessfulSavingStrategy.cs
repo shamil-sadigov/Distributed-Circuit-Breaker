@@ -4,7 +4,7 @@ namespace DCB.Client.WebApi.EventSavingStrategies;
 
 public class SuccessfulSavingStrategy:IEventSavingStrategy
 {
-    public Task<SentEventResult> SendEventAsync(string eventMessage)
+    public Task<SentEventResult> SaveEventAsync(string eventMessage)
     {
         return Task.FromResult(new SentEventResult()
         {

@@ -5,7 +5,7 @@ namespace DCB.Client.WebApi.EventSavingStrategies;
 
 public class EventStoreIsOverwhelmedStrategy : IEventSavingStrategy
 {
-    public Task<SentEventResult> SendEventAsync(string eventMessage)
+    public Task<SentEventResult> SaveEventAsync(string eventMessage)
     {
         throw new EventStoreConnectionException(EventStoreFailureReason.Overwhelmed);
     }

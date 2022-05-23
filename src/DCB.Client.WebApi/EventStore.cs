@@ -14,8 +14,8 @@ public class EventStore
     /// <summary>
     /// Sends log to remote service
     /// </summary>
-    public Task<SentEventResult> SendEventAsync(string eventMessage)
+    public Task<SentEventResult> SaveEventAsync(string eventMessage)
     {
-        return EventSavingStrategy.SendEventAsync(eventMessage);
+        return EventSavingStrategy.SaveEventAsync(eventMessage);
     }
 }

@@ -12,7 +12,7 @@ public class UnsuccessfulSavingStrategy:IEventSavingStrategy
         _reason = reason;
     }
     
-    public Task<SentEventResult> SendEventAsync(string eventMessage)
+    public Task<SentEventResult> SaveEventAsync(string eventMessage)
     {
         return Task.FromResult(new SentEventResult()
         {

@@ -28,7 +28,7 @@ public class EventController : ControllerBase
         try
         {
             var result = await _circuitBreaker.ExecuteAsync(async _ => 
-                await _eventStore.SendEventAsync(request.EventMessage), token);
+                await _eventStore.SaveEventAsync(request.EventMessage), token);
 
             if (result.IsEventSent)
                 return Ok(SendEventResponse.Successful);
