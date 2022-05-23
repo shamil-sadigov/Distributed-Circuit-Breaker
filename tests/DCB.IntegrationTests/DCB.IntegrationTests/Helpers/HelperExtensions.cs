@@ -1,5 +1,4 @@
-﻿using DCB.Client.CriticalLogSaver.Dto;
-using DCB.Client.Shared;
+﻿using DCB.Client.Shared;
 using FluentAssertions;
 
 namespace DCB.IntegrationTests.Helpers;

@@ -1,5 +1,4 @@
 using System.Net;
-using DCB.Client.CriticalLogSaver.Dto;
 using DCB.Client.LogSaver.Dto;
 using DCB.Client.Shared;
 using DCB.Client.Shared.LogSavingStrategies;

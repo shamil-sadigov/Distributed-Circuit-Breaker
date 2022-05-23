@@ -2,9 +2,9 @@ using DCB.Client.Shared;
 using DCB.Extensions;
 using DCB.Extensions.Mongo;
 
-namespace DCB.Client.CriticalLogSaver;
+namespace DCB.Client.LogSaver;
 
-public class CriticalLogSaverProgram
+public class GeneralLogSaverProgram
 {
     static void Main(string[] args)
     {
@@ -13,9 +13,11 @@ public class CriticalLogSaverProgram
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        
+
+
         builder.Services.AddDistributedCircuitBreaker(ops =>
         {
+            // TODO: Extract connection string to config file
             ops.UseMongo(x =>
                 {
                     x.ConnectionString = "mongodb://localhost:27017";

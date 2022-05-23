@@ -7,6 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\DCB.Core\DCB.Core.csproj" />
+        <ProjectReference Include="..\..\..\src\DCB.Extensions.Mongo\DCB.Extensions.Mongo.csproj" />
+        <ProjectReference Include="..\..\..\src\DCB.Extensions\DCB.Extensions.csproj" />
         <ProjectReference Include="..\DCB.Client.Shared\DCB.Client.Shared.csproj" />
         <ProjectReference Include="..\DCB.Core\DCB.Core.csproj" />
         <ProjectReference Include="..\DCB.Extensions.Mongo\DCB.Extensions.Mongo.csproj" />
