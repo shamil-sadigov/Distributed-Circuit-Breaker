@@ -3,9 +3,9 @@ using DCB.Client.WebApi.Dto;
 
 namespace DCB.Client.WebApi.EventSavingStrategies;
 
-public class ClientUnauthorizedStrategy : IEventSavingStrategy
+public class ClientUnauthorizedStrategy : ILogSavingStrategy
 {
-    public Task<SentEventResult> SaveEventAsync(string eventMessage)
+    public Task<SavedLogResult> SaveLogAsync(string logMessage)
     {
         throw new EventStoreConnectionException(EventStoreFailureReason.Unauthorized);
     }

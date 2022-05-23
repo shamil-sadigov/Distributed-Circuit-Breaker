@@ -3,9 +3,9 @@ using DCB.Client.WebApi.Dto;
 
 namespace DCB.Client.WebApi.EventSavingStrategies;
 
-public class EventStoreIsOverwhelmedStrategy : IEventSavingStrategy
+public class LogStorageIsOverwhelmedStrategy : ILogSavingStrategy
 {
-    public Task<SentEventResult> SaveEventAsync(string eventMessage)
+    public Task<SavedLogResult> SaveLogAsync(string logMessage)
     {
         throw new EventStoreConnectionException(EventStoreFailureReason.Overwhelmed);
     }

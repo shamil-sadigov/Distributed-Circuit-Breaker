@@ -31,7 +31,7 @@ public static class ServiceCollectionExtensions
 
         services.RegisterImplementationsOf<ICircuitBreakerStateHandler>();
 
-        services.AddSingleton<CircuitBreakerStateHandlerProvider>();
+        services.AddScoped<CircuitBreakerStateHandlerProvider>();
         services.AddSingleton<ISystemClock, SystemClock>();
         
         return services;

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using DCB.Client.WebApi.Dto;
+﻿using DCB.Client.WebApi.Dto;
 
 namespace DCB.Client.WebApi.CircuitBreakerOptions;
 
@@ -14,7 +13,7 @@ public sealed class EventStoreCircuitBreakerOptions:Core.CircuitBreakerOption.Ci
         HandleException<EventStoreConnectionException>(x => x.FailureReason == EventStoreFailureReason.Overwhelmed);
         HandleException<EventStoreConnectionException>(x => x.FailureReason == EventStoreFailureReason.Unavailable);
         
-        HandleResult<SentEventResult>(x => !x.IsEventSent);
+        HandleResult<SavedLogResult>(x => !x.IsLogSaved);
     }
 }
 

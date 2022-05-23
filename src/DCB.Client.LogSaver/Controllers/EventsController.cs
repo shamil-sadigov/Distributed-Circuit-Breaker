@@ -8,17 +8,23 @@ namespace DCB.Client.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EventController : ControllerBase
+public class EventsController : ControllerBase
 {
-    private readonly EventStore _eventStore;
+    private readonly LogStorage _logStorage;
     private readonly ICircuitBreaker<EventStoreCircuitBreakerOptions> _circuitBreaker;
 
-    public EventController(EventStore eventStore, ICircuitBreaker<EventStoreCircuitBreakerOptions> circuitBreaker)
+    public EventsController(LogStorage logStorage, ICircuitBreaker<EventStoreCircuitBreakerOptions> circuitBreaker)
     {
-        _eventStore = eventStore;
+        _logStorage = logStorage;
         _circuitBreaker = circuitBreaker;
     }
 
+    [HttpGet("Ping")]
+    public IActionResult Ping()
+    {
+        return Ok("Pong");
+    }
+    
     [HttpPost]
     public async Task<ActionResult<SendEventResponse>> Post(SendEventRequest request, CancellationToken token)
     {
@@ -28,9 +34,9 @@ public class EventController : ControllerBase
         try
         {
             var result = await _circuitBreaker.ExecuteAsync(async _ => 
-                await _eventStore.SaveEventAsync(request.EventMessage), token);
+                await _logStorage.SaveLogAsync(request.EventMessage), token);
 
-            if (result.IsEventSent)
+            if (result.IsLogSaved)
                 return Ok(SendEventResponse.Successful);
             
             return SendEventResponse.Failed(EventStoreFailureReason.Unknown);

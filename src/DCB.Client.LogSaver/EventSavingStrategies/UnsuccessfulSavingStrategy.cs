@@ -3,7 +3,7 @@ using DCB.Client.WebApi.Dto;
 
 namespace DCB.Client.WebApi.EventSavingStrategies;
 
-public class UnsuccessfulSavingStrategy:IEventSavingStrategy
+public class UnsuccessfulSavingStrategy:ILogSavingStrategy
 {
     private readonly EventStoreFailureReason _reason;
 
@@ -12,11 +12,11 @@ public class UnsuccessfulSavingStrategy:IEventSavingStrategy
         _reason = reason;
     }
     
-    public Task<SentEventResult> SaveEventAsync(string eventMessage)
+    public Task<SavedLogResult> SaveLogAsync(string logMessage)
     {
-        return Task.FromResult(new SentEventResult()
+        return Task.FromResult(new SavedLogResult()
         {
-            IsEventSent = false
+            IsLogSaved = false
         });
     }
 }
