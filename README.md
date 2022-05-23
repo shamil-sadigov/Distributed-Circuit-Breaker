@@ -45,6 +45,9 @@ And since CircuitBreaker state is globally available, Critical-Log-saver can acc
 
 ![stateful-circuit-breakers](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/stateful-circuit-breaker.jpg)
 
+Especially it can be handy when replicating servies and they share the same Circuit Breaker
+
+
 
 ### Concurrency conflicts
 TODO
