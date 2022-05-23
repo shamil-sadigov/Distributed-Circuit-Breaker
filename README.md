@@ -20,7 +20,7 @@ In below image, we have two services.
 - Trace-log-saver => Saves all trace-level logs in centralized log storage  
 - Critical-log-saver => Do the same thing but only for critical-level logs.
 
-Both of these services use Circuit Breaker when dealing with Log Storage.
+Both of these services use private Circuit Breaker when dealing with Log Storage.
 
 And let say that 
 - Log Storage go down.
@@ -35,7 +35,7 @@ PS: Well, not the best example, but acceptable for conveying a concept
 
 ### Solution
 
-Here we introduce stateful circuit breaker that is shared among Trace-log-saver and Critical-log-saver. It means that
+Here we introduce stateful globally accessible Circuit Breaker that is shared among Trace-log-saver and Critical-log-saver. It means that
 
 - If Log Storage goes down.
 - Trace-log-saver will notice it after several failed attempts when trying to send logs to Log Storage
@@ -43,6 +43,7 @@ Here we introduce stateful circuit breaker that is shared among Trace-log-saver 
 
 And since CircuitBreaker state is globally available, Critical-Log-saver can access this Open CircuitBreaker and be aware of Log Storage unhealthy state. No need for redundant requests, unnecessary resource consumption and other things!
 
+![stateful-circuit-breakers](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/stateful-circuit-breaker.jpg)
 
 
 ### Concurrency conflicts
