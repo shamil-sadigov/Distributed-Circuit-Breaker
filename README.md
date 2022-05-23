@@ -62,6 +62,8 @@ Another approach for a globally accessible Circuit Brekaer is to place Log Stora
 
 
 ## How to use
+TODO
+Add code samples
 
 ## Concurrency conflict resolution
 What happens if there are two requests that simultaniously update circuit breaker state ?
@@ -87,4 +89,3 @@ Redis is coming soon.
 - Ability to forcefully swtich Circuit Breaker to Closed State
 - Add more callbacks support during Circuit Breaker state changes
 - Instead of using DurationOfBreak to swtich CircuitBreaker to Half-Open state we can instead periodically ping remote service (health-checks) to determine whether it become available or not.
-- 
