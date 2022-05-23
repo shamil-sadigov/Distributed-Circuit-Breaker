@@ -2,19 +2,19 @@
 
 # Distributed-Circuit-Breaker
 
-### Description
+## Description
 This repo is a proof of concept of distributed circuit breaker. 
 
 Distributed Circuit Breaker can be helpful if you need to share a circuit breaker among multiple services (or multiple instances of the same service), which means that circuit breaker's state is kept in external storage (Redis, Mongo and so on...) as opposed to service instance memory. Why do we beed it ? Well, go to `Problem` section.
 
 
-### Context
+## Context
 Goto solution for appliying circuit breakers is lovely [Polly](https://github.com/App-vNext/Polly) library. It allows you to nicely create/use/reuse circuit breaker that can be shared across the application code. 
 
 Circuit breaker can be thought as a resilient wrapper of the external system state which allows you to prevent any overwheming external system with redundant request and fail fast or fallback when the system is not healthy. But what if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
 
-### Problem
+## Problem
 
 In below image, we have two services.
 - Trace-log-saver => Saves all trace-level logs in centralized log storage  
@@ -33,7 +33,7 @@ But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, wh
 
 PS: Well, not the best example, but acceptable for conveying a concept
 
-### Solution
+## Solution
 
 Here we introduce stateful globally accessible Circuit Breaker that is shared among Trace-log-saver and Critical-log-saver. It means that
 
@@ -52,7 +52,7 @@ Especially it can be handy when replicating servies and they share the same Circ
 
 So, this repo goes with this solution.
 
-### Solution 2
+## Solution 2
 
 Another approach for a globally accessible Circuit Brekaer is to place Log Storage behind a Proxy service (aka [Sidecar pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar)) that can keep Circuit Breaker. But this repo doesnt implement this solution
 
@@ -60,13 +60,13 @@ Another approach for a globally accessible Circuit Brekaer is to place Log Stora
 
 
 
-### Concurrency conflict resolution
+## Concurrency conflict resolution
 TODO
 
 
-### Technical debt
+## Technical debt
 TODO
 - Redis instead of Mongo
 
-### Future improvements
+## Future improvements
 TODO
