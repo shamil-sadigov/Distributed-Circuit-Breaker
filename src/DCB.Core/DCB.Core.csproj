@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Polly" Version="7.2.3"/>
+        <PackageReference Include="Polly" Version="7.2.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DCB.Helpers\DCB.Helpers.csproj"/>
+        <ProjectReference Include="..\DCB.Helpers\DCB.Helpers.csproj" />
     </ItemGroup>
 
 </Project>
