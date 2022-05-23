@@ -21,16 +21,29 @@ In below image, we have two services.
 - Critical-log-saver => Do the same thing but only for critical-level logs.
 
 Both of these services use Circuit Breaker when dealing with Log Storage.
-And let say that Log Storage went down.
-Trace-log-saver noticed it after several failed attempts to send logs to Log Storage, and switched CircuitBreaker to Open state.
-But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, which means that Critical-Log-saver should also make several failed attempts in order to realize that Log Storage is unhealthy and turn CircuitBreaker to Open state.
+
+And let say that 
+- Log Storage go down.
+- Trace-log-saver will notice it after several failed attempts when trying to send logs to Log Storage
+- As a result and Trace-log-saver switches CircuitBreaker to Open state.
+
+But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, which means that Critical-Log-saver also have to make the same amount of failed attempts in order to realize that Log Storage is unhealthy and turn CircuitBreaker to Open state. But why do these redundant request to Log Storage ?
 
 ![stateless-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/problem-of-in-memory-circuit-breaker.jpg)
 
-
+PS: Well, not the best example, but acceptable for conveying a concept
 
 ### Solution
-TODO
+
+Here we introduce stateful circuit breaker that is shared among Trace-log-saver and Critical-log-saver. It means that
+
+- If Log Storage goes down.
+- Trace-log-saver will notice it after several failed attempts when trying to send logs to Log Storage
+- As a result and Trace-log-saver switches CircuitBreaker to Open state.
+
+And since CircuitBreaker state is globally available, Critical-Log-saver can access this Open CircuitBreaker and be aware of Log Storage unhealthy state. No need for redundant requests, unnecessary resource consumption and other things!
+
+
 
 ### Concurrency conflicts
 TODO
