@@ -50,14 +50,13 @@ Especially it can be handy when replicating servies and they share the same Circ
 ![replicated-services](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/replication.jpg)
 
 
-So, this repo goes with this solution.
+So, this repo implements this solution.
 
 ## Solution 2
 
 Another approach for a globally accessible Circuit Brekaer is to place Log Storage behind a Proxy service (aka [Sidecar pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar)) that can keep Circuit Breaker. But this repo doesnt implement this solution
 
 ![proxy-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/circuit-breaker-via-side-card.jpg)
-
 
 
 ## Concurrency conflict resolution
