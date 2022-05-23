@@ -31,4 +31,8 @@
         <ProjectReference Include="..\..\src\DCB.Extensions\DCB.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="FunctionalTests" />
+    </ItemGroup>
+
 </Project>

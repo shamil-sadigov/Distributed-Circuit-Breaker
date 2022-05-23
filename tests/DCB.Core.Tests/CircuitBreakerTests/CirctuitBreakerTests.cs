@@ -26,7 +26,7 @@ public class CircuitBreakerTests
         var actionInvokedTimes = 0;
         
         var circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceOptions>();
+            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceTestOptions>();
         
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
@@ -52,7 +52,7 @@ public class CircuitBreakerTests
     {
         // Arrange
         var circuitBreaker =  new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceOptions>();
+            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceTestOptions>();
         
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
@@ -78,7 +78,7 @@ public class CircuitBreakerTests
         int failureAllowedBeforeBreaking)
     {
         // Arrange
-        var options = new CurrencyExchangeServiceOptions(failureAllowedBeforeBreaking, durationOfBreak: 3.Seconds());
+        var options = new CurrencyExchangeServiceTestOptions(failureAllowedBeforeBreaking, durationOfBreak: 3.Seconds());
 
         var circuitBreaker = new ServiceCollection()
             .ConfigureAndGetCircuitBreaker(options);
@@ -116,7 +116,7 @@ public class CircuitBreakerTests
     public async Task CircuitBreaker_is_open_when_action_result_is_handleable(int failureAllowedBeforeBreaking)
     {
         // Arrange
-        var options = new CurrencyExchangeServiceOptions(failureAllowedBeforeBreaking, durationOfBreak: 10.Seconds());
+        var options = new CurrencyExchangeServiceTestOptions(failureAllowedBeforeBreaking, durationOfBreak: 10.Seconds());
         var actionInvokedTimesInOpenState = 0;
 
         var circuitBreaker = new ServiceCollection()
@@ -148,7 +148,7 @@ public class CircuitBreakerTests
         // Arrange
         const int failureAllowedBeforeBreaking = 3;
         
-        var options = new CurrencyExchangeServiceOptions(
+        var options = new CurrencyExchangeServiceTestOptions(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
 
@@ -176,7 +176,7 @@ public class CircuitBreakerTests
         const int failureAllowedBeforeBreaking = 3;
         var actionInvokedTimes = 0;
 
-        var options = new CurrencyExchangeServiceOptions(
+        var options = new CurrencyExchangeServiceTestOptions(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
         
@@ -212,7 +212,7 @@ public class CircuitBreakerTests
         const int failureAllowedBeforeBreaking = 3;
         var actionInvokedTimes = 0;
 
-        var options = new CurrencyExchangeServiceOptions(
+        var options = new CurrencyExchangeServiceTestOptions(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
         
@@ -239,7 +239,7 @@ public class CircuitBreakerTests
     }
     
     private static async Task BringTillOpenState(
-        ICircuitBreaker<CurrencyExchangeServiceOptions> circuitBreaker, 
+        ICircuitBreaker<CurrencyExchangeServiceTestOptions> circuitBreaker, 
         int failureAllowedBeforeBreaking)
     {
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)
