@@ -62,7 +62,7 @@ Another approach for a globally accessible Circuit Brekaer is to place Log Stora
 
 ### CircuitBreakerOptions
 
-First create circuit breaker options 
+First create circuit breaker option
 
 ```cs
 // Circuit breaker for remote log storage
@@ -71,7 +71,6 @@ public sealed class LogStorageCircuitBreakerOptions : CircuitBreakerOptions
     public LogStorageCircuitBreakerOptions()
     {
         // Exception and results that circuit breaker should handle
-        
         HandleException<EventStoreConnectionException>(x => x.FailureReason == LogStorageFailureReason.Overwhelmed);
         HandleException<EventStoreConnectionException>(x => x.FailureReason == LogStorageFailureReason.Unavailable);
         
@@ -193,7 +192,7 @@ Well, for now chosen strategy is Last-Update-Wins, because it's easier and reaso
 
 ## Circuit Breaker Storage
 
-Currently available storage mechanisms are
+Currently available storages are
 - MongoDB
 - MSSQL
 
