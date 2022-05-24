@@ -60,9 +60,7 @@ Another approach is to place Log Storage behind a Proxy service (aka [Sidecar pa
 ![proxy-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/circuit-breaker-via-side-card.jpg)
 
 
-# How to use
-
-### CircuitBreakerOptions
+## How to use
 
 First create circuit breaker option
 
@@ -90,9 +88,7 @@ public sealed class LogStorageCircuitBreakerOptions : CircuitBreakerOptions
 }
 ```
 
-### Register services in ServiceCollection
-
-Then configure this option in ServiceCollection and specify storage (Mongo or MSSQL) 
+Then configure distributed circuit breaker by registering previous option in ServiceCollection and specify storage (Mongo or MSSQL) 
 
 Example with Mongo storage
 ```cs
@@ -139,9 +135,7 @@ builder.Services.AddDistributedCircuitBreaker(ops =>
 });
 ```
 
-### Use
-
-Inject circuit breaker in constructor by specifying CircuitBreakerOptions that was registered on previous step
+Then just inject circuit breaker in constructor by specifying CircuitBreakerOptions that was registered on previous step
 
 ```cs
 public class CriticalLogsController : ControllerBase
@@ -158,7 +152,8 @@ public class CriticalLogsController : ControllerBase
 ```
 
 
-Use
+And use
+
 ```cs
 [HttpPost]
 public async Task<ActionResult<SavedLogResponse>> Post(SaveCriticalLogRequest request, CancellationToken token)
