@@ -1,8 +1,5 @@
 ## [WIP]
 
-## TODO
-- Add code samples
-
 # Distributed-Circuit-Breaker
 
 ## Description
@@ -61,9 +58,134 @@ Another approach for a globally accessible Circuit Brekaer is to place Log Stora
 ![proxy-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/circuit-breaker-via-side-card.jpg)
 
 
-## How to use
-TODO
-Add code samples
+# How to use
+
+### CircuitBreakerOptions
+
+First create circuit breaker options 
+
+```cs
+// Circuit breaker for remote log storage
+public sealed class LogStorageCircuitBreakerOptions : CircuitBreakerOptions
+{
+    public LogStorageCircuitBreakerOptions()
+    {
+        // Exception and results that circuit breaker should handle
+        
+        HandleException<EventStoreConnectionException>(x => x.FailureReason == LogStorageFailureReason.Overwhelmed);
+        HandleException<EventStoreConnectionException>(x => x.FailureReason == LogStorageFailureReason.Unavailable);
+        
+        HandleResult<SavedLogResult>(x => !x.IsLogSaved);
+    }
+
+    // circuit breaker name that should be unique across all circuit breakers
+    public override string Name => "LogStorage";
+
+    // number of failed allowed before switching circuit breaker to Open state
+    public override int FailureAllowedBeforeBreaking => 5;
+
+    // how long it will take to switch from Open to HalfOpen state
+    public override TimeSpan DurationOfBreak => TimeSpan.FromSeconds(5);
+}
+```
+
+### Register services in ServiceCollection
+
+Then configure this option in ServiceCollection and specify storage (Mongo or MSSQL) 
+
+Example with Mongo storage
+```cs
+builder.Services.AddDistributedCircuitBreaker(ops =>
+{
+    ops.UseMongo(x =>
+    {
+        // required
+        x.ConnectionString = "mongodb://localhost:27017";
+
+        // optional
+        x.CollectionName = "CircuitBreakers"; // default value
+        x.DatabaseName = "DistributedCircuitBreaker"; // default value
+    })
+    .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
+});
+```
+
+Example with SqlServer
+```cs
+builder.Services.AddDistributedCircuitBreaker(ops =>
+{
+    ops.UseSqlServer(x =>
+    {
+        // required
+        x.ConnectionString = "...";
+    })
+    .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
+});
+```
+
+You can configure as many circuit breaker options as you want
+```cs
+builder.Services.AddDistributedCircuitBreaker(ops =>
+{
+    ops.UseSqlServer(x =>
+        {
+            // required
+            x.ConnectionString = "...";
+        })
+        .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
+        .AddCircuitBreaker<NotificationServiceCircuitBreakerOptions>();
+        .AddCircuitBreaker<AnotherExternalServiceCircuitBreakerOptions>();
+});
+```
+
+### Use
+
+Inject circuit breaker in constructor by specifying CircuitBreakerOptions that was registered on previous step
+
+```cs
+public class CriticalLogsController : ControllerBase
+{
+    ...
+    private readonly ICircuitBreaker<LogStorageCircuitBreakerOptions> _logStorageCircuitBreaker;
+    
+    public CriticalLogsController(
+        ... ,
+        ICircuitBreaker<LogStorageCircuitBreakerOptions> logStorageCircuitBreaker)
+    {
+        _logStorageCircuitBreaker = logStorageCircuitBreaker;
+    }
+```
+
+
+Use
+```cs
+[HttpPost]
+public async Task<ActionResult<SavedLogResponse>> Post(SaveCriticalLogRequest request, CancellationToken token)
+{
+    if (await _circuitBreaker.IsOpenAsync(token))
+    {
+        // Fallback logic
+        return StatusCode((int) HttpStatusCode.ServiceUnavailable);
+    }
+
+    try
+    {
+        var result = await _circuitBreaker.ExecuteAsync(async _ => 
+            await _logStorage.SaveLogAsync(request.LogMessage), token);
+
+        if (result.IsLogSaved)
+            return Ok(SavedLogResponse.Successful);
+
+        return SavedLogResponse.Failed(LogStorageFailureReason.Unknown);
+
+    }
+    catch (EventStoreConnectionException exception)
+    {
+        return SavedLogResponse.Failed(exception.FailureReason);
+    }
+}
+```
+
 
 ## Concurrency conflict resolution
 What happens if there are two requests that simultaniously update circuit breaker state ?
