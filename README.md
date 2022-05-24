@@ -20,7 +20,7 @@ In below image, we have two services.
 - Trace-log-saver (saves all trace-level logs in centralized log storage)
 - Critical-log-saver (does the same thing but only for critical-level logs)
 
-Both of these services use private Circuit Breaker when dealing with Log Storage.
+Both of these services use in-memory Circuit Breaker when dealing with Log Storage.
 
 And let say that:
 - Log Storage goes down.
