@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DCB.Extensions\DCB.Extensions.csproj" />
+        <ProjectReference Include="..\DCB.Shared\DCB.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

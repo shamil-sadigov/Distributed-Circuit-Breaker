@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using DCB.Helpers;
+using DCB.Shared;
 
 namespace DCB.Extensions.Mongo;
 

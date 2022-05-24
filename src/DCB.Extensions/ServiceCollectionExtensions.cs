@@ -2,7 +2,7 @@
 using DCB.Core.CircuitBreakers;
 using DCB.Core.CircuitBreakers.StateHandlers;
 using DCB.Extensions.Builders;
-using DCB.Helpers;
+using DCB.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DCB.Extensions;

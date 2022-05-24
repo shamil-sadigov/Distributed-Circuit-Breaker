@@ -1,4 +1,4 @@
-﻿using DCB.Helpers;
+﻿using DCB.Shared;
 using Microsoft.Extensions.Options;
 
 namespace DCB.Extensions.Mongo;
