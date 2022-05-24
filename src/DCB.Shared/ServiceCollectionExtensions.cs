@@ -22,7 +22,8 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    
+
+    // TODO: Maybe better register via ServiceDescriptor instead of doing switch case
     private static void RegisterImplementation<TBaseType>(
         IServiceCollection services, 
         ServiceLifetime serviceLifetime,
