@@ -23,7 +23,7 @@ public class MongoStorage : ICircuitBreakerStorage
 
     public async Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token)
     {
-        var dataModel = await GetByNameAsync(circuitBreakerName, token);
+        var dataModel = await GetByNameAsync(circuitBreakerName, token).ConfigureAwait(false);
 
         return _mapper.Map<CircuitBreakerContextSnapshot>(dataModel);
     }
@@ -51,8 +51,8 @@ public class MongoStorage : ICircuitBreakerStorage
     private async Task<CircuitBreakerDataModel?> GetByNameAsync(string circuitBreakerName, CancellationToken token)
     {
         var cursor = await _circuitBreakerCollection.FindAsync(
-            x => x.Name == circuitBreakerName,
-            cancellationToken: token);
+            x => x.Name == circuitBreakerName, cancellationToken: token)
+            .ConfigureAwait(false);
 
         return await cursor.FirstOrDefaultAsync(token).ConfigureAwait(false);
     }
