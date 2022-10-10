@@ -29,7 +29,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
         {
             var result = await action(token).ConfigureAwait(false);
 
-            if (!options.ResultHandlers.CanHandle(result))
+            if (!options.CanHandleResult(result))
                 return result;
 
             circuitBreaker.Failed(_systemClock.GetCurrentTime());
@@ -38,7 +38,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
         }
         catch (Exception ex)
         {
-            if (!options.ExceptionHandlers.CanHandle(ex))
+            if (!options.CanHandleException(ex))
                 throw;
 
             circuitBreaker.Failed(_systemClock.GetCurrentTime());

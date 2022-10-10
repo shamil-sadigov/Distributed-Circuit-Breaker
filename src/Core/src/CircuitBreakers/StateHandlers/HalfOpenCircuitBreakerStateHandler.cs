@@ -29,7 +29,7 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
         {
             var result = await action(token).ConfigureAwait(false);
             
-            if (!options.ResultHandlers.CanHandle(result))
+            if (!options.CanHandleResult(result))
             {
                 circuitBreaker.Close(_systemClock.GetCurrentTime());
                 await SaveAsync(circuitBreaker, token);
@@ -42,7 +42,7 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
         }
         catch (Exception ex)
         {
-            if (!options.ExceptionHandlers.CanHandle(ex))
+            if (!options.CanHandleException(ex))
                 throw;
 
             circuitBreaker.Failed(_systemClock.GetCurrentTime());

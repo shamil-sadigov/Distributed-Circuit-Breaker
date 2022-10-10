@@ -5,6 +5,13 @@ namespace Core.CircuitBreakerOption;
 
 public abstract partial class CircuitBreakerOptions : CircuitBreakerOptionsBase
 {
-    internal ExceptionHandlers ExceptionHandlers { get; } = new();
-    internal ResultHandlers ResultHandlers { get; } = new();
+    private ExceptionHandlers ExceptionHandlers { get; } = new();
+    private ResultHandlers ResultHandlers { get; } = new();
+
+    internal bool CanHandleException(Exception exception) 
+        => ExceptionHandlers.CanHandle(exception);
+    
+    internal bool CanHandleResult<TResult>(TResult result) 
+        => ResultHandlers.CanHandle(result);
+
 }
