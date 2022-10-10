@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Extensions.Mongo;
+namespace Registration.Mongo;
 
 public class CircuitBreakerDataModel
 {

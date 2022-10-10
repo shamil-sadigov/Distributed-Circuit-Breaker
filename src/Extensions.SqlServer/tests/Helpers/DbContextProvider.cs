@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Extensions.SqlServer.Tests.Helpers;
+namespace Registration.SqlServer.Tests.Helpers;
 
 public sealed class DbContextProvider : IAsyncLifetime
 {

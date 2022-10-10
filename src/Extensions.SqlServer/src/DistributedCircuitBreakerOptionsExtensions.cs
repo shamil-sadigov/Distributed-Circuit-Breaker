@@ -1,23 +1,23 @@
-using Extensions.Builders;
+using Registration.Registrators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Extensions.SqlServer;
+namespace Registration.SqlServer;
 
 public static class DistributedCircuitBreakerOptionsExtensions
 {
-    public static CircuitBreakerOptionsBuilder UseSqlServer(
-        this CircuitBreakerBuilder builder, 
+    public static CircuitBreakerOptionsRegistrator UseSqlServer(
+        this CircuitBreakerStorageRegistrator storageRegistrator, 
         Action<CircuitBreakerDbOptions> configureDbOptions)
     {
         var dbOptions = new CircuitBreakerDbOptions();
         configureDbOptions(dbOptions);
         dbOptions.Validate();
         
-        builder.Services
+        storageRegistrator.Services
             .AddAutoMapper(typeof(DataModelProfile))
             .AddDbContext<CircuitBreakerDbContext>(ops => ops.UseSqlServer(dbOptions.ConnectionString));
 
-        return builder.UseStorage<SqlServerStorage>();
+        return storageRegistrator.UseStorage<SqlServerStorage>();
     }
 }

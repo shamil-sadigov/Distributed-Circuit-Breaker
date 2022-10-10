@@ -1,7 +1,7 @@
 ﻿using Core.CircuitBreakerOption;
 using Core.CircuitBreakers;
-using Extensions;
-using Extensions.Mongo;
+using Registration;
+using Registration.Mongo;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 

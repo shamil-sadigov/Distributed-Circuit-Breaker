@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Storage;
 using Microsoft.EntityFrameworkCore;
 
-namespace Extensions.SqlServer;
+namespace Registration.SqlServer;
 
 public class SqlServerStorage : ICircuitBreakerStorage
 {

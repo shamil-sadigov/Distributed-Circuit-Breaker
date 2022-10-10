@@ -1,4 +1,4 @@
-﻿namespace Extensions.SqlServer;
+﻿namespace Registration.SqlServer;
 
 public class CircuitBreakerDataModel
 {

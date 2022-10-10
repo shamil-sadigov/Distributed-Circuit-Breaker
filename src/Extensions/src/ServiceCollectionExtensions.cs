@@ -1,31 +1,22 @@
 ﻿using Core;
 using Core.CircuitBreakers;
 using Core.CircuitBreakers.StateHandlers;
-using Extensions.Builders;
 using Helpers;
 using Microsoft.Extensions.DependencyInjection;
+using Registration.Registrators;
 
-namespace Extensions;
+namespace Registration;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDistributedCircuitBreaker(
         this IServiceCollection services,
-        Action<CircuitBreakerBuilder> configBuilder)
+        Action<CircuitBreakerStorageRegistrator> configure)
     {
-        // configure here
-
-        var builder = new CircuitBreakerBuilder(services);
-
-        configBuilder(builder);
-
-        // TODO: Maybe we should rename it
-        var buildResult = builder.Build();
-
-        services.AddSingleton(buildResult);
-
-        foreach (var option in buildResult.CircuitBreakerOptions)
-            services.AddSingleton(option.GetType(), _ => option);
+        CircuitBreakerOptionsRegistrator optionsRegistrator = new(services);
+        CircuitBreakerStorageRegistrator storageRegistrator = new (services, optionsRegistrator);
+        
+        configure(storageRegistrator);
         
         services.AddTransient(typeof(ICircuitBreaker<>), typeof(CircuitBreaker<>));
 

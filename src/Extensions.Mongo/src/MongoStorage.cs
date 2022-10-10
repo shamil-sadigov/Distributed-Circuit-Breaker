@@ -4,7 +4,7 @@ using Core.Exceptions;
 using Core.Storage;
 using MongoDB.Driver;
 
-namespace Extensions.Mongo;
+namespace Registration.Mongo;
 
 public class MongoStorage : ICircuitBreakerStorage
 {
@@ -13,7 +13,7 @@ public class MongoStorage : ICircuitBreakerStorage
 
     public MongoStorage(
         MongoClient mongoClient,
-        CircuitBreakerDbOptions options,
+        MongoDbOptions options,
         IMapper mapper)
     {
         _mapper = mapper;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Extensions.SqlServer;
+namespace Registration.SqlServer;
 
 public class CircuitBreakerDbContext : DbContext
 {

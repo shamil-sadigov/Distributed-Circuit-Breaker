@@ -1,17 +1,17 @@
 using AutoMapper;
-using Extensions.Mongo.Tests.Helpers;
 using FluentAssertions;
 using Helpers.Tests;
 using MongoDB.Driver;
+using Registration.Mongo.Tests.Helpers;
 
-namespace Extensions.Mongo.Tests;
+namespace Registration.Mongo.Tests;
 
 // TODO: Run Mongo in docker instead of relying on local instance
 // See => https://github.com/HofmeisterAn/dotnet-testcontainers
 
 public class MongoStorageTests : IClassFixture<MongoOptionsProvider>
 {
-    private readonly CircuitBreakerDbOptions _dbOptions;
+    private readonly MongoDbOptions _dbOptions;
     private readonly Mapper _mapper;
     private readonly MongoClient _mongoClient;
 

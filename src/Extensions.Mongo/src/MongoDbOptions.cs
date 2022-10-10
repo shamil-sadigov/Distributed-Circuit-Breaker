@@ -1,15 +1,15 @@
-using Helpers;
 using System.ComponentModel.DataAnnotations;
+using Helpers;
 
-namespace Extensions.Mongo;
+namespace Registration.Mongo;
 
-public class CircuitBreakerDbOptions
+public class MongoDbOptions
 {
     private string? _connectionString;
     private string _databaseName;
     private string _collectionName;
 
-    public CircuitBreakerDbOptions(string databaseName, string collectionName)
+    public MongoDbOptions(string databaseName, string collectionName)
     {
         databaseName.ThrowIfNull();
         collectionName.ThrowIfNull();

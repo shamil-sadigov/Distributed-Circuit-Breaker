@@ -10,9 +10,7 @@ public interface ICircuitBreaker<TOptions> where TOptions : CircuitBreakerOption
 
     Task<bool> IsOpenAsync(CancellationToken cancellationToken);
     
-    Task ExecuteAsync(
-        Func<CancellationToken, Task> action,
-        CancellationToken cancellationToken);
+    Task ExecuteAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken);
     
     Task<TResult> ExecuteAsync<TResult>(
         Func<CancellationToken, Task<TResult>> action, 

@@ -3,7 +3,7 @@ using Core.CircuitBreakers.Context;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 
-namespace Extensions.SqlServer.Tests;
+namespace Registration.SqlServer.Tests;
 
 public class MappingTests
 {

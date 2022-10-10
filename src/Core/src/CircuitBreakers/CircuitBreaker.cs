@@ -10,7 +10,6 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
     private readonly CircuitBreakerStateHandlerProvider _stateHandlerProvider;
     private readonly ISystemClock _systemClock;
     private readonly TOptions _circuitBreakerOptions;
-    private readonly Task<Void> _cachedVoidResult = Task.FromResult(new Void());
     
     public CircuitBreaker(
         ICircuitBreakerStorage storage,
@@ -69,12 +68,11 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
             .HandleAsync(token =>
             {
                 action(token);
-                return _cachedVoidResult;
+                return Void.Instance;
             }, context, _circuitBreakerOptions, cancellationToken)
             .ConfigureAwait(false);
     }
     
-
     private async Task<CircuitBreakerContext> GetOrCreateContextAsync(CancellationToken cancellationToken)
     {
         var snapshot = await _storage
@@ -92,7 +90,6 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
             // return the one that is already exists in DB
 
             context = await CreateNewCircuitBreakerAsync(cancellationToken).ConfigureAwait(false);
-
         }
         
         return context;
@@ -106,6 +103,8 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
                 _circuitBreakerOptions.DurationOfBreak);
 
         var snapshot = context.GetSnapshot();
+        
+        // TODO: This can be called in concurrent environment, ensure it's idempotent
         await _storage.AddAsync(snapshot, token);
         return context;
     }

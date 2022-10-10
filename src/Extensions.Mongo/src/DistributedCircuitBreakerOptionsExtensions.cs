@@ -1,34 +1,34 @@
-using Extensions.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using Registration.Registrators;
 
-namespace Extensions.Mongo;
+namespace Registration.Mongo;
 
 // TODO: Test it
 public static class DistributedCircuitBreakerOptionsExtensions
 {
-    public static CircuitBreakerOptionsBuilder UseMongo(
-        this CircuitBreakerBuilder builder,
-        Action<CircuitBreakerDbOptions> configureDbOptions)
+    public static CircuitBreakerOptionsRegistrator UseMongo(
+        this CircuitBreakerStorageRegistrator storageRegistrator,
+        Action<MongoDbOptions> configure)
     {
-        if (configureDbOptions is null)
-            throw new ArgumentNullException(nameof(configureDbOptions));
+        if (configure is null)
+            throw new ArgumentNullException(nameof(configure));
 
-        var options = new CircuitBreakerDbOptions("DistributedCircuitBreaker", "CircuitBreakers");
+        var mongoOptions = new MongoDbOptions("DistributedCircuitBreaker", "CircuitBreakers");
 
-        configureDbOptions(options);
+        configure(mongoOptions);
         
-        options.Validate();
+        mongoOptions.Validate();
         
-        builder.Services
-            .AddSingleton(_ => options)
+        storageRegistrator.Services
+            .AddSingleton(_ => mongoOptions)
             .AddSingleton(sp =>
             {
-                var dbOptions = sp.GetRequiredService<CircuitBreakerDbOptions>();
+                var dbOptions = sp.GetRequiredService<MongoDbOptions>();
                 return new MongoClient(dbOptions.ConnectionString);
             })
             .AddAutoMapper(typeof(DataModelProfile));
 
-        return builder.UseStorage<MongoStorage>();
+        return storageRegistrator.UseStorage<MongoStorage>();
     }
 }

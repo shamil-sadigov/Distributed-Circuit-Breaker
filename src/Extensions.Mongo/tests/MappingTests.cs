@@ -3,7 +3,7 @@ using Core.CircuitBreakers.Context;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 
-namespace Extensions.Mongo.Tests;
+namespace Registration.Mongo.Tests;
 
 public class MappingTests
 {

@@ -8,10 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="6.6.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-        <PackageReference Include="NSubstitute" Version="4.3.0" />
-        <PackageReference Include="TestEnvironment.Docker.Containers.Mongo" Version="2.1.3" />
+        <PackageReference Include="FluentAssertions" Version="6.6.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,7 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Helpers\tests\Helpers.Tests.csproj" />
-      <ProjectReference Include="..\src\Extensions.SqlServer.csproj" />
+      <ProjectReference Include="..\src\Registration.Mongo.csproj" />
     </ItemGroup>
     
     <ItemGroup>
@@ -33,6 +32,5 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
-    
-   
+
 </Project>

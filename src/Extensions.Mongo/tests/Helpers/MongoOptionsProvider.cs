@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace Extensions.Mongo.Tests.Helpers;
+namespace Registration.Mongo.Tests.Helpers;
 
 public sealed class MongoOptionsProvider : IAsyncLifetime
 {
     private const string ConfigFileName = "test-config.json";
 
     public MongoClient MongoClient { get; private set; } = null!;
-    public CircuitBreakerDbOptions Options { get; set; } = null!;
+    public MongoDbOptions Options { get; set; } = null!;
 
     public Task InitializeAsync()
     {
         var connectionString = GetConnectionStringFromConfiguration();
         MongoClient = new MongoClient(connectionString);
-        Options = new CircuitBreakerDbOptions("DistributedCircuitBreakerTestDB", "CircuitBreakers");
+        Options = new MongoDbOptions("DistributedCircuitBreakerTestDB", "CircuitBreakers");
         return Task.CompletedTask;
     }
 

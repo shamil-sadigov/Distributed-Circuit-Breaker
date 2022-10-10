@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.CircuitBreakers.Context;
 
-namespace Extensions.Mongo;
+namespace Registration.Mongo;
 
 public class DataModelProfile : Profile
 {

@@ -26,8 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Extensions.Mongo\src\Extensions.Mongo.csproj" />
-      <ProjectReference Include="..\..\Extensions\src\Extensions.csproj" />
+      <ProjectReference Include="..\..\Extensions.Mongo\src\Registration.Mongo.csproj" />
+      <ProjectReference Include="..\..\Extensions\src\Registration.csproj" />
       <ProjectReference Include="..\src\Core.csproj" />
     </ItemGroup>
 

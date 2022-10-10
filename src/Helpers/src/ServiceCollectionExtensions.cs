@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Helpers;
 
-// TODO: Move it to Extensions project
+// TODO: Move it to Registration project
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection RegisterImplementationsOf<TBaseType>(

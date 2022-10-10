@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.CircuitBreakers.Context;
 
-namespace Extensions.SqlServer;
+namespace Registration.SqlServer;
 
 public class DataModelProfile : Profile
 {

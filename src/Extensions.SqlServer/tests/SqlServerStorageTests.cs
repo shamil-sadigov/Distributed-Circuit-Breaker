@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Extensions.SqlServer.Tests.Helpers;
+using Registration.SqlServer.Tests.Helpers;
 using FluentAssertions;
 using Helpers.Tests;
 
-namespace Extensions.SqlServer.Tests;
+namespace Registration.SqlServer.Tests;
 
 // TODO: Run SqlServer in docker instead of relying on local instance
 // See => https://github.com/HofmeisterAn/dotnet-testcontainers

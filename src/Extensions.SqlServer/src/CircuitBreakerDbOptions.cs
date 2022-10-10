@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Helpers;
 
-namespace Extensions.SqlServer;
+namespace Registration.SqlServer;
 
 public class CircuitBreakerDbOptions
 {

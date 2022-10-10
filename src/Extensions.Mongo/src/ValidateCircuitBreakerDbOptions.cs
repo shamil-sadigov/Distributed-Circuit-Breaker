@@ -1,11 +1,11 @@
 ﻿using Helpers;
 using Microsoft.Extensions.Options;
 
-namespace Extensions.Mongo;
+namespace Registration.Mongo;
 
-public class ValidateCircuitBreakerDbOptions:IValidateOptions<CircuitBreakerDbOptions>
+public class ValidateCircuitBreakerDbOptions:IValidateOptions<MongoDbOptions>
 {
-    public ValidateOptionsResult Validate(string name, CircuitBreakerDbOptions options)
+    public ValidateOptionsResult Validate(string name, MongoDbOptions options)
     {
         var errors = Validate(options);
 
@@ -15,7 +15,7 @@ public class ValidateCircuitBreakerDbOptions:IValidateOptions<CircuitBreakerDbOp
         return ValidateOptionsResult.Fail(errors);
     }
 
-    private static List<string> Validate(CircuitBreakerDbOptions options)
+    private static List<string> Validate(MongoDbOptions options)
     {
         var errors = new List<string>(3);
 

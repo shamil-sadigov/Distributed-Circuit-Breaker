@@ -1,12 +1,12 @@
 using Core.CircuitBreakerOption;
 using Helpers;
 
-namespace Extensions.Registry;
+namespace Registration;
 
-public class CircuitBreakerOptionsValidator
+public static class CircuitBreakerOptionsValidator
 {
     /// <returns>Error messages</returns>
-    public IEnumerable<string> Validate(CircuitBreakerOptionsBase options)
+    public static IEnumerable<string> Validate(CircuitBreakerOptionsBase options)
     {
         if (options.Name.IsNullOrWhitespace())
             yield return $"{options.Name} should have a value";
