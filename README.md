@@ -201,6 +201,7 @@ Redis is coming soon.
 - Add logging in CircuitBreaker state handlers
 - Consider renaming of some classes
 - Add unit tests for untested components 
+- Add Redis implementation
 
 ## Future improvements
 - Ability to forcefully swtich Circuit Breaker to Open State
