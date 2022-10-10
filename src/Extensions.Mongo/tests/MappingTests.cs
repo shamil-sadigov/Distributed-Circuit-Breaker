@@ -17,7 +17,7 @@ public class MappingTests
     [Fact]
     public void Snapshot_is_correctly_mapped_to_data_model()
     {
-        var snapshot = new CircuitBreakerContextSnapshot
+        var snapshot = new CircuitBreakerState
         (
             "CircuitBreakerName",
             5,
@@ -46,7 +46,7 @@ public class MappingTests
             DurationOfBreak = 20.Seconds()
         };
 
-        var snapshot = _mapper.Map<CircuitBreakerContextSnapshot>(dataModel);
+        var snapshot = _mapper.Map<CircuitBreakerState>(dataModel);
 
         snapshot.Should().BeEquivalentTo(dataModel);
     }

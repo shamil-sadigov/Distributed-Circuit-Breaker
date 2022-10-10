@@ -4,5 +4,5 @@ namespace Core.Storage;
 
 public interface ICircuitBreakerContextGetter
 {
-    Task<CircuitBreakerContextSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token);
+    Task<CircuitBreakerState?> GetAsync(string circuitBreakerName, CancellationToken token);
 }

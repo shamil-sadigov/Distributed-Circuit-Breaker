@@ -1,79 +1,58 @@
+using Core.CircuitBreakerOption;
 using Core.Exceptions;
 using Helpers;
 
 namespace Core.CircuitBreakers.Context;
 
-// TODO: Add tests
+// TODO: Add more unit tests
 
 public partial class CircuitBreakerContext
 {
-    private CircuitBreakerContext()
+    private readonly ISystemClock _systemClock;
+
+    private CircuitBreakerContext(ISystemClock systemClock)
     {
+        _systemClock = systemClock;
     }
 
-    public string Name { get; private init; }
-    public int FailureAllowedBeforeBreaking { get; private init; }
-    public int FailedCount { get; private set; }
+    public string Name => State.Name;
     public CircuitBreakerState State { get; private set; }
-    public DateTime? TransitionDateToHalfOpenState { get; private set; }
-    public DateTime? LastTimeStateChanged { get; private set; }
+    public CircuitBreakerOptionsBase Options { get; private set; }
 
-    /// <summary>
-    ///     How long CircuitBreaker should remain in open state
-    /// </summary>
-    public TimeSpan DurationOfBreak { get; private init; }
-
-    // TODO: Add unit tests
-
-    public void Failed(DateTime currentTime)
+    public bool IsClosed()
     {
-        FailedCount++;
-
-        if (FailedCount < FailureAllowedBeforeBreaking)
-            return;
-
-        State = CircuitBreakerState.Open;
-        TransitionDateToHalfOpenState = currentTime + DurationOfBreak;
-        LastTimeStateChanged = currentTime;
+       return State.FailedCount < Options.FailureAllowedBeforeBreaking; 
     }
 
-    public void Close(DateTime currentTime)
+    public bool IsOpen()
     {
-        if (State != CircuitBreakerState.HalfOpen)
-            throw new InvalidCircuitBreakerStateException(Name, State, CircuitBreakerState.HalfOpen);
+        var durationOfBreakPassed = (State.LastTimeFailed + Options.DurationOfBreak) > _systemClock.GetCurrentUtcTime();
 
-        State = CircuitBreakerState.Closed;
-        FailedCount = 0;
-        TransitionDateToHalfOpenState = null;
-        LastTimeStateChanged = currentTime;
+        return State.FailedCount >= Options.FailureAllowedBeforeBreaking & !durationOfBreakPassed;
+    }
+    
+    public bool IsHalfOpen()
+    {
+        var durationOfBreakPassed = (State.LastTimeFailed + Options.DurationOfBreak) > _systemClock.GetCurrentUtcTime();
+
+        return State.FailedCount >= Options.FailureAllowedBeforeBreaking & durationOfBreakPassed;
+    }
+    
+    public void Failed()
+    {
+        State = State with
+        {
+            FailedCount = State.FailedCount + 1,
+            LastTimeFailed = _systemClock.GetCurrentUtcTime()
+        };
     }
 
-    public static CircuitBreakerContext BuildFromSnapshot(CircuitBreakerContextSnapshot snapshot, DateTime currentTime)
+    public void Reset()
     {
-        snapshot.ThrowIfNull();
-        currentTime.ThrowIfDefault();
-        snapshot.DurationOfBreak.ThrowIfDefault();
-
-        if (snapshot.IsCircuitBreakerClosed)
-            return CreateInClosedState(snapshot);
-
-        if (snapshot.TransitionDateToHalfOpenState <= currentTime)
-            return CreateInHalfOpenState(snapshot);
-
-        return CreateInOpenState(snapshot);
-    }
-
-    public CircuitBreakerContextSnapshot GetSnapshot()
-    {
-        return new
-        (
-            Name,
-            FailureAllowedBeforeBreaking,
-            FailedCount,
-            State == CircuitBreakerState.Closed,
-            TransitionDateToHalfOpenState,
-            LastTimeStateChanged,
-            DurationOfBreak
-        );
+        State = State with
+        {
+            FailedCount = 0,
+            LastTimeFailed = null
+        };
     }
 }

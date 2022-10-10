@@ -4,8 +4,6 @@ namespace Core.CircuitBreakers;
 
 public interface ICircuitBreaker<TOptions> where TOptions : CircuitBreakerOptionsBase
 {
-    Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken);
-
     Task<bool> IsClosedAsync(CancellationToken cancellationToken);
 
     Task<bool> IsOpenAsync(CancellationToken cancellationToken);

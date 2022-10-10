@@ -3,5 +3,5 @@
 public class SystemClock:ISystemClock
 {
     // TODO: Rename => UtcTime
-    public DateTime GetCurrentTime() => DateTime.UtcNow;
+    public DateTime GetCurrentUtcTime() => DateTime.UtcNow;
 }

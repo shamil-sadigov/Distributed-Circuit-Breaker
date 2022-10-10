@@ -5,11 +5,11 @@ namespace Core.Tests.StateHandlersTests.Helpers;
 
 internal class CircuitBreakerUpdaterSpy : ICircuitBreakerContextUpdater
 {
-    internal CircuitBreakerContextSnapshot? UpdatedCircuitBreaker { get; private set; }
+    internal CircuitBreakerState? UpdatedCircuitBreaker { get; private set; }
 
-    public Task UpdateAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token)
+    public Task UpdateAsync(CircuitBreakerState state, CancellationToken token)
     {
-        UpdatedCircuitBreaker = snapshot;
+        UpdatedCircuitBreaker = state;
         return Task.CompletedTask;
     }
 }

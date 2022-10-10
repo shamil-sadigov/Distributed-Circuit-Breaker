@@ -10,12 +10,10 @@ namespace Core.CircuitBreakers.StateHandlers;
 internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 {
     private readonly ICircuitBreakerContextUpdater _contextUpdater;
-    private readonly ISystemClock _systemClock;
 
-    public ClosedCircuitBreakerHandler(ICircuitBreakerContextUpdater contextUpdater, ISystemClock systemClock)
+    public ClosedCircuitBreakerHandler(ICircuitBreakerContextUpdater contextUpdater)
     {
         _contextUpdater = contextUpdater;
-        _systemClock = systemClock;
     }
 
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
@@ -23,8 +21,6 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
         CircuitBreakerOptions options,
         CancellationToken token)
     {
-        EnsureCircuitBreakerIsClosed(circuitBreaker);
-
         try
         {
             var result = await action(token).ConfigureAwait(false);
@@ -32,8 +28,8 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
             if (!options.CanHandleResult(result))
                 return result;
 
-            circuitBreaker.Failed(_systemClock.GetCurrentTime());
-            await SaveAsync(circuitBreaker, token);
+            circuitBreaker.Failed();
+            await SaveAsync(circuitBreaker.State, token);
             return result;
         }
         catch (Exception ex)
@@ -41,26 +37,20 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
             if (!options.CanHandleException(ex))
                 throw;
 
-            circuitBreaker.Failed(_systemClock.GetCurrentTime());
-            await SaveAsync(circuitBreaker, token);
+            circuitBreaker.Failed();
+            await SaveAsync(circuitBreaker.State, token);
             throw;
         }
     }
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.State == CircuitBreakerState.Closed;
+        return context.IsClosed();
     }
 
-    private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
+    private async Task SaveAsync(CircuitBreakerState circuitBreakerState, CancellationToken token)
     {
-        var snapshot = circuitBreaker.GetSnapshot();
-        await _contextUpdater.UpdateAsync(snapshot, token).ConfigureAwait(false);
+        await _contextUpdater.UpdateAsync(circuitBreakerState, token).ConfigureAwait(false);
     }
-
-    private void EnsureCircuitBreakerIsClosed(CircuitBreakerContext context)
-    {
-        if (!CanHandle(context))
-            throw new InvalidCircuitBreakerStateException(context.Name, context.State, CircuitBreakerState.Closed);
-    }
+    
 }

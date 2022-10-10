@@ -1,76 +1,33 @@
+using Core.CircuitBreakerOption;
 using Helpers;
 
 namespace Core.CircuitBreakers.Context;
 
 public partial class CircuitBreakerContext
 {
-    private static CircuitBreakerContext CreateInOpenState(CircuitBreakerContextSnapshot snapshot)
+    internal static CircuitBreakerContext CreateNew(CircuitBreakerOptionsBase options, ISystemClock systemClock)
     {
-        snapshot.FailedCount.ThrowIfLessThan(snapshot.FailureAllowedBeforeBreaking);
-        snapshot.LastTimeStateChanged.ThrowIfNull();
-        snapshot.TransitionDateToHalfOpenState.ThrowIfNull();
-
-        return new CircuitBreakerContext
+        options.ThrowIfNull();
+        
+        return new CircuitBreakerContext(systemClock)
         {
-            Name = snapshot.Name,
-            State = CircuitBreakerState.Open,
-            FailedCount = snapshot.FailedCount,
-            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
-            LastTimeStateChanged = snapshot.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = snapshot.TransitionDateToHalfOpenState,
-            DurationOfBreak = snapshot.DurationOfBreak
+            Options = options,
+            State = new CircuitBreakerState(options.Name, FailedCount: 0, null)
         };
     }
-
-    internal static CircuitBreakerContext CreateNew(
-        string name,
-        int failureAllowedBeforeBreaking,
-        TimeSpan durationOfBreak)
+    
+    public static CircuitBreakerContext Build(
+        CircuitBreakerOptionsBase options,
+        CircuitBreakerState state,
+        ISystemClock systemClock)
     {
-        name.ThrowIfNull();
-        failureAllowedBeforeBreaking.ThrowIfLessOrEqualTo(0);
-        durationOfBreak.ThrowIfLessOrEqualTo(TimeSpan.Zero);
+        options.ThrowIfNull();
+        state.ThrowIfNull();
 
-        return new CircuitBreakerContext
+        return new CircuitBreakerContext(systemClock)
         {
-            Name = name,
-            State = CircuitBreakerState.Closed,
-            FailureAllowedBeforeBreaking = failureAllowedBeforeBreaking,
-            DurationOfBreak = durationOfBreak
-        };
-    }
-
-
-    private static CircuitBreakerContext CreateInClosedState(CircuitBreakerContextSnapshot snapshot)
-    {
-        snapshot.FailedCount.ThrowIfGreaterOrEqualTo(snapshot.FailureAllowedBeforeBreaking);
-
-        return new CircuitBreakerContext
-        {
-            Name = snapshot.Name,
-            State = CircuitBreakerState.Closed,
-            FailedCount = snapshot.FailedCount,
-            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
-            LastTimeStateChanged = snapshot.LastTimeStateChanged,
-            DurationOfBreak = snapshot.DurationOfBreak
-        };
-    }
-
-    private static CircuitBreakerContext CreateInHalfOpenState(CircuitBreakerContextSnapshot snapshot)
-    {
-        snapshot.FailedCount.ThrowIfLessThan(snapshot.FailureAllowedBeforeBreaking);
-        snapshot.LastTimeStateChanged.ThrowIfNull();
-        snapshot.TransitionDateToHalfOpenState.ThrowIfNull();
-
-        return new CircuitBreakerContext
-        {
-            Name = snapshot.Name,
-            State = CircuitBreakerState.HalfOpen,
-            FailedCount = snapshot.FailedCount,
-            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking,
-            LastTimeStateChanged = snapshot.LastTimeStateChanged,
-            TransitionDateToHalfOpenState = snapshot.TransitionDateToHalfOpenState,
-            DurationOfBreak = snapshot.DurationOfBreak
+            State = state,
+            Options = options
         };
     }
 }

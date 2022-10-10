@@ -6,7 +6,7 @@ namespace Helpers.Tests;
 // TODO: Maybe we need to move it
 public static class SnapshotHelper
 {
-    public static CircuitBreakerContextSnapshot CreateSampleSnapshot(string circuitBreakerName)
+    public static CircuitBreakerState CreateSampleSnapshot(string circuitBreakerName)
     {
         return new
         (
@@ -20,16 +20,16 @@ public static class SnapshotHelper
         );
     }
 
-    public static CircuitBreakerContextSnapshot ChangeValues(CircuitBreakerContextSnapshot snapshot)
+    public static CircuitBreakerState ChangeValues(CircuitBreakerState state)
     {
-        return snapshot with
+        return state with
         {
-            FailedCount = snapshot.FailedCount + 1,
-            FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking + 1,
-            IsCircuitBreakerClosed = !snapshot.IsCircuitBreakerClosed,
-            TransitionDateToHalfOpenState = snapshot.TransitionDateToHalfOpenState + 1.Minutes(),
-            LastTimeStateChanged = snapshot.LastTimeStateChanged + 1.Minutes(),
-            DurationOfBreak = snapshot.DurationOfBreak + 1.Minutes()
+            FailedCount = state.FailedCount + 1,
+            FailureAllowedBeforeBreaking = state.FailureAllowedBeforeBreaking + 1,
+            IsCircuitBreakerClosed = !state.IsCircuitBreakerClosed,
+            TransitionDateToHalfOpenState = state.TransitionDateToHalfOpenState + 1.Minutes(),
+            LastTimeFailed = state.LastTimeFailed + 1.Minutes(),
+            DurationOfBreak = state.DurationOfBreak + 1.Minutes()
         };
     }
 }

@@ -10,6 +10,7 @@ using FluentAssertions;
 using FluentAssertions.Extensions;
 using NSubstitute;
 using static Core.Tests.StateHandlersTests.Helpers.CircuitBreakerBuilder;
+using CircuitBreakerState = Core.CircuitBreakers.CircuitBreakerState;
 
 namespace Core.Tests.StateHandlersTests;
 
@@ -138,12 +139,12 @@ public class ClosedCircuitBreakerStateTests
 
         var savedCircuitBreaker = saverSpy.UpdatedCircuitBreaker;
 
-        var transitToHalfOpenStateDate = clock.GetCurrentTime() + options.DurationOfBreak;
+        var transitToHalfOpenStateDate = clock.GetCurrentUtcTime() + options.DurationOfBreak;
 
         savedCircuitBreaker!.ShouldBe()
             .NotClosed()
             .WithFailedCount(expectedFailedCount)
-            .LastTimeStateChangedAt(clock.GetCurrentTime())
+            .LastTimeStateChangedAt(clock.GetCurrentUtcTime())
             .WillTransitToHalfOpenState(transitToHalfOpenStateDate);
     }
 
@@ -187,8 +188,8 @@ public class ClosedCircuitBreakerStateTests
         CircuitBreakerContext circuitBreakerContext = BuildOpenCircuitBreaker()
             .WithAllowedNumberOfFailures(3)
             .WithFailedCount(3)
-            .LastTimeStateChangedAt(clock.GetCurrentTime() - 10.Seconds())
-            .WillTransitToHalfOpenStateAt(clock.GetCurrentTime() + 5.Minutes());
+            .LastTimeStateChangedAt(clock.GetCurrentUtcTime() - 10.Seconds())
+            .WillTransitToHalfOpenStateAt(clock.GetCurrentUtcTime() + 5.Minutes());
 
         var sut = new ClosedCircuitBreakerHandler(saverSpy, clock);
 

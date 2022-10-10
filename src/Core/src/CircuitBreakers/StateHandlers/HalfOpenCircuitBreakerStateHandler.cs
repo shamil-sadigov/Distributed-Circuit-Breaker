@@ -9,13 +9,10 @@ namespace Core.CircuitBreakers.StateHandlers;
 internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateHandler
 {
     private readonly ICircuitBreakerContextUpdater _contextUpdater;
-    private readonly ISystemClock _systemClock;
 
     public HalfOpenCircuitBreakerStateHandler(
-        ISystemClock systemClock,
         ICircuitBreakerContextUpdater contextUpdater)
     {
-        _systemClock = systemClock;
         _contextUpdater = contextUpdater;
     }
 
@@ -23,21 +20,19 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
         CircuitBreakerContext circuitBreaker,
         CircuitBreakerOptions options, CancellationToken token)
     {
-        EnsureCircuitBreakerIsHalfOpen(circuitBreaker);
-
         try
         {
             var result = await action(token).ConfigureAwait(false);
             
             if (!options.CanHandleResult(result))
             {
-                circuitBreaker.Close(_systemClock.GetCurrentTime());
-                await SaveAsync(circuitBreaker, token);
+                circuitBreaker.Reset();
+                await SaveAsync(circuitBreaker.State, token);
                 return result;
             }
 
-            circuitBreaker.Failed(_systemClock.GetCurrentTime());
-            await SaveAsync(circuitBreaker, token);
+            circuitBreaker.Failed();
+            await SaveAsync(circuitBreaker.State, token);
             return result;
         }
         catch (Exception ex)
@@ -45,28 +40,20 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
             if (!options.CanHandleException(ex))
                 throw;
 
-            circuitBreaker.Failed(_systemClock.GetCurrentTime());
-            await SaveAsync(circuitBreaker, token);
+            circuitBreaker.Failed();
+            await SaveAsync(circuitBreaker.State, token);
             throw;
         }
     }
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.State == CircuitBreakerState.HalfOpen;
+        return context.IsHalfOpen();
     }
 
-    private async Task SaveAsync(CircuitBreakerContext circuitBreaker, CancellationToken token)
+    private async Task SaveAsync(CircuitBreakerState circuitBreakerState, CancellationToken token)
     {
-        var snapshot = circuitBreaker.GetSnapshot();
-        await _contextUpdater.UpdateAsync(snapshot, token).ConfigureAwait(false);
+        await _contextUpdater.UpdateAsync(circuitBreakerState, token).ConfigureAwait(false);
     }
-
-    // TODO: Maybe it's worth to extract to some base class
-    private void EnsureCircuitBreakerIsHalfOpen(CircuitBreakerContext context)
-    {
-        if (!CanHandle(context))
-            throw new InvalidCircuitBreakerStateException(context.Name, context.State,
-                CircuitBreakerState.HalfOpen);
-    }
+    
 }

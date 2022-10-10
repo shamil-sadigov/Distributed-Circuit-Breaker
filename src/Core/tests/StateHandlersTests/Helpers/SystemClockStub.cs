@@ -9,5 +9,5 @@ public class SystemClockStub : ISystemClock
         _utcNow = utcNowTime;
     }
 
-    public DateTime GetCurrentTime() =>  _utcNow ?? DateTime.UtcNow;
+    public DateTime GetCurrentUtcTime() =>  _utcNow ?? DateTime.UtcNow;
 }

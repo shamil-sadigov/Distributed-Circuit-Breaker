@@ -5,9 +5,9 @@ namespace Core.Tests.StateHandlersTests.Helpers;
 
 public class CircuitBreakerSnapshotAssertion
 {
-    private readonly CircuitBreakerContextSnapshot _context;
+    private readonly CircuitBreakerState _context;
 
-    public CircuitBreakerSnapshotAssertion(CircuitBreakerContextSnapshot context)
+    public CircuitBreakerSnapshotAssertion(CircuitBreakerState context)
     {
         _context = context;
     }
@@ -32,7 +32,7 @@ public class CircuitBreakerSnapshotAssertion
 
     public CircuitBreakerSnapshotAssertion LastTimeStateChangedAt(DateTime stateChangedAt)
     {
-        _context.LastTimeStateChanged.Should().Be(stateChangedAt);
+        _context.LastTimeFailed.Should().Be(stateChangedAt);
         return this;
     }
 
@@ -51,8 +51,8 @@ public class CircuitBreakerSnapshotAssertion
 
 public static class CircuitBreakerSnapshotAssertionExtensions
 {
-    public static CircuitBreakerSnapshotAssertion ShouldBe(this CircuitBreakerContextSnapshot snapshot)
+    public static CircuitBreakerSnapshotAssertion ShouldBe(this CircuitBreakerState state)
     {
-        return new CircuitBreakerSnapshotAssertion(snapshot);
+        return new CircuitBreakerSnapshotAssertion(state);
     }
 }

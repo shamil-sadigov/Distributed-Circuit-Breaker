@@ -9,5 +9,5 @@ public interface ICircuitBreakerContextUpdater
     ///     When snapshot.Name doesn't exists in storage
     /// </exception>
     /// <returns></returns>
-    Task UpdateAsync(CircuitBreakerContextSnapshot snapshot, CancellationToken token);
+    Task UpdateAsync(CircuitBreakerState state, CancellationToken token);
 }

@@ -7,7 +7,7 @@ public class DataModelProfile : Profile
 {
     public DataModelProfile()
     {
-        CreateMap<CircuitBreakerContextSnapshot, CircuitBreakerDataModel>()
+        CreateMap<CircuitBreakerState, CircuitBreakerDataModel>()
             .ReverseMap();
     }
 }

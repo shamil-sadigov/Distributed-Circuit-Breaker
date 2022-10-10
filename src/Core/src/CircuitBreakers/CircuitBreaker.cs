@@ -23,22 +23,17 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
         _systemClock = systemClock;
     }
 
-    public async Task<CircuitBreakerState> GetStateAsync(CancellationToken token)
-    {
-        var circuitBreakerContext = await GetOrCreateContextAsync(token).ConfigureAwait(false);
-        return circuitBreakerContext.State;
-    }
 
     public async Task<bool> IsClosedAsync(CancellationToken token)
     {
-        var state = await GetStateAsync(token).ConfigureAwait(false);
-        return state == CircuitBreakerState.Closed;
+        var context = await GetOrCreateContextAsync(token).ConfigureAwait(false);
+        return context.IsClosed();
     }
 
     public async Task<bool> IsOpenAsync(CancellationToken token)
     {
-        var state = await GetStateAsync(token).ConfigureAwait(false);
-        return state == CircuitBreakerState.Open;
+        var context = await GetOrCreateContextAsync(token).ConfigureAwait(false);
+        return context.IsOpen();
     }
 
     public async Task<TResult> ExecuteAsync<TResult>(
@@ -78,34 +73,23 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
         var snapshot = await _storage
             .GetAsync(_circuitBreakerOptions.Name, cancellationToken)
             .ConfigureAwait(false);
-
-        CircuitBreakerContext context;
-
+        
         if (snapshot is not null)
-            context = CircuitBreakerContext.BuildFromSnapshot(snapshot, _systemClock.GetCurrentTime());
-        else
         {
-            // TODO: We should also consider concurrency. If two parallel requests will try to 
-            // create circuitbreaker then one of them will fail, so we need to handle it and just 
-            // return the one that is already exists in DB
-
-            context = await CreateNewCircuitBreakerAsync(cancellationToken).ConfigureAwait(false);
+            return CircuitBreakerContext.Build(_circuitBreakerOptions, snapshot, _systemClock);
         }
         
-        return context;
+        // TODO: We should also consider concurrency. If two parallel requests will try to 
+        // create circuitbreaker then one of them will fail, so we need to handle it and just 
+        // return the one that is already exists in DB
+
+        return await CreateNewCircuitBreakerAsync(cancellationToken).ConfigureAwait(false);
     }
     
     private async Task<CircuitBreakerContext> CreateNewCircuitBreakerAsync(CancellationToken token)
     {
-        var context = CircuitBreakerContext.CreateNew(
-                _circuitBreakerOptions.Name,
-                _circuitBreakerOptions.FailureAllowedBeforeBreaking,
-                _circuitBreakerOptions.DurationOfBreak);
-
-        var snapshot = context.GetSnapshot();
-        
-        // TODO: This can be called in concurrent environment, ensure it's idempotent
-        await _storage.AddAsync(snapshot, token);
+        var context = CircuitBreakerContext.CreateNew(_circuitBreakerOptions, _systemClock);
+        await _storage.AddAsync(context.State, token);
         return context;
     }
 }
