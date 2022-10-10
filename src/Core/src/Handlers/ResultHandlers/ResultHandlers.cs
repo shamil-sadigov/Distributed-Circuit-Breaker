@@ -5,10 +5,9 @@ namespace Core.Handlers.ResultHandlers;
 /// <summary>
 ///     TODO: Write tests
 /// </summary>
-/// <typeparam name="TResult"></typeparam>
 public class ResultHandlers
 {
-    protected readonly List<object> _resultHandlers = new();
+    private readonly List<object> _resultHandlers = new();
 
     public ResultHandlers Handle<TResult>(Func<TResult, bool> resultHandler)
     {
@@ -26,7 +25,7 @@ public class ResultHandlers
     }
 
     // TODO: Rename it. Maybe HandleAvailable ?
-    public bool CanHandle<TResult>(TResult result)
+    internal bool CanHandle<TResult>(TResult result)
     {
         return _resultHandlers
             .OfType<IResultHandler<TResult>>()

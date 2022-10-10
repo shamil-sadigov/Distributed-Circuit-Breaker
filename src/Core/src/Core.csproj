@@ -13,5 +13,9 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Helpers\src\Helpers.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions" />
+    </ItemGroup>
     
 </Project>

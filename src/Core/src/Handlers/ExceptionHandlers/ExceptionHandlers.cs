@@ -33,8 +33,7 @@ public sealed class ExceptionHandlers
         return this;
     }
 
-    // TODO: Maybe internal ?
-    public bool CanHandle(Exception exception)
+    internal bool CanHandle(Exception exception)
     {
         return _exceptionHandlers.Any(x => x.HandleException(exception));
     }
