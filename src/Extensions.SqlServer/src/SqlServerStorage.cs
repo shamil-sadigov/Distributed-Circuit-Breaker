@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.CircuitBreakers.Context;
+using Core.CircuitBreakers;
 using Core.Exceptions;
 using Core.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -17,33 +17,33 @@ public class SqlServerStorage : ICircuitBreakerStorage
         _mapper = mapper;
     }
 
-    public async Task<CircuitBreakerState?> GetAsync(string circuitBreakerName, CancellationToken token)
+    public async Task<CircuitBreakerSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token)
     {
         var dataModel = await _context.CircuitBreakers
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Name == circuitBreakerName, token)
             .ConfigureAwait(false);
 
-        return _mapper.Map<CircuitBreakerState>(dataModel);
+        return _mapper.Map<CircuitBreakerSnapshot>(dataModel);
     }
 
-    public async Task UpdateAsync(CircuitBreakerState state, CancellationToken token)
+    public async Task UpdateAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
     {
         var foundModel = await _context.CircuitBreakers
-            .FirstOrDefaultAsync(x => x.Name == state.Name, token)
+            .FirstOrDefaultAsync(x => x.Name == snapshot.Name, token)
             .ConfigureAwait(false);
 
         if (foundModel is null)
-            throw new CircuitBreakerSnapshotNotFoundException(state.Name);
+            throw new CircuitBreakerSnapshotNotFoundException(snapshot.Name);
 
-        _mapper.Map(state, foundModel);
+        _mapper.Map(snapshot, foundModel);
 
         await _context.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task AddAsync(CircuitBreakerState state, CancellationToken token)
+    public async Task AddAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
     {
-        var dataModel = _mapper.Map<CircuitBreakerDataModel>(state);
+        var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
 
         await _context.CircuitBreakers.AddAsync(dataModel, token).ConfigureAwait(false);
 

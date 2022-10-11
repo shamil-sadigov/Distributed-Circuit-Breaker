@@ -1,4 +1,4 @@
-using Core.CircuitBreakers.Context;
+using Core.CircuitBreakers;
 using Core.Exceptions;
 
 namespace Core.Storage;
@@ -9,5 +9,5 @@ public interface ICircuitBreakerContextUpdater
     ///     When snapshot.Name doesn't exists in storage
     /// </exception>
     /// <returns></returns>
-    Task UpdateAsync(CircuitBreakerState state, CancellationToken token);
+    Task UpdateAsync(CircuitBreakerSnapshot snapshot, CancellationToken token);
 }

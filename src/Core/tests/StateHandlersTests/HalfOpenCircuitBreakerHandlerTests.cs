@@ -65,7 +65,7 @@ public class HalfOpenCircuitBreakerHandlerTests
         // Arrange
         var saverSpy = new CircuitBreakerUpdaterSpy();
         var clock = new SystemClockStub();
-        var options = new TestCircuitBreakerOptions();
+        var options = new TestCircuitBreakerSettings();
 
         clock.SetUtcDate(DateTime.UtcNow);
 
@@ -91,7 +91,7 @@ public class HalfOpenCircuitBreakerHandlerTests
         savedCircuitBreaker!.ShouldBe()
             .NotClosed()
             .WithFailedCount(++failedCount)
-            .LastTimeStateChangedAt(clock.GetCurrentUtcTime());
+            .LastTimeStateChangedAt(clock.CurrentUtcTime());
     }
 
     [Theory]
@@ -103,7 +103,7 @@ public class HalfOpenCircuitBreakerHandlerTests
         // Arrange
         var saverSpy = new CircuitBreakerUpdaterSpy();
         var clock = new SystemClockStub();
-        var options = new TestCircuitBreakerOptions();
+        var options = new TestCircuitBreakerSettings();
 
         clock.SetUtcDate(DateTime.UtcNow);
 
@@ -132,7 +132,7 @@ public class HalfOpenCircuitBreakerHandlerTests
         // Arrange
         var saverSpy = new CircuitBreakerUpdaterSpy();
         var clock = new SystemClockStub();
-        var options = new TestCircuitBreakerOptions();
+        var options = new TestCircuitBreakerSettings();
 
         options.HandleResult<CustomResult>(x => !x.IsSuccessful);
 
@@ -154,7 +154,7 @@ public class HalfOpenCircuitBreakerHandlerTests
 
         savedCircuitBreaker!.ShouldBe()
             .Closed()
-            .LastTimeStateChangedAt(clock.GetCurrentUtcTime())
+            .LastTimeStateChangedAt(clock.CurrentUtcTime())
             .WillNotTransitToHalfOpenState()
             .WithFailedCount(0);
     }

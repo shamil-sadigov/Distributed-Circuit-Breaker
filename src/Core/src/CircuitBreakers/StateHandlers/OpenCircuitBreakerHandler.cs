@@ -4,11 +4,12 @@ using Core.Exceptions;
 
 namespace Core.CircuitBreakers.StateHandlers;
 
+// TODO: Ensure that handler is really registed in DI
 internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler
 {
     public Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
-        CircuitBreakerOptions options, 
+        CircuitBreakerSettings settings, 
         CancellationToken token)
     {
         throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' cannot be used" +
@@ -17,6 +18,6 @@ internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.IsOpen();
+        return context.State is CircuitBreakerState.Open;
     }
 }

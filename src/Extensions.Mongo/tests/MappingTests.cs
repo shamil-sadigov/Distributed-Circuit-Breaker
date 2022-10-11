@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.CircuitBreakers.Context;
+using Core.CircuitBreakers;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 
@@ -17,7 +17,7 @@ public class MappingTests
     [Fact]
     public void Snapshot_is_correctly_mapped_to_data_model()
     {
-        var snapshot = new CircuitBreakerState
+        var snapshot = new CircuitBreakerSnapshot
         (
             "CircuitBreakerName",
             5,
@@ -46,7 +46,7 @@ public class MappingTests
             DurationOfBreak = 20.Seconds()
         };
 
-        var snapshot = _mapper.Map<CircuitBreakerState>(dataModel);
+        var snapshot = _mapper.Map<CircuitBreakerSnapshot>(dataModel);
 
         snapshot.Should().BeEquivalentTo(dataModel);
     }

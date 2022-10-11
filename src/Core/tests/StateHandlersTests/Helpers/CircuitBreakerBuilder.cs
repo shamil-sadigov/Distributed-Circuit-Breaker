@@ -1,42 +1,43 @@
-﻿using Core.CircuitBreakers.Context;
+﻿using Core.CircuitBreakers;
+using Core.CircuitBreakers.Context;
 using FluentAssertions.Extensions;
 
 namespace Core.Tests.StateHandlersTests.Helpers;
 
 public class CircuitBreakerBuilder
 {
-    private CircuitBreakerState _state;
+    private CircuitBreakerSnapshot _snapshot;
     private ISystemClock? _systemClock;
 
-    public CircuitBreakerBuilder(CircuitBreakerState state)
+    public CircuitBreakerBuilder(CircuitBreakerSnapshot snapshot)
     {
-        _state = state;
+        _snapshot = snapshot;
     }
 
     public static CircuitBreakerBuilder BuildClosedCircuitBreaker()
     {
-        var closedCircuitBreaker = new CircuitBreakerState("Default", 3, 0, true, null, null, 5.Seconds());
+        var closedCircuitBreaker = new CircuitBreakerSnapshot("Default", 3, 0, true, null, null, 5.Seconds());
         return new CircuitBreakerBuilder(closedCircuitBreaker);
     }
 
 
     public static CircuitBreakerBuilder BuildOpenCircuitBreaker()
     {
-        var closedCircuitBreaker = new CircuitBreakerState(
+        var closedCircuitBreaker = new CircuitBreakerSnapshot(
             "Default", 3, 3, false, DateTime.UtcNow + 5.Seconds(), DateTime.UtcNow, 5.Seconds());
         return new CircuitBreakerBuilder(closedCircuitBreaker);
     }
 
     public static CircuitBreakerBuilder BuildHalfOpenCircuitBreaker()
     {
-        var closedCircuitBreaker = new CircuitBreakerState(
+        var closedCircuitBreaker = new CircuitBreakerSnapshot(
             "Default", 3, 3, false, DateTime.UtcNow - 5.Seconds(), DateTime.UtcNow - 10.Seconds(), 5.Seconds());
         return new CircuitBreakerBuilder(closedCircuitBreaker);
     }
 
     public CircuitBreakerBuilder WithFailedCount(int failedCount)
     {
-        _state = _state with
+        _snapshot = _snapshot with
         {
             FailedCount = failedCount
         };
@@ -45,7 +46,7 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerBuilder WillTransitToHalfOpenStateAt(DateTime transitionToHalfOpenStateAt)
     {
-        _state = _state with
+        _snapshot = _snapshot with
         {
             TransitionDateToHalfOpenState = transitionToHalfOpenStateAt
         };
@@ -54,7 +55,7 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerBuilder LastTimeStateChangedAt(DateTime lastTimeStateChangedAt)
     {
-        _state = _state with
+        _snapshot = _snapshot with
         {
             LastTimeFailed = lastTimeStateChangedAt
         };
@@ -63,7 +64,7 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerBuilder WithAllowedNumberOfFailures(int allowedFailures)
     {
-        _state = _state with
+        _snapshot = _snapshot with
         {
             FailureAllowedBeforeBreaking = allowedFailures
         };
@@ -72,7 +73,7 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerBuilder WithDurationOfBreak(TimeSpan durationOfBreak)
     {
-        _state = _state with
+        _snapshot = _snapshot with
         {
             DurationOfBreak = durationOfBreak
         };
@@ -88,8 +89,8 @@ public class CircuitBreakerBuilder
 
     public CircuitBreakerContext Build()
     {
-        var currentTime = _systemClock?.GetCurrentUtcTime() ?? DateTime.UtcNow;
-        return CircuitBreakerContext.Build(_state, currentTime);
+        var currentTime = _systemClock?.UtcTime() ?? DateTime.UtcNow;
+        return CircuitBreakerContext.BuildFromState(_snapshot, currentTime);
     }
 
     public static implicit operator CircuitBreakerContext(CircuitBreakerBuilder builder)

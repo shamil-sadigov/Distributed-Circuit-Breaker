@@ -1,4 +1,4 @@
-using Core.CircuitBreakers.Context;
+using Core.CircuitBreakers;
 
 namespace Core.Storage;
 
@@ -7,5 +7,5 @@ namespace Core.Storage;
 
 public interface ICircuitBreakerContextAdder
 {
-    Task AddAsync(CircuitBreakerState state, CancellationToken token);
+    Task AddAsync(CircuitBreakerSnapshot snapshot, CancellationToken token);
 }

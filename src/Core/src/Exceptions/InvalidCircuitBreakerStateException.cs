@@ -1,5 +1,3 @@
-using Core.CircuitBreakers;
-
 namespace Core.Exceptions;
 
 public class InvalidCircuitBreakerStateException : CircuitBreakerException

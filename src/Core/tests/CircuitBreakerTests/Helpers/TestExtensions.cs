@@ -1,29 +1,30 @@
 ﻿using Core.CircuitBreakerOption;
 using Core.CircuitBreakers;
+using Core.CircuitBreakers.Context;
 using Registration;
 using Registration.Mongo;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using FluentAssertions;
 
 
 namespace Core.Tests.CircuitBreakerTests.Helpers;
 
-// TODO: Extract mongo connection string
+// TODO: Extract mongo connection string OR use TestDb instead of Mongo
 // TODO: Add Dispose() that will drop database or collection
 
 public static class TestExtensions
 {
-    public static async Task ShouldBeInStateAsync<TOptions>(
-        this ICircuitBreaker<TOptions> circuitBreaker,
+    public static async Task ShouldBeInStateAsync<TSettings>(
+        this ICircuitBreaker<TSettings> circuitBreaker,
         CircuitBreakerState expectedState)
-        where TOptions : CircuitBreakerOptionsBase
+        where TSettings : ICircuitBreakerSettings
     {
-        var state = await circuitBreaker.GetStateAsync(CancellationToken.None);
+        CircuitBreakerState state = await circuitBreaker.GetStateAsync(CancellationToken.None);
         state.Should().Be(expectedState);
     }
 
-    public static ICircuitBreaker<TOptions> ConfigureAndGetCircuitBreaker<TOptions>(this ServiceCollection services) 
-        where TOptions : CircuitBreakerOptions, new()
+    public static ICircuitBreaker<TSettings> ConfigureAndGetCircuitBreaker<TSettings>(this ServiceCollection services) 
+        where TSettings : CircuitBreakerSettings, new()
     {
         services.AddDistributedCircuitBreaker(ops =>
         {
@@ -31,18 +32,18 @@ public static class TestExtensions
                 {
                     x.ConnectionString = "mongodb://localhost:27017";
                 })
-                .AddCircuitBreaker<TOptions>();
+                .AddCircuitBreaker<TSettings>();
         });
 
         return services
             .BuildServiceProvider()
-            .GetRequiredService<ICircuitBreaker<TOptions>>();
+            .GetRequiredService<ICircuitBreaker<TSettings>>();
     }
     
     public static ICircuitBreaker<TOptions> ConfigureAndGetCircuitBreaker<TOptions>(
         this ServiceCollection services, 
         TOptions options) 
-        where TOptions : CircuitBreakerOptions, new()
+        where TOptions : CircuitBreakerSettings, new()
     {
         services.AddDistributedCircuitBreaker(ops =>
         {

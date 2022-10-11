@@ -1,12 +1,11 @@
 ﻿using Core.CircuitBreakerOption;
+using Core.CircuitBreakers.Context;
 
 namespace Core.CircuitBreakers;
 
-public interface ICircuitBreaker<TOptions> where TOptions : CircuitBreakerOptionsBase
+public interface ICircuitBreaker<TOptions> where TOptions : ICircuitBreakerSettings
 {
-    Task<bool> IsClosedAsync(CancellationToken cancellationToken);
-
-    Task<bool> IsOpenAsync(CancellationToken cancellationToken);
+    Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken);
     
     Task ExecuteAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken);
     

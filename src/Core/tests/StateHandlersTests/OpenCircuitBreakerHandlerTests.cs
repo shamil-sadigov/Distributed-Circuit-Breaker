@@ -48,7 +48,7 @@ public class OpenCircuitBreakerStateTests
     public async Task When_circuit_breaker_is_open_then_action_is_impossible_to_invoke()
     {
         // Arrange
-        var options = new TestCircuitBreakerOptions();
+        var options = new TestCircuitBreakerSettings();
 
         options.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable)
             .HandleResult<CustomResult>(x => !x.IsSuccessful);

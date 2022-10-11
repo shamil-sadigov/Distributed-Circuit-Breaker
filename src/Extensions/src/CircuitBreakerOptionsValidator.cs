@@ -6,7 +6,7 @@ namespace Registration;
 public static class CircuitBreakerOptionsValidator
 {
     /// <returns>Error messages</returns>
-    public static IEnumerable<string> Validate(CircuitBreakerOptionsBase options)
+    public static IEnumerable<string> Validate(ICircuitBreakerSettings options)
     {
         if (options.Name.IsNullOrWhitespace())
             yield return $"{options.Name} should have a value";

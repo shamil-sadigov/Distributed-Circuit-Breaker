@@ -1,58 +1,66 @@
 using Core.CircuitBreakerOption;
-using Core.Exceptions;
 using Helpers;
 
 namespace Core.CircuitBreakers.Context;
 
 // TODO: Add more unit tests
 
-public partial class CircuitBreakerContext
+public enum CircuitBreakerState
 {
-    private readonly ISystemClock _systemClock;
+    Closed,
+    Open,
+    HalfOpen
+}
 
-    private CircuitBreakerContext(ISystemClock systemClock)
+public sealed partial class CircuitBreakerContext
+{
+    private readonly ISystemClock _clock;
+
+    private CircuitBreakerContext(
+        ICircuitBreakerSettings settings,
+        int failedCount,
+        DateTime? lastTimeFailed,
+        ISystemClock clock)
     {
-        _systemClock = systemClock;
+        settings.ThrowIfNull();
+        clock.ThrowIfNull();
+        if (failedCount < 0)
+            throw new ArgumentException("Expected to be greater or equal to zero", nameof(failedCount));
+
+        FailedCount = failedCount;
+        LastTimeFailed = lastTimeFailed;
+        Settings = settings;
+        _clock = clock;
     }
 
-    public string Name => State.Name;
-    public CircuitBreakerState State { get; private set; }
-    public CircuitBreakerOptionsBase Options { get; private set; }
+    internal string Name => Settings.Name;
+    private int FailedCount { get; set; }
+    private DateTime? LastTimeFailed { get; set; }
 
-    public bool IsClosed()
-    {
-       return State.FailedCount < Options.FailureAllowedBeforeBreaking; 
-    }
+    private ICircuitBreakerSettings Settings { get; }
 
-    public bool IsOpen()
-    {
-        var durationOfBreakPassed = (State.LastTimeFailed + Options.DurationOfBreak) > _systemClock.GetCurrentUtcTime();
-
-        return State.FailedCount >= Options.FailureAllowedBeforeBreaking & !durationOfBreakPassed;
-    }
+    internal CircuitBreakerSnapshot CreateSnapshot() 
+        => new(Name, FailedCount, LastTimeFailed);
     
-    public bool IsHalfOpen()
-    {
-        var durationOfBreakPassed = (State.LastTimeFailed + Options.DurationOfBreak) > _systemClock.GetCurrentUtcTime();
+    private bool IsClosed => FailedCount < Settings.FailureAllowedBeforeBreaking;
+    private bool IsHalfOpen => !IsClosed && IsTimeToGiveAChance;
 
-        return State.FailedCount >= Options.FailureAllowedBeforeBreaking & durationOfBreakPassed;
-    }
+    internal CircuitBreakerState State => 
+        IsClosed ? CircuitBreakerState.Closed 
+        : IsHalfOpen ? CircuitBreakerState.HalfOpen
+        : CircuitBreakerState.Open;
     
-    public void Failed()
+    private bool IsTimeToGiveAChance => LastTimeFailed + Settings.DurationOfBreak > _clock.UtcTime;
+    
+    internal void Failed()
     {
-        State = State with
-        {
-            FailedCount = State.FailedCount + 1,
-            LastTimeFailed = _systemClock.GetCurrentUtcTime()
-        };
+        FailedCount++;
+        LastTimeFailed = _clock.UtcTime;
     }
 
-    public void Reset()
+    internal void Reset()
     {
-        State = State with
-        {
-            FailedCount = 0,
-            LastTimeFailed = null
-        };
+        FailedCount = default;
+        LastTimeFailed = null;
     }
 }

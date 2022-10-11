@@ -2,5 +2,5 @@ namespace Core;
 
 public interface ISystemClock
 {
-    DateTime GetCurrentUtcTime();
+    DateTime UtcTime { get; }
 }

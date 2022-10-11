@@ -1,6 +1,5 @@
 ﻿using Core.CircuitBreakerOption;
 using Core.CircuitBreakers.Context;
-using Core.Exceptions;
 using Core.Storage;
 
 namespace Core.CircuitBreakers.StateHandlers;
@@ -18,39 +17,39 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
-        CircuitBreakerOptions options,
+        CircuitBreakerSettings settings,
         CancellationToken token)
     {
         try
         {
             var result = await action(token).ConfigureAwait(false);
 
-            if (!options.CanHandleResult(result))
+            if (!settings.CanHandleResult(result))
                 return result;
 
             circuitBreaker.Failed();
-            await SaveAsync(circuitBreaker.State, token);
+            await SaveAsync(circuitBreaker.CreateSnapshot(), token);
             return result;
         }
         catch (Exception ex)
         {
-            if (!options.CanHandleException(ex))
+            if (!settings.CanHandleException(ex))
                 throw;
 
             circuitBreaker.Failed();
-            await SaveAsync(circuitBreaker.State, token);
+            await SaveAsync(circuitBreaker.CreateSnapshot(), token);
             throw;
         }
     }
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.IsClosed();
+        return context.State is CircuitBreakerState.Closed;
     }
 
-    private async Task SaveAsync(CircuitBreakerState circuitBreakerState, CancellationToken token)
+    private async Task SaveAsync(CircuitBreakerSnapshot circuitBreakerSnapshot, CancellationToken token)
     {
-        await _contextUpdater.UpdateAsync(circuitBreakerState, token).ConfigureAwait(false);
+        await _contextUpdater.UpdateAsync(circuitBreakerSnapshot, token).ConfigureAwait(false);
     }
     
 }

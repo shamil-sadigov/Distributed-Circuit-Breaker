@@ -15,7 +15,7 @@ public class CircuitBreakerOptionsRegistrator
     }
     
     public CircuitBreakerOptionsRegistrator AddCircuitBreaker<TOptions>()
-        where TOptions : CircuitBreakerOptionsBase, new()
+        where TOptions : ICircuitBreakerSettings, new()
     {
         var options = new TOptions();
         AddCircuitBreakerInternal(options);
@@ -23,19 +23,19 @@ public class CircuitBreakerOptionsRegistrator
     }
     
     public CircuitBreakerOptionsRegistrator AddCircuitBreaker<TOptions>(TOptions options)
-        where TOptions : CircuitBreakerOptionsBase
+        where TOptions : ICircuitBreakerSettings
     {
         AddCircuitBreakerInternal(options);
         return this;
     }
     
-    private void AddCircuitBreakerInternal<TOptions>(TOptions options) where TOptions : CircuitBreakerOptionsBase
+    private void AddCircuitBreakerInternal<TOptions>(TOptions options) where TOptions : ICircuitBreakerSettings
     {
         ValidateOptions(options);
         _services.AddSingleton(options.GetType(), _ => options);
     }
     
-    private void ValidateOptions(CircuitBreakerOptionsBase options)
+    private void ValidateOptions(ICircuitBreakerSettings options)
     {
         if (options is null)
         {

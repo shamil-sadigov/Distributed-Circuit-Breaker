@@ -3,19 +3,22 @@ using Helpers;
 
 namespace Core.CircuitBreakerOption;
 
-public partial class CircuitBreakerOptions
+public partial class CircuitBreakerSettings
 {
-    public CircuitBreakerOptions HandleResult<TResult>(Func<TResult, bool> resultHandler)
+    public CircuitBreakerSettings HandleResult<TResult>(Func<TResult, bool> resultHandler)
     {
         resultHandler.ThrowIfNull();
         ResultHandlers.Handle(resultHandler);
         return this;
     }
 
-    public CircuitBreakerOptions HandleResult<TResult>(IResultHandler<TResult> resultHandler)
+    public CircuitBreakerSettings HandleResult<TResult>(IResultHandler<TResult> resultHandler)
     {
         resultHandler.ThrowIfNull();
         ResultHandlers.Handle(resultHandler);
         return this;
     }
+    
+    internal bool CanHandleResult<TResult>(TResult result) 
+        => ResultHandlers.CanHandle(result);
 }

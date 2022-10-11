@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Core.CircuitBreakers;
+using Core.CircuitBreakers.Context;
 using Core.Exceptions;
 using Core.Tests.CircuitBreakerTests.Helpers;
 using Core.Tests.ResultHandlerTests.Helpers;
@@ -8,6 +9,8 @@ using FluentAssertions.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Tests.CircuitBreakerTests;
+
+using static CircuitBreakerState;
 
 // TODO: Test uniqueness of circuti Breakers
 
@@ -26,7 +29,7 @@ public class CircuitBreakerTests
         var actionInvokedTimes = 0;
         
         var circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceTestOptions>();
+            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceTestSettings>();
         
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
@@ -37,7 +40,7 @@ public class CircuitBreakerTests
                 return CurrencyExchangeResponse.SuccessfulResult;
             }, CancellationToken.None);
 
-            await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Closed);
+            await circuitBreaker.ShouldBeInStateAsync(Closed);
         }
 
         actionInvokedTimes.Should().Be(executionCount);
@@ -52,7 +55,7 @@ public class CircuitBreakerTests
     {
         // Arrange
         var circuitBreaker =  new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceTestOptions>();
+            .ConfigureAndGetCircuitBreaker<CurrencyExchangeServiceTestSettings>();
         
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
@@ -65,7 +68,7 @@ public class CircuitBreakerTests
             .Should()
             .ThrowAsync<ArgumentException>();
 
-            await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Closed);
+            await circuitBreaker.ShouldBeInStateAsync(Closed);
         }
     }
 
@@ -78,7 +81,7 @@ public class CircuitBreakerTests
         int failureAllowedBeforeBreaking)
     {
         // Arrange
-        var options = new CurrencyExchangeServiceTestOptions(failureAllowedBeforeBreaking, durationOfBreak: 3.Seconds());
+        var options = new CurrencyExchangeServiceTestSettings(failureAllowedBeforeBreaking, durationOfBreak: 3.Seconds());
 
         var circuitBreaker = new ServiceCollection()
             .ConfigureAndGetCircuitBreaker(options);
@@ -96,7 +99,7 @@ public class CircuitBreakerTests
                 .Should()
                 .ThrowAsync<CustomHttpException>();
 
-        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Open);
+        await circuitBreaker.ShouldBeInStateAsync(Open);
 
         await circuitBreaker.Invoking(x => x.ExecuteAsync(_ =>
             {
@@ -116,7 +119,7 @@ public class CircuitBreakerTests
     public async Task CircuitBreaker_is_open_when_action_result_is_handleable(int failureAllowedBeforeBreaking)
     {
         // Arrange
-        var options = new CurrencyExchangeServiceTestOptions(failureAllowedBeforeBreaking, durationOfBreak: 10.Seconds());
+        var options = new CurrencyExchangeServiceTestSettings(failureAllowedBeforeBreaking, durationOfBreak: 10.Seconds());
         var actionInvokedTimesInOpenState = 0;
 
         var circuitBreaker = new ServiceCollection()
@@ -126,7 +129,7 @@ public class CircuitBreakerTests
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)
             await circuitBreaker.ExecuteAsync(_ => CurrencyExchangeResponse.UnsuccessfulResult, CancellationToken.None);
 
-        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Open);
+        await circuitBreaker.ShouldBeInStateAsync(Open);
         
         await circuitBreaker.Invoking(x => x.ExecuteAsync(_ =>
             {
@@ -148,7 +151,7 @@ public class CircuitBreakerTests
         // Arrange
         const int failureAllowedBeforeBreaking = 3;
         
-        var options = new CurrencyExchangeServiceTestOptions(
+        var options = new CurrencyExchangeServiceTestSettings(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
 
@@ -162,7 +165,7 @@ public class CircuitBreakerTests
         await Task.Delay(duration.Seconds());
         
         // Assert
-        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.HalfOpen);
+        await circuitBreaker.ShouldBeInStateAsync(HalfOpen);
     }
     
     [Theory]
@@ -176,7 +179,7 @@ public class CircuitBreakerTests
         const int failureAllowedBeforeBreaking = 3;
         var actionInvokedTimes = 0;
 
-        var options = new CurrencyExchangeServiceTestOptions(
+        var options = new CurrencyExchangeServiceTestSettings(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
         
@@ -196,7 +199,7 @@ public class CircuitBreakerTests
         }, CancellationToken.None);
         
         // Assert
-        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Closed);
+        await circuitBreaker.ShouldBeInStateAsync(Closed);
         actionInvokedTimes.Should().Be(1);
     }
     
@@ -212,7 +215,7 @@ public class CircuitBreakerTests
         const int failureAllowedBeforeBreaking = 3;
         var actionInvokedTimes = 0;
 
-        var options = new CurrencyExchangeServiceTestOptions(
+        var options = new CurrencyExchangeServiceTestSettings(
             failureAllowedBeforeBreaking, 
             durationOfBreak: duration.Seconds());
         
@@ -234,17 +237,17 @@ public class CircuitBreakerTests
             .ThrowAsync<CustomHttpException>();
 
         // Assert
-        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Open);
+        await circuitBreaker.ShouldBeInStateAsync(Open);
         actionInvokedTimes.Should().Be(1);
     }
     
     private static async Task BringTillOpenState(
-        ICircuitBreaker<CurrencyExchangeServiceTestOptions> circuitBreaker, 
+        ICircuitBreaker<CurrencyExchangeServiceTestSettings> circuitBreaker, 
         int failureAllowedBeforeBreaking)
     {
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)
             await circuitBreaker.ExecuteAsync(_ => CurrencyExchangeResponse.UnsuccessfulResult, CancellationToken.None);
 
-        await circuitBreaker.ShouldBeInStateAsync(CircuitBreakerState.Open);
+        await circuitBreaker.ShouldBeInStateAsync(Open);
     }
 }

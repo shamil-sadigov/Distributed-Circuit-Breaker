@@ -5,7 +5,7 @@ using FluentAssertions.Extensions;
 
 namespace Core.Tests.CircuitBreakerTests.Helpers;
 
-public class CurrencyExchangeServiceTestOptions : CircuitBreakerOptions
+public class CurrencyExchangeServiceTestSettings : CircuitBreakerSettings
 {
     // Defaults values
     public const int DefaultFailureAllowedBeforeBreaking = 5;
@@ -15,14 +15,14 @@ public class CurrencyExchangeServiceTestOptions : CircuitBreakerOptions
     private readonly int? _failureAllowedBeforeBreaking;
     private readonly TimeSpan? _durationOfBreak;
     
-    public CurrencyExchangeServiceTestOptions(
+    public CurrencyExchangeServiceTestSettings(
         int failureAllowedBeforeBreaking, 
         TimeSpan durationOfBreak):this()
     {
         _failureAllowedBeforeBreaking = failureAllowedBeforeBreaking;
         _durationOfBreak = durationOfBreak;
     }
-    public CurrencyExchangeServiceTestOptions()
+    public CurrencyExchangeServiceTestSettings()
     {
         HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
         HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.TooManyRequests);

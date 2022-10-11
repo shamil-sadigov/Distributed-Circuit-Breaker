@@ -3,7 +3,7 @@ using FluentAssertions.Extensions;
 
 namespace Core.Tests;
 
-public class TestOptions : CircuitBreakerOptions
+public class TestSettings : CircuitBreakerSettings
 {
     public override string Name => "Test";
     public override int FailureAllowedBeforeBreaking => 3;

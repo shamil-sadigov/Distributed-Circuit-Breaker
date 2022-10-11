@@ -3,9 +3,9 @@ using Helpers;
 
 namespace Core.CircuitBreakerOption;
 
-public partial class CircuitBreakerOptions
+public partial class CircuitBreakerSettings
 {
-    public CircuitBreakerOptions HandleException<TException>()
+    public CircuitBreakerSettings HandleException<TException>()
         where TException : Exception
     {
         var handler = new DelegateBasedExceptionHandler(ex => ex is TException);
@@ -13,7 +13,7 @@ public partial class CircuitBreakerOptions
         return this;
     }
 
-    public CircuitBreakerOptions HandleException<TException>(Func<TException, bool> exceptionHandler)
+    public CircuitBreakerSettings HandleException<TException>(Func<TException, bool> exceptionHandler)
         where TException : Exception
     {
         exceptionHandler.ThrowIfNull();
@@ -21,10 +21,13 @@ public partial class CircuitBreakerOptions
         return this;
     }
 
-    public CircuitBreakerOptions HandleException(IExceptionHandler exceptionHandler)
+    public CircuitBreakerSettings HandleException(IExceptionHandler exceptionHandler)
     {
         exceptionHandler.ThrowIfNull();
         ExceptionHandlers.Handle(exceptionHandler);
         return this;
     }
+    
+    internal bool CanHandleException(Exception exception) 
+        => ExceptionHandlers.CanHandle(exception);
 }

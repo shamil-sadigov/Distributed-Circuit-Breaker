@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.CircuitBreakers.Context;
+using Core.CircuitBreakers;
 using Core.Exceptions;
 using Core.Storage;
 using MongoDB.Driver;
@@ -21,30 +21,30 @@ public class MongoStorage : ICircuitBreakerStorage
             .GetCollection<CircuitBreakerDataModel>(options.CollectionName);
     }
 
-    public async Task<CircuitBreakerState?> GetAsync(string circuitBreakerName, CancellationToken token)
+    public async Task<CircuitBreakerSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token)
     {
         var dataModel = await GetByNameAsync(circuitBreakerName, token).ConfigureAwait(false);
 
-        return _mapper.Map<CircuitBreakerState>(dataModel);
+        return _mapper.Map<CircuitBreakerSnapshot>(dataModel);
     }
 
-    public async Task UpdateAsync(CircuitBreakerState state, CancellationToken token)
+    public async Task UpdateAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
     {
-        var dataModel = await GetByNameAsync(state.Name, token).ConfigureAwait(false);
+        var dataModel = await GetByNameAsync(snapshot.Name, token).ConfigureAwait(false);
 
         if (dataModel is null)
-            throw new CircuitBreakerSnapshotNotFoundException(state.Name);
+            throw new CircuitBreakerSnapshotNotFoundException(snapshot.Name);
 
-        _mapper.Map(state, dataModel);
+        _mapper.Map(snapshot, dataModel);
 
         await _circuitBreakerCollection
-            .ReplaceOneAsync(x => x.Name == state.Name, dataModel, cancellationToken: token)
+            .ReplaceOneAsync(x => x.Name == snapshot.Name, dataModel, cancellationToken: token)
             .ConfigureAwait(false);
     }
 
-    public async Task AddAsync(CircuitBreakerState state, CancellationToken token)
+    public async Task AddAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
     {
-        var dataModel = _mapper.Map<CircuitBreakerDataModel>(state);
+        var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
         await _circuitBreakerCollection.InsertOneAsync(dataModel, cancellationToken: token).ConfigureAwait(false);
     }
 

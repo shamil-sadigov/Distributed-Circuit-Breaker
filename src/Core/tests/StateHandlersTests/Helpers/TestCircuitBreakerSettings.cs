@@ -3,7 +3,7 @@ using FluentAssertions.Extensions;
 
 namespace Core.Tests.StateHandlersTests.Helpers;
 
-public class TestCircuitBreakerOptions : CircuitBreakerOptions
+public class TestCircuitBreakerSettings : CircuitBreakerSettings
 {
     public override string Name => "Treezor";
     public override int FailureAllowedBeforeBreaking => 2;

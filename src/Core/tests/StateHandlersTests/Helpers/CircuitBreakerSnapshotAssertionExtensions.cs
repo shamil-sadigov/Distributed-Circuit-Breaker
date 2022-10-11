@@ -1,13 +1,13 @@
-﻿using Core.CircuitBreakers.Context;
+﻿using Core.CircuitBreakers;
 using FluentAssertions;
 
 namespace Core.Tests.StateHandlersTests.Helpers;
 
 public class CircuitBreakerSnapshotAssertion
 {
-    private readonly CircuitBreakerState _context;
+    private readonly CircuitBreakerSnapshot _context;
 
-    public CircuitBreakerSnapshotAssertion(CircuitBreakerState context)
+    public CircuitBreakerSnapshotAssertion(CircuitBreakerSnapshot context)
     {
         _context = context;
     }
@@ -51,8 +51,8 @@ public class CircuitBreakerSnapshotAssertion
 
 public static class CircuitBreakerSnapshotAssertionExtensions
 {
-    public static CircuitBreakerSnapshotAssertion ShouldBe(this CircuitBreakerState state)
+    public static CircuitBreakerSnapshotAssertion ShouldBe(this CircuitBreakerSnapshot snapshot)
     {
-        return new CircuitBreakerSnapshotAssertion(state);
+        return new CircuitBreakerSnapshotAssertion(snapshot);
     }
 }

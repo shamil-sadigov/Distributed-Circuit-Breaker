@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.CircuitBreakers.Context;
+using Core.CircuitBreakers;
 
 namespace Registration.SqlServer;
 
@@ -9,7 +9,7 @@ public class DataModelProfile : Profile
 {
     public DataModelProfile()
     {
-        CreateMap<CircuitBreakerState, CircuitBreakerDataModel>()
+        CreateMap<CircuitBreakerSnapshot, CircuitBreakerDataModel>()
             .ReverseMap();
     }
 }
