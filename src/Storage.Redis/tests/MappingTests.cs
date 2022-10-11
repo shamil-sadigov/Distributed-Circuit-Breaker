@@ -27,12 +27,7 @@ public class MappingTests
     [Fact]
     public void Datamodel_is_correctly_mapped_to_snapshot()
     {
-        var dataModel = new CircuitBreakerDataModel
-        {
-            Name = "CircuitBreakerName",
-            FailedTimes = 5,
-            LastTimeFailed = DateTime.UtcNow
-        };
+        var dataModel = new CircuitBreakerDataModel("CircuitBreakerName", 5, DateTime.UtcNow);
 
         var snapshot = _mapper.Map<CircuitBreakerSnapshot>(dataModel);
 

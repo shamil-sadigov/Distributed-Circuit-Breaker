@@ -3,9 +3,4 @@
 
 namespace Storage.Redis;
 
-public class CircuitBreakerDataModel
-{
-    public string Name { get; set; }
-    public int FailedTimes { get; set; }
-    public DateTime? LastTimeFailed { get; set; }
-}
+public record CircuitBreakerDataModel(string Name, int FailedTimes, DateTime? LastTimeFailed);

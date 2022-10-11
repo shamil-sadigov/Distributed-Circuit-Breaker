@@ -19,6 +19,7 @@ public class RedisStorageTests
         _mapper = new Mapper(new MapperConfiguration(x => x.AddMaps(typeof(DataModelProfile))));
         _dbOptions = new RedisDbOptions()
         {
+            // TODO: Don't couple to localhost, by getting connection string test-config.json
             ConnectionString = "localhost"
         };
     }
