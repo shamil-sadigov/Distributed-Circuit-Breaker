@@ -1,8 +1,8 @@
 using System.Net;
+using Core.Context;
 using Core.Exceptions;
 using Core.StateHandlers;
 using Core.Tests.ResultHandlerTests.Helpers;
-using Core.Tests.StateHandlersTests.Helpers;
 using FluentAssertions;
 using static Core.Tests.StateHandlersTests.Helpers.CircuitBreakerBuilder;
 
@@ -11,37 +11,15 @@ namespace Core.Tests.StateHandlersTests;
 public class OpenCircuitBreakerStateTests
 {
     [Fact]
-    public void Can_handle_open_circuit_breaker()
+    public void Can_handle_circuit_breaker_only_in_open_state()
     {
-        var circuitBreaker = BuildOpenCircuitBreaker();
+        var sut = new ClosedCircuitBreakerHandler();
 
-        var sut = new OpenCircuitBreakerHandler();
-
-        sut.CanHandle(circuitBreaker)
-            .Should().BeTrue();
-    }
-
-    [Fact]
-    public void Cannot_handle_closed_circuit_breaker()
-    {
-        var closedCircuitBreaker = BuildClosedCircuitBreaker();
-
-        var sut = new OpenCircuitBreakerHandler();
-
-        // Act & Assert
-        sut.CanHandle(closedCircuitBreaker)
-            .Should().BeFalse();
-    }
-
-    [Fact]
-    public void Cannot_handle_half_open_circuit_breaker()
-    {
-        var halfOpenCircuitBreaker = BuildHalfOpenCircuitBreaker();
-
-        var sut = new OpenCircuitBreakerHandler();
-
-        sut.CanHandle(halfOpenCircuitBreaker)
-            .Should().BeFalse();
+        foreach (var circuitBreakerState in Enum.GetValues<CircuitBreakerState>())
+            if (circuitBreakerState is CircuitBreakerState.HalfOpen)
+                sut.CanHandle(circuitBreakerState).Should().BeTrue();
+            else
+                sut.CanHandle(circuitBreakerState).Should().BeFalse();
     }
 
     [Fact]
@@ -53,7 +31,7 @@ public class OpenCircuitBreakerStateTests
         options.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable)
             .HandleResult<CustomResult>(x => !x.IsSuccessful);
 
-        var circuitBreakerContext = BuildOpenCircuitBreaker();
+        var circuitBreakerContext = OpenCircuitBreakerWith();
 
         var sut = new OpenCircuitBreakerHandler();
 

@@ -16,7 +16,7 @@ public static class TestExtensions
     public static async Task ShouldBeInStateAsync<TSettings>(
         this ICircuitBreaker<TSettings> circuitBreaker,
         CircuitBreakerState expectedState)
-        where TSettings : ICircuitBreakerSettings
+        where TSettings : CircuitBreakerSettings
     {
         CircuitBreakerState state = await circuitBreaker.GetStateAsync(CancellationToken.None);
         state.Should().Be(expectedState);

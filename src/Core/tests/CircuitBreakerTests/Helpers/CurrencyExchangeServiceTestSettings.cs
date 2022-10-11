@@ -34,7 +34,7 @@ public class CurrencyExchangeServiceTestSettings : CircuitBreakerSettings
     
     public override string Name { get; }
     
-    public override int FailureAllowedBeforeBreaking 
+    public override int FailureAllowed 
         => _failureAllowedBeforeBreaking ?? DefaultFailureAllowedBeforeBreaking;
 
     public override TimeSpan DurationOfBreak

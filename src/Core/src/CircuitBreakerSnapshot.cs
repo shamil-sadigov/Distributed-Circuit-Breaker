@@ -9,6 +9,6 @@ namespace Core;
 public sealed record CircuitBreakerSnapshot
 (
     string Name,
-    int FailedCount,
+    int FailedTimes,
     DateTime? LastTimeFailed
 );

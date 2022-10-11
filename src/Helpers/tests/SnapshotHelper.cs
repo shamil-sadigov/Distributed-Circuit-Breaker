@@ -24,7 +24,7 @@ public static class SnapshotHelper
     {
         return snapshot with
         {
-            FailedCount = snapshot.FailedCount + 1,
+            FailedTimes = snapshot.FailedTimes + 1,
             FailureAllowedBeforeBreaking = snapshot.FailureAllowedBeforeBreaking + 1,
             IsCircuitBreakerClosed = !snapshot.IsCircuitBreakerClosed,
             TransitionDateToHalfOpenState = snapshot.TransitionDateToHalfOpenState + 1.Minutes(),

@@ -1,10 +1,10 @@
 ﻿using Core.Context;
 using Core.Settings;
-using Core.StateHandlers;
 using Core.Storage;
 
 namespace Core;
 
+// TODO: Write tests to check that context is saved
 public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSettings : CircuitBreakerSettings
 {
     private readonly ICircuitBreakerStorage _circuitBreakerStorage;

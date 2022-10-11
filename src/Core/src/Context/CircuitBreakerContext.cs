@@ -4,6 +4,7 @@ using Helpers;
 namespace Core.Context;
 
 // TODO: Add more unit tests
+// - to test Corretly returned snapshot
 
 public sealed partial class CircuitBreakerContext
 {
@@ -11,29 +12,30 @@ public sealed partial class CircuitBreakerContext
 
     private CircuitBreakerContext(
         CircuitBreakerSettings settings,
-        int failedCount,
+        int failedTimes,
         DateTime? lastTimeFailed,
         ISystemClock clock)
     {
         settings.ThrowIfNull();
         clock.ThrowIfNull();
-        if (failedCount < 0)
-            throw new ArgumentException("Expected to be greater or equal to zero", nameof(failedCount));
+        if (failedTimes < 0)
+            throw new ArgumentException("Expected to be greater or equal to zero", nameof(failedTimes));
 
-        FailedCount = failedCount;
+        FailedTimes = failedTimes;
         LastTimeFailed = lastTimeFailed;
         Settings = settings;
         _clock = clock;
     }
 
-    internal string Name => Settings.Name;
-    private int FailedCount { get; set; }
-    private DateTime? LastTimeFailed { get; set; }
+    public string Name => Settings.Name;
+    public int FailedTimes { get; private set; }
+    public DateTime? LastTimeFailed { get; private set; }
 
     private CircuitBreakerSettings Settings { get; }
 
-    private bool IsClosed => FailedCount < Settings.FailureAllowedBeforeBreaking;
-    private bool IsHalfOpen => !IsClosed && IsTimeToGiveAChance;
+    public bool IsClosed => FailedTimes < Settings.FailureAllowed;
+    public bool IsOpen => !IsClosed && !IsTimeToGiveAChance;
+    public bool IsHalfOpen => !IsClosed && IsTimeToGiveAChance;
 
     internal CircuitBreakerState State => IsClosed
         ? CircuitBreakerState.Closed
@@ -41,31 +43,34 @@ public sealed partial class CircuitBreakerContext
             ? CircuitBreakerState.HalfOpen
             : CircuitBreakerState.Open;
 
-    private bool IsTimeToGiveAChance => LastTimeFailed + Settings.DurationOfBreak > _clock.UtcTime;
+
+    public DateTime? TimeToTransitToHalfOpenState => IsClosed ? null : LastTimeFailed + Settings.DurationOfBreak;
+    
+    private bool IsTimeToGiveAChance => TimeToTransitToHalfOpenState > _clock.CurrentUtcTime;
 
     internal CircuitBreakerSnapshot CreateSnapshot()
     {
-        return new(Name, FailedCount, LastTimeFailed);
+        return new(Name, FailedTimes, LastTimeFailed);
     }
 
-    internal void Failed()
+    public void Failed()
     {
-        FailedCount++;
-        LastTimeFailed = _clock.UtcTime;
+        FailedTimes++;
+        LastTimeFailed = _clock.CurrentUtcTime;
     }
 
-    internal void Reset()
+    public void Reset()
     {
-        FailedCount = default;
+        FailedTimes = default;
         LastTimeFailed = null;
     }
 
-    internal bool CanHandleResult<TResult>(TResult result)
+    public bool CanHandleResult<TResult>(TResult result)
     {
         return Settings.CanHandleResult(result);
     }
 
-    internal bool CanHandleException(Exception exception)
+    public bool CanHandleException(Exception exception)
     {
         return Settings.CanHandleException(exception);
     }
