@@ -1,5 +1,7 @@
 using AutoMapper;
+using Core;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using MongoDB.Driver;
 using Registration.Mongo.Tests.Helpers;
 using Storage.Mongo;
@@ -23,46 +25,50 @@ public class MongoStorageTests : IClassFixture<MongoOptionsProvider>
     }
 
     [Fact]
-    public async Task Can_get_previously_added_snapshot()
+    public async Task Should_return_saved_snapshot()
     {
         // Arrange
         var circuitBreakerName = $"CircuitBreakerName-{Guid.NewGuid()}";
-        var snapshot = SnapshotHelper.CreateSampleSnapshot(circuitBreakerName);
+        var snapshot = new CircuitBreakerSnapshot(circuitBreakerName, 5, DateTime.UtcNow);
         var sut = new MongoStorage(_mongoClient, _dbOptions, _mapper);
 
         // Act
-        await sut.AddAsync(snapshot, CancellationToken.None);
+        await sut.SaveAsync(snapshot, CancellationToken.None);
 
         // Assert
         var foundSnapshot = await sut.GetAsync(circuitBreakerName, CancellationToken.None);
-
-        // By default Mongo saves 
-
+        
         foundSnapshot.Should().BeEquivalentTo(snapshot);
     }
 
     [Fact]
-    public async Task Can_get_previously_updated_snapshot()
+    public async Task Should_return_updated_snapshot()
     {
         // Arrange
         var circuitBreakerName = $"CircuitBreakerName-{Guid.NewGuid()}";
-        await SeedCircuitBreakerAsync(circuitBreakerName);
+        
+        var snapshot = new CircuitBreakerSnapshot(circuitBreakerName, FailedTimes:5, LastTimeFailed: DateTime.UtcNow);
+        
+        await SaveSnapshotAsync(snapshot);
+        
         var sut = new MongoStorage(_mongoClient, _dbOptions, _mapper);
+        
         var foundSnapshot = await sut.GetAsync(circuitBreakerName, CancellationToken.None);
 
         // Act
-        var modifiedSnapshot = SnapshotHelper.ChangeValues(foundSnapshot!);
-        await sut.SaveAsync(modifiedSnapshot, CancellationToken.None);
+        var updatedSnapshot = new CircuitBreakerSnapshot(
+            circuitBreakerName, FailedTimes: 999, LastTimeFailed: DateTime.UtcNow + 10.Seconds());
+        await sut.SaveAsync(updatedSnapshot, CancellationToken.None);
 
         // Assert
         foundSnapshot = await sut.GetAsync(circuitBreakerName, CancellationToken.None);
-        foundSnapshot.Should().BeEquivalentTo(modifiedSnapshot);
+        foundSnapshot.Should().BeEquivalentTo(updatedSnapshot);
     }
 
-    private async Task SeedCircuitBreakerAsync(string circuitBreakerName)
+
+    private async Task SaveSnapshotAsync(CircuitBreakerSnapshot snapshot)
     {
-        var snapshot = SnapshotHelper.CreateSampleSnapshot(circuitBreakerName);
         var sut = new MongoStorage(_mongoClient, _dbOptions, _mapper);
-        await sut.AddAsync(snapshot, CancellationToken.None);
+        await sut.SaveAsync(snapshot, CancellationToken.None);
     }
 }

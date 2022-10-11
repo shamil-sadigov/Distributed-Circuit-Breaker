@@ -1,7 +1,6 @@
 using AutoMapper;
 using Core;
 using FluentAssertions;
-using FluentAssertions.Extensions;
 using Storage.Mongo;
 
 namespace Registration.Mongo.Tests;
@@ -18,16 +17,7 @@ public class MappingTests
     [Fact]
     public void Snapshot_is_correctly_mapped_to_data_model()
     {
-        var snapshot = new CircuitBreakerSnapshot
-        (
-            "CircuitBreakerName",
-            5,
-            5,
-            true,
-            DateTime.UtcNow + 10.Seconds(),
-            DateTime.UtcNow - 10.Seconds(),
-            20.Seconds()
-        );
+        var snapshot = new CircuitBreakerSnapshot("CircuitBreakerName", 5, DateTime.UtcNow);
 
         var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
 
@@ -40,11 +30,8 @@ public class MappingTests
         var dataModel = new CircuitBreakerDataModel
         {
             Name = "CircuitBreakerName",
-            FailureAllowedBeforeBreaking = 5,
-            FailedCount = 5,
-            TransitionDateToHalfOpenState = DateTime.UtcNow + 10.Seconds(),
-            LastTimeStateChanged = DateTime.UtcNow - 10.Seconds(),
-            DurationOfBreak = 20.Seconds()
+            FailedTimes = 4, 
+            LastTimeFailed = DateTime.UtcNow
         };
 
         var snapshot = _mapper.Map<CircuitBreakerSnapshot>(dataModel);

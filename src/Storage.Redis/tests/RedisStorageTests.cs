@@ -25,7 +25,7 @@ public class RedisStorageTests
     }
 
     [Fact]
-    public async Task Can_get_previously_saved_snapshot()
+    public async Task Should_return_saved_snapshot()
     {
         var circuitBreakerName = $"CircuitBreakerName-{Guid.NewGuid()}";
 
@@ -43,7 +43,7 @@ public class RedisStorageTests
     }
 
     [Fact]
-    public async Task Can_get_updated_snapshot()
+    public async Task Should_return_updated_snapshot()
     {
         // Arrange
         var circuitBreakerName = $"CircuitBreakerName-{Guid.NewGuid()}";
