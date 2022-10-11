@@ -5,12 +5,12 @@ namespace Storage.Redis;
 
 public class RedisDbOptions
 {
-    private string _connectionString = null!;
+    private readonly string _connectionString = null!;
     
     public string ConnectionString
     {
         get => _connectionString;
-        set
+        init
         {
             if (value!.IsNullOrWhitespace())
                 throw new ArgumentNullException(nameof(ConnectionString));

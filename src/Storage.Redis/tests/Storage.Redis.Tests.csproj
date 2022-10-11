@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="11.0.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
         <PackageReference Include="FluentAssertions" Version="6.6.0" />
@@ -24,13 +25,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Helpers\tests\Helpers.Tests.csproj" />
+      <ProjectReference Include="..\core\Storage.Redis.csproj" />
     </ItemGroup>
     
     <ItemGroup>
         <None Update="test-config.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Helpers" />
     </ItemGroup>
 
 </Project>
