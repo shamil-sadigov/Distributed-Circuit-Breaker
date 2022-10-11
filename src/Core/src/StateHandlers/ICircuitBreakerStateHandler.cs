@@ -11,5 +11,5 @@ public interface ICircuitBreakerStateHandler
         CircuitBreakerSettings settings,
         CancellationToken token);
 
-    public bool CanHandle(CircuitBreakerContext context);
+    public bool CanHandle(CircuitBreakerState state);
 }

@@ -1,6 +1,7 @@
 ﻿using Core.Context;
+using Core.StateHandlers;
 
-namespace Core.StateHandlers;
+namespace Core;
 
 public sealed class CircuitBreakerStateHandlerProvider
 {
@@ -18,11 +19,11 @@ public sealed class CircuitBreakerStateHandlerProvider
 
     // TODO: Write test to ensure that StateMapper maps all necessary enums
 
-    internal ICircuitBreakerStateHandler GetHandler(CircuitBreakerContext context)
+    internal ICircuitBreakerStateHandler FindHandler(CircuitBreakerState circuitBreakerState)
     {
         // TODO: What to do if there is more than one handler ?
 
-        var stateHandler = _stateHandlers.SingleOrDefault(x => x.CanHandle(context));
+        var stateHandler = _stateHandlers.SingleOrDefault(x => x.CanHandle(circuitBreakerState));
 
         if (stateHandler is null)
             throw new InvalidOperationException("No handler is found that can handle context");

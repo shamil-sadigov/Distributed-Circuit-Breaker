@@ -1,4 +1,5 @@
 ﻿using Core.Context;
+using Core.Exceptions;
 using Core.Settings;
 using Core.StateHandlers;
 using Core.Storage;
@@ -7,18 +8,18 @@ namespace Core;
 
 public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions : CircuitBreakerSettings
 {
-    private readonly ICircuitBreakerStorage _storage;
+    private readonly ICircuitBreakerStorage _circuitBreakerStorage;
     private readonly CircuitBreakerStateHandlerProvider _stateHandlerProvider;
     private readonly ISystemClock _systemClock;
     private readonly TOptions _circuitBreakerOptions;
     
     public CircuitBreaker(
-        ICircuitBreakerStorage storage,
+        ICircuitBreakerStorage circuitBreakerStorage,
         CircuitBreakerStateHandlerProvider stateHandlerProvider,
         TOptions circuitBreakerOptions,
         ISystemClock systemClock)
     {
-        _storage = storage;
+        _circuitBreakerStorage = circuitBreakerStorage;
         _stateHandlerProvider = stateHandlerProvider;
         _circuitBreakerOptions = circuitBreakerOptions;
         _systemClock = systemClock;
@@ -30,7 +31,7 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
     {
         var context = await GetOrCreateContextAsync(cancellationToken).ConfigureAwait(false);
         
-        var stateHandler = _stateHandlerProvider.GetHandler(context);
+        var stateHandler = _stateHandlerProvider.FindHandler(context.State);
 
         var result = await stateHandler
             .HandleAsync(action, context, _circuitBreakerOptions, cancellationToken)
@@ -51,7 +52,7 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
     {
         var context = await GetOrCreateContextAsync(cancellationToken).ConfigureAwait(false);
 
-        var stateHandler = _stateHandlerProvider.GetHandler(context);
+        var stateHandler = _stateHandlerProvider.FindHandler(context.State);
         
         await stateHandler
             .HandleAsync(token =>
@@ -59,12 +60,25 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
                 action(token);
                 return Void.Instance;
             }, context, _circuitBreakerOptions, cancellationToken)
+            .ContinueWith(async parentTask =>
+            {
+                if (parentTask.IsFaulted && parentTask.Exception?.InnerException is CircuitBreakerIsOpenException)
+                {
+                    return parentTask;   
+                }
+
+                var snapshot = context.CreateSnapshot();
+                await _circuitBreakerStorage.UpdateAsync(snapshot, cancellationToken).ConfigureAwait(false);
+                return parentTask;
+            }, cancellationToken)
+            .Unwrap()
+            .Unwrap()
             .ConfigureAwait(false);
     }
     
     private async Task<CircuitBreakerContext> GetOrCreateContextAsync(CancellationToken cancellationToken)
     {
-        var circuitBreakerState = await _storage
+        var circuitBreakerState = await _circuitBreakerStorage
             .GetAsync(_circuitBreakerOptions.Name, cancellationToken)
             .ConfigureAwait(false);
         
@@ -83,8 +97,7 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
     private async Task<CircuitBreakerContext> CreateNewCircuitBreakerAsync(CancellationToken token)
     {
         var context = CircuitBreakerContext.CreateNew(_circuitBreakerOptions, _systemClock);
-        await _storage.AddAsync(context.CreateSnapshot(), token);
+        await _circuitBreakerStorage.AddAsync(context.CreateSnapshot(), token);
         return context;
     }
-    
 }

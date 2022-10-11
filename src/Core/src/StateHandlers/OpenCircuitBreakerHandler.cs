@@ -16,8 +16,5 @@ internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler
                                                 " while it's in open state");
     }
 
-    public bool CanHandle(CircuitBreakerContext context)
-    {
-        return context.State is CircuitBreakerState.Open;
-    }
+    public bool CanHandle(CircuitBreakerState state) => state is CircuitBreakerState.Open;
 }
