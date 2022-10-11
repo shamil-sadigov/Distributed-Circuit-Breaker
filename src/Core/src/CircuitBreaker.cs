@@ -1,5 +1,4 @@
 ﻿using Core.Context;
-using Core.Exceptions;
 using Core.Settings;
 using Core.StateHandlers;
 using Core.Storage;
@@ -33,11 +32,11 @@ public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSetti
         
         var stateHandler = _stateHandlerProvider.FindHandler(context.State);
 
-        var result = await stateHandler
+        return await stateHandler
             .HandleAsync(action, context, cancellationToken)
+            .ContinueWithSavingContext(context, _circuitBreakerStorage, cancellationToken)
+            .Unwrap()
             .ConfigureAwait(false);
-
-        return result;
     }
 
     public async Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken)
@@ -55,23 +54,13 @@ public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSetti
         var stateHandler = _stateHandlerProvider.FindHandler(context.State);
         
         await stateHandler
-            .HandleAsync(token =>
+            .HandleAsync(async token =>
             {
-                action(token);
+                await action(token);
                 return Void.Instance;
             }, context, cancellationToken)
-            .ContinueWith(async parentTask =>
-            {
-                if (parentTask.IsFaulted && parentTask.Exception?.InnerException is CircuitBreakerIsOpenException)
-                {
-                    return parentTask;   
-                }
-
-                var snapshot = context.CreateSnapshot();
-                await _circuitBreakerStorage.UpdateAsync(snapshot, cancellationToken).ConfigureAwait(false);
-                return parentTask;
-            }, cancellationToken)
             .Unwrap()
+            .ContinueWithSavingContext(context, _circuitBreakerStorage, cancellationToken)
             .Unwrap()
             .ConfigureAwait(false);
     }
