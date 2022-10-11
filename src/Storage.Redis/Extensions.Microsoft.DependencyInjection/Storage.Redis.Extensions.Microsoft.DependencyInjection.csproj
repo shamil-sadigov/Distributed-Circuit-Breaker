@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Extensions\Microsoft.DependencyInjection\src\Extensions.Microsoft.DependencyInjection.csproj" />
-    <ProjectReference Include="..\core\Storage.Mongo.csproj" />
+    <ProjectReference Include="..\core\Storage.Redis.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-  </ItemGroup>
- 
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+	</ItemGroup>
+  
 </Project>

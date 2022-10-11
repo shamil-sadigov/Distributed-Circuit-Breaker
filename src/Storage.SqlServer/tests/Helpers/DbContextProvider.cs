@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
-namespace Storage.SqlServer.Tests.Helpers;
+﻿namespace Storage.SqlServer.Tests.Helpers;
 
 public sealed class DbContextProvider : IAsyncLifetime
 {
