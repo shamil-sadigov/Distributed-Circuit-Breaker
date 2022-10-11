@@ -1,6 +1,4 @@
 ﻿using Core.Context;
-using Core.Settings;
-using Core.Storage;
 
 namespace Core.StateHandlers;
 
@@ -9,13 +7,13 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
 {
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
-        CircuitBreakerSettings settings, CancellationToken token)
+        CancellationToken token)
     {
         try
         {
             var result = await action(token).ConfigureAwait(false);
 
-            if (settings.CanHandleResult(result))
+            if (circuitBreaker.CanHandleResult(result))
                 circuitBreaker.Failed();
             else
                 circuitBreaker.Reset();
@@ -24,7 +22,7 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
         }
         catch (Exception ex)
         {
-            if (settings.CanHandleException(ex))
+            if (circuitBreaker.CanHandleException(ex))
                 circuitBreaker.Failed();
             
             throw;

@@ -10,14 +10,13 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 {
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
-        CircuitBreakerSettings settings,
         CancellationToken token)
     {
         try
         {
             var result = await action(token).ConfigureAwait(false);
 
-            if (!settings.CanHandleResult(result))
+            if (!circuitBreaker.CanHandleResult(result))
                 return result;
 
             circuitBreaker.Failed();
@@ -25,7 +24,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
         }
         catch (Exception ex)
         {
-            if (settings.CanHandleException(ex))
+            if (circuitBreaker.CanHandleException(ex))
                 circuitBreaker.Failed();
             
             throw;

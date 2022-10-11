@@ -5,14 +5,14 @@ namespace Core.Context;
 
 public partial class CircuitBreakerContext
 {
-    internal static CircuitBreakerContext CreateNew(ICircuitBreakerSettings settings, ISystemClock systemClock)
+    internal static CircuitBreakerContext CreateNew(CircuitBreakerSettings settings, ISystemClock systemClock)
     {
         return new CircuitBreakerContext(settings, failedCount: 0, null, systemClock);
     }
     
     internal static CircuitBreakerContext BuildFromState(
         CircuitBreakerSnapshot snapshot,
-        ICircuitBreakerSettings settings,
+        CircuitBreakerSettings settings,
         ISystemClock systemClock)
     {
         snapshot.ThrowIfNull();

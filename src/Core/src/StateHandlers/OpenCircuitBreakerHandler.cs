@@ -9,7 +9,6 @@ internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler
 {
     public Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
-        CircuitBreakerSettings settings, 
         CancellationToken token)
     {
         throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' cannot be used" +
