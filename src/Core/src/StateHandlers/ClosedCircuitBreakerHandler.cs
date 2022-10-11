@@ -1,6 +1,5 @@
 ﻿using Core.Context;
-using Core.Settings;
-using Core.Storage;
+using Core.Exceptions;
 
 namespace Core.StateHandlers;
 
@@ -8,10 +7,15 @@ namespace Core.StateHandlers;
 
 internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 {
-    public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
+    public async Task<TResult> HandleAsync<TResult>(
+        Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
         CancellationToken token)
     {
+        circuitBreaker.EnsureStateIs(CircuitBreakerState.Closed);
+        
+        token.ThrowIfCancellationRequested();
+        
         try
         {
             var result = await action(token).ConfigureAwait(false);
@@ -30,6 +34,6 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
             throw;
         }
     }
-
+    
     public bool CanHandle(CircuitBreakerState state) => state is CircuitBreakerState.Closed;
 }

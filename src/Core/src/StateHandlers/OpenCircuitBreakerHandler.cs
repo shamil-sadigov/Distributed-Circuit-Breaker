@@ -1,6 +1,5 @@
 ﻿using Core.Context;
 using Core.Exceptions;
-using Core.Settings;
 
 namespace Core.StateHandlers;
 
@@ -11,9 +10,11 @@ internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler
         CircuitBreakerContext circuitBreaker,
         CancellationToken token)
     {
+        circuitBreaker.EnsureStateIs(CircuitBreakerState.Open);
+        
         throw new CircuitBreakerIsOpenException($"Circuit breaker with name '{circuitBreaker.Name}' cannot be used" +
                                                 " while it's in open state");
     }
-
+    
     public bool CanHandle(CircuitBreakerState state) => state is CircuitBreakerState.Open;
 }

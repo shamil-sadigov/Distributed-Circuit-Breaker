@@ -4,7 +4,7 @@ using Core.Storage;
 
 namespace Core;
 
-public static class TaskExtensions
+public static class Extensions
 {
     /// <returns>Returns parent task <see cref="parentTask"/></returns>
     public static async Task<Task<T>> ContinueWithSavingContext<T>(
@@ -21,5 +21,15 @@ public static class TaskExtensions
         var snapshot = context.CreateSnapshot();
         await storage.UpdateAsync(snapshot, token).ConfigureAwait(false);
         return parentTask;
+    }
+
+    public static void EnsureStateIs(this CircuitBreakerContext circuitBreaker, CircuitBreakerState expectedState)
+    {
+        if (circuitBreaker.State != expectedState)
+        {
+            throw new InvalidCircuitBreakerStateException(
+                circuitBreaker.Name,
+                $"Expected circuit breaker in '{expectedState}' state but got in '{circuitBreaker.State}' state");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Context;
+using Core.Exceptions;
 
 namespace Core.StateHandlers;
 
@@ -9,6 +10,11 @@ internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateH
         CircuitBreakerContext circuitBreaker,
         CancellationToken token)
     {
+        circuitBreaker.EnsureStateIs(CircuitBreakerState.HalfOpen);
+        
+        token.ThrowIfCancellationRequested();
+
+        
         try
         {
             var result = await action(token).ConfigureAwait(false);
