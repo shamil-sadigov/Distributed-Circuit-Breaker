@@ -2,7 +2,7 @@
 
 namespace Storage.Mongo;
 
-public class CircuitBreakerDataModel
+public sealed class CircuitBreakerDataModel
 {
     [BsonId] 
     public string Name { get; set; }

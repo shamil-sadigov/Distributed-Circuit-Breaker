@@ -3,4 +3,4 @@
 
 namespace Storage.Redis;
 
-public record CircuitBreakerDataModel(string Name, int FailedTimes, DateTime? LastTimeFailed);
+public sealed record CircuitBreakerDataModel(string Name, int FailedTimes, DateTime? LastTimeFailed);

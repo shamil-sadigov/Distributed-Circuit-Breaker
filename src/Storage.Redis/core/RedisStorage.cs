@@ -6,7 +6,7 @@ using StackExchange.Redis;
 
 namespace Storage.Redis;
 
-public class RedisStorage : ICircuitBreakerStorage
+public sealed class RedisStorage : ICircuitBreakerStorage
 {
     private readonly RedisDbOptions _options;
     private readonly IMapper _mapper;

@@ -3,7 +3,7 @@ using Core;
 
 namespace Storage.Redis;
 
-public class DataModelProfile : Profile
+public sealed class DataModelProfile : Profile
 {
     public DataModelProfile()
     {

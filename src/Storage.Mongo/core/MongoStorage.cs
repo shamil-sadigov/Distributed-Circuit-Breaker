@@ -6,7 +6,7 @@ using MongoDB.Driver;
 
 namespace Storage.Mongo;
 
-public class MongoStorage : ICircuitBreakerStorage
+public sealed class MongoStorage : ICircuitBreakerStorage
 {
     private readonly IMongoCollection<CircuitBreakerDataModel> _circuitBreakerCollection;
     private readonly IMapper _mapper;

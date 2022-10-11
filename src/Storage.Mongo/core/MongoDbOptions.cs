@@ -3,7 +3,7 @@ using Helpers;
 
 namespace Storage.Mongo;
 
-public class MongoDbOptions
+public sealed class MongoDbOptions
 {
     private string? _connectionString;
     private string _databaseName;

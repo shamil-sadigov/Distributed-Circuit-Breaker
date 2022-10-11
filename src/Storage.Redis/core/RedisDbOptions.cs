@@ -3,7 +3,7 @@ using Helpers;
 
 namespace Storage.Redis;
 
-public class RedisDbOptions
+public sealed class RedisDbOptions
 {
     private readonly string _connectionString = null!;
     
