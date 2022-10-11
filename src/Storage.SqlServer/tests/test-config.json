@@ -1,5 +1,0 @@
-﻿{
-  "ConnectionStrings": {
-    "Default": "Data Source=darwin;Initial Catalog=CircuitBreakerTests;Integrated Security=True"
-  }
-}
