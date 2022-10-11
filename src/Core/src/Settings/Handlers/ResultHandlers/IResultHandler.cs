@@ -1,4 +1,4 @@
-﻿namespace Core.Handlers.ResultHandlers;
+﻿namespace Core.Settings.Handlers.ResultHandlers;
 
 public interface IResultHandler<in TResult>
 {

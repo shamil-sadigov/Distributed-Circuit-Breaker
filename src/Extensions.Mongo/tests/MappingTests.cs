@@ -1,5 +1,5 @@
 using AutoMapper;
-using Core.CircuitBreakers;
+using Core;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 

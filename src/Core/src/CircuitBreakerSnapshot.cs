@@ -1,6 +1,6 @@
-using Core.CircuitBreakers.Context;
+using Core.Context;
 
-namespace Core.CircuitBreakers;
+namespace Core;
 
 /// <summary>
 ///     Data of <see cref="CircuitBreakerContext" />

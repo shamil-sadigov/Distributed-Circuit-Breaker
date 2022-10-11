@@ -1,8 +1,7 @@
 using System.Net;
-using Core.CircuitBreakers;
-using Core.CircuitBreakers.Context;
-using Core.CircuitBreakers.StateHandlers;
+using Core.Context;
 using Core.Exceptions;
+using Core.StateHandlers;
 using Core.Storage;
 using Core.Tests.ResultHandlerTests.Helpers;
 using Core.Tests.StateHandlersTests.Helpers;

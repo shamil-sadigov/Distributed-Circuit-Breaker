@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Core.CircuitBreakers;
+using Core;
 using Core.Exceptions;
 using Core.Storage;
 using MongoDB.Driver;

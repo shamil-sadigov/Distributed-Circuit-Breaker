@@ -1,7 +1,7 @@
-﻿using Core.Handlers.ExceptionHandlers;
+﻿using Core.Settings.Handlers.ExceptionHandlers;
 using Helpers;
 
-namespace Core.CircuitBreakerOption;
+namespace Core.Settings;
 
 public partial class CircuitBreakerSettings
 {
@@ -20,7 +20,7 @@ public partial class CircuitBreakerSettings
         ExceptionHandlers.Handle(exceptionHandler);
         return this;
     }
-
+    
     public CircuitBreakerSettings HandleException(IExceptionHandler exceptionHandler)
     {
         exceptionHandler.ThrowIfNull();
@@ -28,6 +28,7 @@ public partial class CircuitBreakerSettings
         return this;
     }
     
+    // TODO: Rename it to ShouldHandle ?
     internal bool CanHandleException(Exception exception) 
         => ExceptionHandlers.CanHandle(exception);
 }

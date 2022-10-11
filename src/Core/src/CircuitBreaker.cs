@@ -1,8 +1,9 @@
-﻿using Core.CircuitBreakerOption;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
+using Core.Settings;
+using Core.StateHandlers;
 using Core.Storage;
 
-namespace Core.CircuitBreakers;
+namespace Core;
 
 public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions : CircuitBreakerSettings
 {
@@ -51,7 +52,7 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
         var context = await GetOrCreateContextAsync(cancellationToken).ConfigureAwait(false);
 
         var stateHandler = _stateHandlerProvider.GetHandler(context);
-
+        
         await stateHandler
             .HandleAsync(token =>
             {
@@ -85,4 +86,5 @@ public class CircuitBreaker<TOptions> : ICircuitBreaker<TOptions> where TOptions
         await _storage.AddAsync(context.CreateSnapshot(), token);
         return context;
     }
+    
 }

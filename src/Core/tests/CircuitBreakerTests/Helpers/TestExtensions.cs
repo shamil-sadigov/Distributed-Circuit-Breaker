@@ -1,6 +1,5 @@
-﻿using Core.CircuitBreakerOption;
-using Core.CircuitBreakers;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
+using Core.Settings;
 using Registration;
 using Registration.Mongo;
 using Microsoft.Extensions.DependencyInjection;

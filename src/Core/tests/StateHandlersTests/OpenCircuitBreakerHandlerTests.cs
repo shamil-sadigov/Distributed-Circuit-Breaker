@@ -1,6 +1,6 @@
 using System.Net;
-using Core.CircuitBreakers.StateHandlers;
 using Core.Exceptions;
+using Core.StateHandlers;
 using Core.Tests.ResultHandlerTests.Helpers;
 using Core.Tests.StateHandlersTests.Helpers;
 using FluentAssertions;

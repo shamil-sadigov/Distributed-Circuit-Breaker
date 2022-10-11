@@ -1,6 +1,5 @@
 ﻿using System.Net;
-using Core.CircuitBreakers;
-using Core.CircuitBreakers.Context;
+using Core.Context;
 using Core.Exceptions;
 using Core.Tests.CircuitBreakerTests.Helpers;
 using Core.Tests.ResultHandlerTests.Helpers;

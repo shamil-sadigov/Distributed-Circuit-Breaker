@@ -1,31 +1,34 @@
-﻿using Core.CircuitBreakerOption;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
+using Core.Settings;
 using Core.Storage;
 
-namespace Core.CircuitBreakers.StateHandlers;
+namespace Core.StateHandlers;
 
 // TODO: Add logging
-
-internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
+internal sealed class HalfOpenCircuitBreakerStateHandler : ICircuitBreakerStateHandler
 {
     private readonly ICircuitBreakerContextUpdater _contextUpdater;
 
-    public ClosedCircuitBreakerHandler(ICircuitBreakerContextUpdater contextUpdater)
+    public HalfOpenCircuitBreakerStateHandler(
+        ICircuitBreakerContextUpdater contextUpdater)
     {
         _contextUpdater = contextUpdater;
     }
 
     public async Task<TResult> HandleAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
         CircuitBreakerContext circuitBreaker,
-        CircuitBreakerSettings settings,
-        CancellationToken token)
+        CircuitBreakerSettings settings, CancellationToken token)
     {
         try
         {
             var result = await action(token).ConfigureAwait(false);
-
+            
             if (!settings.CanHandleResult(result))
+            {
+                circuitBreaker.Reset();
+                await SaveAsync(circuitBreaker.CreateSnapshot(), token);
                 return result;
+            }
 
             circuitBreaker.Failed();
             await SaveAsync(circuitBreaker.CreateSnapshot(), token);
@@ -44,7 +47,7 @@ internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 
     public bool CanHandle(CircuitBreakerContext context)
     {
-        return context.State is CircuitBreakerState.Closed;
+        return context.State is CircuitBreakerState.HalfOpen;
     }
 
     private async Task SaveAsync(CircuitBreakerSnapshot circuitBreakerSnapshot, CancellationToken token)

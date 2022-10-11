@@ -1,4 +1,4 @@
-using Core.CircuitBreakerOption;
+using Core.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq.Extensions;
 

@@ -1,6 +1,5 @@
 ﻿using Core;
-using Core.CircuitBreakers;
-using Core.CircuitBreakers.StateHandlers;
+using Core.StateHandlers;
 using Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Registration.Registrators;

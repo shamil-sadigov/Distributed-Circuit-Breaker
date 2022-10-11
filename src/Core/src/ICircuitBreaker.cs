@@ -1,7 +1,7 @@
-﻿using Core.CircuitBreakerOption;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
+using Core.Settings;
 
-namespace Core.CircuitBreakers;
+namespace Core;
 
 public interface ICircuitBreaker<TOptions> where TOptions : ICircuitBreakerSettings
 {

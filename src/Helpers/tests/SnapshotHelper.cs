@@ -1,4 +1,4 @@
-﻿using Core.CircuitBreakers;
+﻿using Core;
 using FluentAssertions.Extensions;
 
 namespace Helpers.Tests;

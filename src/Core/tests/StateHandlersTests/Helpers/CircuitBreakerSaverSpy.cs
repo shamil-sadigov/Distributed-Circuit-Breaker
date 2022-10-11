@@ -1,4 +1,3 @@
-using Core.CircuitBreakers;
 using Core.Storage;
 
 namespace Core.Tests.StateHandlersTests.Helpers;

@@ -1,5 +1,3 @@
-using Core.CircuitBreakers;
-
 namespace Core.Storage;
 
 public interface ICircuitBreakerContextGetter

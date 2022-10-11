@@ -1,4 +1,4 @@
-using Core.Handlers.ResultHandlers;
+using Core.Settings.Handlers.ResultHandlers;
 
 namespace Core.Tests.ResultHandlerTests.Helpers;
 

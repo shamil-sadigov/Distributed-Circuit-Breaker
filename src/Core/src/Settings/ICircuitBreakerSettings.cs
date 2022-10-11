@@ -1,4 +1,4 @@
-namespace Core.CircuitBreakerOption;
+namespace Core.Settings;
 
 
 public interface ICircuitBreakerSettings

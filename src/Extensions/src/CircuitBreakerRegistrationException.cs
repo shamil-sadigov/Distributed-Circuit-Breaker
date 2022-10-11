@@ -1,4 +1,5 @@
 using Core;
+using Core.Exceptions;
 
 namespace Registration;
 

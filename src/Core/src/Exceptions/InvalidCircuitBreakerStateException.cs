@@ -1,5 +1,6 @@
 namespace Core.Exceptions;
 
+// TODO: Add Expected and Currnent State
 public class InvalidCircuitBreakerStateException : CircuitBreakerException
 {
     public InvalidCircuitBreakerStateException(

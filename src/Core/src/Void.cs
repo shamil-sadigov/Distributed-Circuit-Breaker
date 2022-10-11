@@ -1,4 +1,4 @@
-﻿namespace Core.CircuitBreakers;
+﻿namespace Core;
 
 internal struct Void
 {

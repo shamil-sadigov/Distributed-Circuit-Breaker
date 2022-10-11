@@ -1,4 +1,4 @@
-namespace Core;
+namespace Core.Exceptions;
 
 /// <summary>
 ///     Base Exception for all other exceptions

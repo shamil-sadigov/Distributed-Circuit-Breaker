@@ -1,8 +1,8 @@
-﻿using Core.CircuitBreakerOption;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
 using Core.Exceptions;
+using Core.Settings;
 
-namespace Core.CircuitBreakers.StateHandlers;
+namespace Core.StateHandlers;
 
 // TODO: Ensure that handler is really registed in DI
 internal sealed class OpenCircuitBreakerHandler : ICircuitBreakerStateHandler

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using System.Net;
-using Core.Handlers.ExceptionHandlers;
+using Core.Settings.Handlers.ExceptionHandlers;
 using Core.Tests.ResultHandlerTests.Helpers;
 using FluentAssertions;
 

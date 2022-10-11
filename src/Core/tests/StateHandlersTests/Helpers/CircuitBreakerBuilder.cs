@@ -1,5 +1,4 @@
-﻿using Core.CircuitBreakers;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
 using FluentAssertions.Extensions;
 
 namespace Core.Tests.StateHandlersTests.Helpers;

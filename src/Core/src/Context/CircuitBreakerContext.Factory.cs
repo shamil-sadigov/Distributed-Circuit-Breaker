@@ -1,7 +1,7 @@
-using Core.CircuitBreakerOption;
+using Core.Settings;
 using Helpers;
 
-namespace Core.CircuitBreakers.Context;
+namespace Core.Context;
 
 public partial class CircuitBreakerContext
 {

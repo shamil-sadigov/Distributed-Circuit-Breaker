@@ -1,7 +1,7 @@
-﻿using Core.CircuitBreakerOption;
-using Core.CircuitBreakers.Context;
+﻿using Core.Context;
+using Core.Settings;
 
-namespace Core.CircuitBreakers.StateHandlers;
+namespace Core.StateHandlers;
 
 public interface ICircuitBreakerStateHandler
 {

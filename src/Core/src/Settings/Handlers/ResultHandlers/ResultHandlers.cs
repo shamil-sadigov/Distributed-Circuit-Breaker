@@ -1,6 +1,6 @@
 using Helpers;
 
-namespace Core.Handlers.ResultHandlers;
+namespace Core.Settings.Handlers.ResultHandlers;
 
 /// <summary>
 ///     TODO: Write tests

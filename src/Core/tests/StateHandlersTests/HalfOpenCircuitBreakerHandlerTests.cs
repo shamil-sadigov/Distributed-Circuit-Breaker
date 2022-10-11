@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Core.CircuitBreakers.StateHandlers;
+using Core.StateHandlers;
 using Core.Storage;
 using Core.Tests.ResultHandlerTests.Helpers;
 using Core.Tests.StateHandlersTests.Helpers;

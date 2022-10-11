@@ -1,7 +1,7 @@
-﻿using Core.Handlers.ResultHandlers;
+﻿using Core.Settings.Handlers.ResultHandlers;
 using Helpers;
 
-namespace Core.CircuitBreakerOption;
+namespace Core.Settings;
 
 public partial class CircuitBreakerSettings
 {
@@ -19,6 +19,7 @@ public partial class CircuitBreakerSettings
         return this;
     }
     
+    // TODO: Maybe ShouldHandle ?
     internal bool CanHandleResult<TResult>(TResult result) 
         => ResultHandlers.CanHandle(result);
 }

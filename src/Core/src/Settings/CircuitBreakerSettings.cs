@@ -1,7 +1,7 @@
-﻿using Core.Handlers.ExceptionHandlers;
-using Core.Handlers.ResultHandlers;
+﻿using Core.Settings.Handlers.ExceptionHandlers;
+using Core.Settings.Handlers.ResultHandlers;
 
-namespace Core.CircuitBreakerOption;
+namespace Core.Settings;
 
 public abstract partial class CircuitBreakerSettings : ICircuitBreakerSettings
 {

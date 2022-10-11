@@ -1,5 +1,5 @@
 using System.Net;
-using Core.CircuitBreakerOption;
+using Core.Settings;
 using Core.Tests.ResultHandlerTests.Helpers;
 using FluentAssertions.Extensions;
 

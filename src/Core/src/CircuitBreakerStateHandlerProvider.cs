@@ -1,7 +1,6 @@
-﻿using Core.CircuitBreakers.Context;
-using Core.CircuitBreakers.StateHandlers;
+﻿using Core.Context;
 
-namespace Core.CircuitBreakers;
+namespace Core.StateHandlers;
 
 public sealed class CircuitBreakerStateHandlerProvider
 {
