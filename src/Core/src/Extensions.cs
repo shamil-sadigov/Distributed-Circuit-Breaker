@@ -19,7 +19,7 @@ public static class Extensions
         }
 
         var snapshot = context.CreateSnapshot();
-        await storage.UpdateAsync(snapshot, token).ConfigureAwait(false);
+        await storage.SaveAsync(snapshot, token).ConfigureAwait(false);
         return parentTask;
     }
 

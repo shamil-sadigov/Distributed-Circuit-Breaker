@@ -27,7 +27,7 @@ public class SqlServerStorage : ICircuitBreakerStorage
         return _mapper.Map<CircuitBreakerSnapshot>(dataModel);
     }
 
-    public async Task UpdateAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
+    public async Task SaveAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
     {
         var foundModel = await _context.CircuitBreakers
             .FirstOrDefaultAsync(x => x.Name == snapshot.Name, token)

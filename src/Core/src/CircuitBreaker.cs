@@ -86,7 +86,7 @@ public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSetti
     private async Task<CircuitBreakerContext> CreateNewCircuitBreakerAsync(CancellationToken token)
     {
         var context = CircuitBreakerContext.CreateNew(_circuitBreakerSettings, _systemClock);
-        await _circuitBreakerStorage.AddAsync(context.CreateSnapshot(), token);
+        await _circuitBreakerStorage.SaveAsync(context.CreateSnapshot(), token);
         return context;
     }
 }

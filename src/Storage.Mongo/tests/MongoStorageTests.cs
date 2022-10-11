@@ -1,6 +1,5 @@
 using AutoMapper;
 using FluentAssertions;
-using Helpers.Tests;
 using MongoDB.Driver;
 using Registration.Mongo.Tests.Helpers;
 using Storage.Mongo;
@@ -53,7 +52,7 @@ public class MongoStorageTests : IClassFixture<MongoOptionsProvider>
 
         // Act
         var modifiedSnapshot = SnapshotHelper.ChangeValues(foundSnapshot!);
-        await sut.UpdateAsync(modifiedSnapshot, CancellationToken.None);
+        await sut.SaveAsync(modifiedSnapshot, CancellationToken.None);
 
         // Assert
         foundSnapshot = await sut.GetAsync(circuitBreakerName, CancellationToken.None);
