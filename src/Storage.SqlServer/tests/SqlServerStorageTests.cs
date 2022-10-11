@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Storage.SqlServer.Tests.Helpers;
-using Helpers.Tests;
+using Storage.Mongo;
 
 namespace Storage.SqlServer.Tests;
 

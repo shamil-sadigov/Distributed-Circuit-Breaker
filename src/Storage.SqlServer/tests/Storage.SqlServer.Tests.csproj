@@ -24,7 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Helpers\tests\Helpers.Tests.csproj" />
       <ProjectReference Include="..\..\Storage.Mongo\core\Storage.Mongo.csproj" />
     </ItemGroup>
     
