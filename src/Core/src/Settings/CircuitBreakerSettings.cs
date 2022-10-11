@@ -3,7 +3,7 @@ using Core.Settings.Handlers.ResultHandlers;
 
 namespace Core.Settings;
 
-public abstract partial class CircuitBreakerSettings : ICircuitBreakerSettings
+public abstract partial class CircuitBreakerSettings
 {
     public abstract string Name { get; }
     public abstract int FailureAllowedBeforeBreaking { get; }

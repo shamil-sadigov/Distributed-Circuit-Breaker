@@ -3,7 +3,7 @@ using Core.Settings;
 
 namespace Core;
 
-public interface ICircuitBreaker<TOptions> where TOptions : ICircuitBreakerSettings
+public interface ICircuitBreaker<TOptions> where TOptions : CircuitBreakerSettings
 {
     Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken);
     
