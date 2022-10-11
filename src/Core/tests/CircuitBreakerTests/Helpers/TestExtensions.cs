@@ -1,7 +1,5 @@
 ﻿using Core.Context;
 using Core.Settings;
-using Registration;
-using Registration.Mongo;
 using Microsoft.Extensions.DependencyInjection;
 using FluentAssertions;
 

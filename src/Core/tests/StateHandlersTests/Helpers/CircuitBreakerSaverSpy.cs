@@ -1,5 +1,3 @@
-using Core.Storage;
-
 namespace Core.Tests.StateHandlersTests.Helpers;
 
 internal class CircuitBreakerUpdaterSpy : ICircuitBreakerContextUpdater

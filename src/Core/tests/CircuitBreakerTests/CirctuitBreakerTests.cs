@@ -80,10 +80,10 @@ public class CircuitBreakerTests
         int failureAllowedBeforeBreaking)
     {
         // Arrange
-        var options = new CurrencyExchangeServiceTestSettings(failureAllowedBeforeBreaking, durationOfBreak: 3.Seconds());
+        var settings = new CurrencyExchangeServiceTestSettings(failureAllowedBeforeBreaking, durationOfBreak: 3.Seconds());
 
         var circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(options);
+            .ConfigureAndGetCircuitBreaker(settings);
 
         var actionInvokedTimesInOpenState = 0;
         
