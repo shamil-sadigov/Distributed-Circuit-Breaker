@@ -1,5 +1,4 @@
 ﻿using Core.Settings;
-using FluentAssertions.Extensions;
 
 namespace Core.Tests;
 

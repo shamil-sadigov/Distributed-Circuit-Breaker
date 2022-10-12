@@ -1,7 +1,6 @@
 using System.Net;
 using Core.Settings;
 using Core.Tests.ResultHandlerTests.Helpers;
-using FluentAssertions.Extensions;
 
 namespace Core.Tests.CircuitBreakerTests.Helpers;
 

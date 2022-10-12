@@ -2,7 +2,6 @@
 using System.Net;
 using Core.Settings.Handlers.ExceptionHandlers;
 using Core.Tests.ResultHandlerTests.Helpers;
-using FluentAssertions;
 
 namespace Core.Tests.ResultHandlerTests;
 

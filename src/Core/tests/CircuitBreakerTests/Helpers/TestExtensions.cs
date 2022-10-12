@@ -1,8 +1,6 @@
-﻿using Core.Context;
-using Core.Settings;
+﻿using Core.Settings;
 using Extensions.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using FluentAssertions;
 
 namespace Core.Tests.CircuitBreakerTests.Helpers;
 

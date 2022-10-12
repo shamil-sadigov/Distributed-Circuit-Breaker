@@ -1,7 +1,4 @@
-﻿using Core.Context;
-using FluentAssertions;
-
-namespace Core.Tests.StateHandlersTests.Helpers;
+﻿namespace Core.Tests.StateHandlersTests.Helpers;
 
 public sealed class CircuitBreakerContextAssertion
 {

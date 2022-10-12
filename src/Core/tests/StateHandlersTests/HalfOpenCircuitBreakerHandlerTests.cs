@@ -1,10 +1,6 @@
 ﻿using System.Net;
-using Core.Context;
-using Core.StateHandlers;
 using Core.Tests.ResultHandlerTests.Helpers;
 using Core.Tests.StateHandlersTests.Helpers;
-using FluentAssertions;
-using FluentAssertions.Extensions;
 using static Core.Tests.StateHandlersTests.Helpers.CircuitBreakerBuilder;
 
 namespace Core.Tests.StateHandlersTests;

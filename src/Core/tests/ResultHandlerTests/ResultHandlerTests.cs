@@ -1,6 +1,5 @@
 ﻿using Core.Settings.Handlers.ResultHandlers;
 using Core.Tests.ResultHandlerTests.Helpers;
-using FluentAssertions;
 
 namespace Core.Tests.ResultHandlerTests;
 

@@ -1,10 +1,7 @@
 ﻿using System.Net;
-using Core.Context;
 using Core.Exceptions;
 using Core.Tests.CircuitBreakerTests.Helpers;
 using Core.Tests.ResultHandlerTests.Helpers;
-using FluentAssertions;
-using FluentAssertions.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Tests.CircuitBreakerTests;
