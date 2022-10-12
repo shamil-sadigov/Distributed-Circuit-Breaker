@@ -4,6 +4,6 @@ public class ClientUnauthorizedStrategy : IShipmentStrategy
 {
     public Task<ShipmentResult> SaveLogAsync(object metrics)
     {
-        throw new ShipmentServiceConnectionException(FailureReason.Unauthorized);
+        throw new ShipmentServiceException(FailureReason.Unauthorized);
     }
 }

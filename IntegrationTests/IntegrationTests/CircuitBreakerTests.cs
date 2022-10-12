@@ -29,8 +29,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             .Pipe(server =>
             {
                 server.Configure<ShipmentService>(x => x.ShipmentStrategy = new SuccessfulShipmentStrategy());
-            })
-            .ToArray();
+            }).ToArray();
         
         // Act & Assert
         
@@ -46,7 +45,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         
          // CircuitBreaker on all servers is closed
          serverReplicas
-             .Select(x => x.GetCircuitBreaker<ShipmentServiceSettings>())
+             .Select(server => server.GetCircuitBreaker<ShipmentServiceSettings>())
              .Pipe(circuitBreaker =>
              {
                  circuitBreaker.IsClosed()
@@ -54,10 +53,8 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
              });
     }
     
-    // TODO: Write test to check that In Unauthirzed ir response then circuit breaker remains closed
-    
     [Fact]
-    public async Task CircuitBreaker_is_opened_when_shipment_service_is_unavailable_during_order_creation()
+    public async Task CircuitBreaker_become_opened_when_shipment_service_is_unavailable_during_order_placement()
     {
         // Arrange
         // Let's say we have 5 instances of the same service
@@ -78,11 +75,11 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
                 OrderId = "SomeId"
             });
             
-            response.ShouldBe(HttpStatusCode.ServiceUnavailable, "Because");
+            response.ShouldBe(HttpStatusCode.ServiceUnavailable);
         }
         
         serverReplicas
-            .Select(x => x.GetCircuitBreaker<ShipmentServiceSettings>())
+            .Select(server => server.GetCircuitBreaker<ShipmentServiceSettings>())
             .Pipe(circuitBreaker =>
             {
                 circuitBreaker.IsOpen().Should().BeTrue(
@@ -93,7 +90,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
     
     
     [Fact]
-    public async Task CircuitBreaker_remains_closed_when_shipment_service_rate_is_limited_during_order_creation()
+    public async Task CircuitBreaker_remains_closed_event_when_shipment_service_rate_is_limited_during_order_creation()
     {
         // Arrange
         // Let's say we have 5 instances of the same service
@@ -118,7 +115,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         }
         
         serverReplicas
-            .Select(x => x.GetCircuitBreaker<ShipmentServiceSettings>())
+            .Select(server => server.GetCircuitBreaker<ShipmentServiceSettings>())
             .Pipe(circuitBreaker =>
             {
                 circuitBreaker.IsClosed().Should().BeTrue(
@@ -126,7 +123,8 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             });
     }
     
-     
+    
+    // Hmmm... What a name....
     [Fact]
     public async Task When_allowed_number_of_failures_is_not_reached_CircuitBreaker_remains_closed_when_shipment_service_is_unavailable_during_order_creation()
     {

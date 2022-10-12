@@ -44,7 +44,7 @@ public class OrdersController : ControllerBase
             return StatusCode(StatusCodes.Status409Conflict, PlaceOrderResponse.Failed);
 
         }
-        catch (ShipmentServiceConnectionException)
+        catch (ShipmentServiceException)
         {
             return StatusCode(StatusCodes.Status503ServiceUnavailable, PlaceOrderResponse.Failed);
         }

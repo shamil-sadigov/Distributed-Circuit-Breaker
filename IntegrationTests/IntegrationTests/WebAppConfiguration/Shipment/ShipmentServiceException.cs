@@ -1,10 +1,10 @@
 ﻿namespace IntegrationTests.WebAppConfiguration.Shipment;
 
-public class ShipmentServiceConnectionException:Exception
+public class ShipmentServiceException:Exception
 {
     public FailureReason FailureReason { get; }
 
-    public ShipmentServiceConnectionException(FailureReason failureReason)
+    public ShipmentServiceException(FailureReason failureReason)
     {
         FailureReason =  failureReason;
     }

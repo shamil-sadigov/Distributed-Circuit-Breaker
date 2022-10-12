@@ -10,8 +10,8 @@ public sealed class ShipmentServiceSettings:CircuitBreakerSettings
 
     public ShipmentServiceSettings()
     {
-        HandleException<ShipmentServiceConnectionException>(x => x.FailureReason == FailureReason.RateLimited);
-        HandleException<ShipmentServiceConnectionException>(x => x.FailureReason == FailureReason.Unavailable);
+        HandleException<ShipmentServiceException>(x => x.FailureReason == FailureReason.RateLimited);
+        HandleException<ShipmentServiceException>(x => x.FailureReason == FailureReason.Unavailable);
         
         HandleResult<ShipmentResult>(x => !x.IsShipmentAccepted);
 

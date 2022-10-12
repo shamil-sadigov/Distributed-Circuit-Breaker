@@ -4,6 +4,6 @@ public class RateLimitedStrategy : IShipmentStrategy
 {
     public Task<ShipmentResult> SaveLogAsync(object metrics)
     {
-        throw new ShipmentServiceConnectionException(FailureReason.RateLimited);
+        throw new ShipmentServiceException(FailureReason.RateLimited);
     }
 }
