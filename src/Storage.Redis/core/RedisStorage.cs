@@ -8,11 +8,11 @@ namespace Storage.Redis;
 
 public sealed class RedisStorage : ICircuitBreakerStorage
 {
-    private readonly RedisDbOptions _options;
+    private readonly RedisOptions _options;
     private readonly IMapper _mapper;
     private readonly ConnectionMultiplexer _multiplexer;
 
-    public RedisStorage(RedisDbOptions options, IMapper mapper)
+    public RedisStorage(RedisOptions options, IMapper mapper)
     {
         _options = options;
         _mapper = mapper;

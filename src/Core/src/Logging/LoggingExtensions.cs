@@ -1,7 +1,5 @@
 ﻿using Core.Context;
-using Core.Settings;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ObjectPool;
 
 namespace Core.Logging;
 
@@ -33,7 +31,7 @@ public static partial class LoggingExtensions
         EventId = LoggingEvents.CircuitBreakerStateReport.EventId, 
         EventName = LoggingEvents.CircuitBreakerStateReport.EventName, 
         Level = LogLevel.Debug, 
-        Message = "CircuitBreaker '{CircuitBreakerName}' is in '{CircuitBreakerState}' state. Context: {@Context}."
+        Message = "CircuitBreaker '{CircuitBreakerName}' is in '{CircuitBreakerState}' state. Context: {Context}."
     )]
     static partial void CircuitBreakerState(
         ILogger logger,

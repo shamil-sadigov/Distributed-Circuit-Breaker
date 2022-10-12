@@ -1,5 +1,3 @@
-using Core.Exceptions;
-
 namespace Core.Storage;
 
 public interface ICircuitBreakerStorage

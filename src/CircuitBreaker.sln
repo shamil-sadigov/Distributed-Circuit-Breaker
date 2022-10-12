@@ -42,6 +42,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.Redis.Extensions.Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.Redis.Tests", "Storage.Redis\tests\Storage.Redis.Tests.csproj", "{002683E3-8080-44A0-B751-352D564313C2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{674B964F-B00F-4CE0-97CD-01656AC671A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "..\IntegrationTests\IntegrationTests\IntegrationTests.csproj", "{2837C87C-75E7-4F27-9787-1A8B8EAE6298}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +92,10 @@ Global
 		{002683E3-8080-44A0-B751-352D564313C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{002683E3-8080-44A0-B751-352D564313C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{002683E3-8080-44A0-B751-352D564313C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2837C87C-75E7-4F27-9787-1A8B8EAE6298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2837C87C-75E7-4F27-9787-1A8B8EAE6298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2837C87C-75E7-4F27-9787-1A8B8EAE6298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2837C87C-75E7-4F27-9787-1A8B8EAE6298}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +111,7 @@ Global
 		{EA9389D5-1491-4B6B-BDE7-541D82D88221} = {3D683121-724C-431A-A1FE-F6967CC90EC4}
 		{C9BCDBA3-5434-4532-AD88-F8DEB5E5FDDB} = {3D683121-724C-431A-A1FE-F6967CC90EC4}
 		{002683E3-8080-44A0-B751-352D564313C2} = {3D683121-724C-431A-A1FE-F6967CC90EC4}
+		{2837C87C-75E7-4F27-9787-1A8B8EAE6298} = {674B964F-B00F-4CE0-97CD-01656AC671A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17A8C475-76BD-40BE-B549-00BB5DFFFB9C}

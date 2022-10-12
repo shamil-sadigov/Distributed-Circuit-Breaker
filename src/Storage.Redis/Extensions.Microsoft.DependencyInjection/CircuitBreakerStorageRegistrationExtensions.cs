@@ -6,16 +6,26 @@ namespace Storage.Redis.Extensions.Microsoft.DependencyInjection;
 // TODO: Test it
 public static class CircuitBreakerStorageRegistrationExtensions
 {
-    public static CircuitBreakerSettingsRegistration UseMongo(
+    public static CircuitBreakerSettingsRegistration UseRedis(
         this CircuitBreakerStorageRegistration storageRegistration,
-        Action<RedisDbOptions> configure)
+        Action<RedisOptions> configure)
     {
         if (configure is null)
             throw new ArgumentNullException(nameof(configure));
 
-        var redisOptions = new RedisDbOptions();
+        var redisOptions = new RedisOptions();
 
         configure(redisOptions);
+
+        return UseRedis(storageRegistration, redisOptions);
+    }
+    
+    public static CircuitBreakerSettingsRegistration UseRedis(
+        this CircuitBreakerStorageRegistration storageRegistration,
+        RedisOptions redisOptions)
+    {
+        if (redisOptions is null)
+            throw new ArgumentNullException(nameof(redisOptions));
         
         redisOptions.Validate();
         

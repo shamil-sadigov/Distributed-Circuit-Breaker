@@ -1,31 +1,51 @@
-﻿using Core;
-using Core.StateHandlers;
-using Extensions.Microsoft.DependencyInjection.Registrations;
-using Helpers;
+using System.Reflection;
+using Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Extensions.Microsoft.DependencyInjection;
 
+// TODO: Move it to Extensions.Microsoft.DI project
 public static class ServiceCollectionExtensions
 {
-    // TODO: Revise service lifetimes, they seem to be unreasonable
-    
-    public static IServiceCollection AddDistributedCircuitBreaker(
+    public static IServiceCollection RegisterImplementationsOf<TBaseType>(
         this IServiceCollection services,
-        Action<CircuitBreakerStorageRegistration> configure)
+        ServiceLifetime serviceLifetime = ServiceLifetime.Transient,
+        Type? assemblyType = null)
     {
-        CircuitBreakerSettingsRegistration settingsRegistration = new(services);
-        CircuitBreakerStorageRegistration storageRegistration = new (services, settingsRegistration);
+        assemblyType ??= typeof(TBaseType);
         
-        configure(storageRegistration);
-        
-        services.AddTransient(typeof(ICircuitBreaker<>), typeof(CircuitBreaker<>));
+        assemblyType.Assembly.GetTypes()
+            .Where(type => typeof(TBaseType).IsAssignableFrom(type)
+                           && !type.IsInterface
+                           && !type.IsAbstract)
+            .Where(type => !type.IsDefined(typeof(SkipAutoWiringAttribute)))
+            .ToList()
+            .ForEach(implementationType => 
+                RegisterImplementation<TBaseType>(services, serviceLifetime, implementationType));
 
-        services.RegisterImplementationsOf<ICircuitBreakerStateHandler>();
-
-        services.AddScoped<CircuitBreakerStateHandlerProvider>();
-        services.AddSingleton<ISystemClock, SystemClock>();
-        
         return services;
+    }
+
+
+    // TODO: Maybe better register via ServiceDescriptor instead of doing switch case
+    private static void RegisterImplementation<TBaseType>(
+        IServiceCollection services, 
+        ServiceLifetime serviceLifetime,
+        Type implementationType)
+    {
+        switch (serviceLifetime)
+        {
+            case ServiceLifetime.Singleton:
+                services.AddSingleton(typeof(TBaseType), implementationType);
+                break;
+            case ServiceLifetime.Scoped:
+                services.AddScoped(typeof(TBaseType), implementationType);
+                break;
+            case ServiceLifetime.Transient:
+                services.AddTransient(typeof(TBaseType), implementationType);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(serviceLifetime), serviceLifetime, null);
+        }
     }
 }

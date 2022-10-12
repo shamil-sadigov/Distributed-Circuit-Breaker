@@ -12,12 +12,12 @@ namespace Registration.Mongo.Tests;
 public class RedisStorageTests 
 {
     private readonly Mapper _mapper;
-    private readonly RedisDbOptions _dbOptions;
+    private readonly RedisOptions _options;
 
     public RedisStorageTests()
     {
         _mapper = new Mapper(new MapperConfiguration(x => x.AddMaps(typeof(DataModelProfile))));
-        _dbOptions = new RedisDbOptions()
+        _options = new RedisOptions()
         {
             // TODO: Don't couple to localhost, by getting connection string test-config.json
             ConnectionString = "localhost"
@@ -31,7 +31,7 @@ public class RedisStorageTests
 
         // Arrange
         var snapshot = new CircuitBreakerSnapshot(circuitBreakerName, 5, DateTime.UtcNow);
-        var sut = new RedisStorage(_dbOptions, _mapper);
+        var sut = new RedisStorage(_options, _mapper);
 
         // Act
         await sut.SaveAsync(snapshot, CancellationToken.None);
@@ -52,7 +52,7 @@ public class RedisStorageTests
         
         await SaveSnapshotAsync(snapshot);
         
-        var sut = new RedisStorage(_dbOptions, _mapper);
+        var sut = new RedisStorage(_options, _mapper);
 
         // Act
         var updatedSnapshot = new CircuitBreakerSnapshot(
@@ -67,7 +67,7 @@ public class RedisStorageTests
 
     private async Task SaveSnapshotAsync(CircuitBreakerSnapshot snapshot)
     {
-        var sut = new RedisStorage(_dbOptions, _mapper);
+        var sut = new RedisStorage(_options, _mapper);
         await sut.SaveAsync(snapshot, CancellationToken.None);
     }
 }

@@ -4,17 +4,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.StateHandlers;
 
-// TODO: Register in IoC
-public class CircuitBreakerStateHandlerLoggingDecorator:ICircuitBreakerStateHandler
+// TODO: poor solution, but it's temporarily
+[SkipAutoWiring]
+public sealed class CircuitBreakerStateHandlerLoggingDecorator:ICircuitBreakerStateHandler
 {
-    private readonly ICircuitBreakerStateHandler _decoratee;
+    private readonly ICircuitBreakerStateHandler _decoratedHandler;
     private readonly ILogger<CircuitBreakerStateHandlerLoggingDecorator> _logger;
 
     public CircuitBreakerStateHandlerLoggingDecorator(
-        ICircuitBreakerStateHandler decoratee,
+        ICircuitBreakerStateHandler decoratedHandler,
         ILogger<CircuitBreakerStateHandlerLoggingDecorator> logger)
     {
-        _decoratee = decoratee;
+        _decoratedHandler = decoratedHandler;
         _logger = logger;
     }
     
@@ -22,7 +23,7 @@ public class CircuitBreakerStateHandlerLoggingDecorator:ICircuitBreakerStateHand
     {
         _logger.LogCircuitBreakerState(circuitBreaker);
 
-        var result =  await _decoratee.HandleAsync(action, circuitBreaker, token);
+        var result =  await _decoratedHandler.HandleAsync(action, circuitBreaker, token);
         
         _logger.LogCircuitBreakerState(circuitBreaker);
 
@@ -31,6 +32,6 @@ public class CircuitBreakerStateHandlerLoggingDecorator:ICircuitBreakerStateHand
 
     public bool CanHandle(CircuitBreakerState state)
     {
-        return _decoratee.CanHandle(state);
+        return _decoratedHandler.CanHandle(state);
     }
 }
