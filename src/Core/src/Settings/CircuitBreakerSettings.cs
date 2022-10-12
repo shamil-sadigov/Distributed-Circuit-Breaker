@@ -6,9 +6,8 @@ namespace Core.Settings;
 public abstract partial class CircuitBreakerSettings
 {
     /// <summary>
-    /// Unique name of circuit breaker
+    /// Unique name of circuit breaker. Should not be greater than 256
     /// </summary>
-    // TODO: Ensure no longer than 256 char
     public abstract string Name { get; }
     
     /// <summary>
@@ -21,6 +20,13 @@ public abstract partial class CircuitBreakerSettings
     /// </summary>
     public abstract TimeSpan DurationOfBreak { get; set; }
     
+    /// <summary>
+    /// Which exception should be handled
+    /// </summary>
     private ExceptionHandlers ExceptionHandlers { get; } = new();
+    
+    /// <summary>
+    /// Which results should be handled
+    /// </summary>
     private ResultHandlers ResultHandlers { get; } = new();
 }

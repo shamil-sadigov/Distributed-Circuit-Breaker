@@ -4,8 +4,10 @@ using Helpers;
 namespace Core.Context;
 
 // TODO: Add more unit tests
-// - to test Corretly returned snapshot
 
+/// <summary>
+/// Context of circuit breaker that controls state transitions
+/// </summary>
 public sealed partial class CircuitBreakerContext
 {
     private readonly ISystemClock _clock;
@@ -18,6 +20,7 @@ public sealed partial class CircuitBreakerContext
     {
         settings.ThrowIfNull();
         clock.ThrowIfNull();
+        
         if (failedTimes < 0)
             throw new ArgumentException("Expected to be greater or equal to zero", nameof(failedTimes));
 
@@ -69,11 +72,11 @@ public sealed partial class CircuitBreakerContext
 
     public bool CanHandleResult<TResult>(TResult result)
     {
-        return Settings.CanHandleResult(result);
+        return Settings.ShouldHandleResult(result);
     }
 
     public bool CanHandleException(Exception exception)
     {
-        return Settings.CanHandleException(exception);
+        return Settings.ShouldHandleException(exception);
     }
 }

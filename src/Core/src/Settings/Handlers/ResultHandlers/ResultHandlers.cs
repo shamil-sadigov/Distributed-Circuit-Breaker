@@ -2,9 +2,6 @@ using Helpers;
 
 namespace Core.Settings.Handlers.ResultHandlers;
 
-/// <summary>
-///     TODO: Write tests
-/// </summary>
 public class ResultHandlers
 {
     private readonly List<object> _resultHandlers = new();

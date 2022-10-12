@@ -19,7 +19,6 @@ public partial class CircuitBreakerSettings
         return this;
     }
     
-    // TODO: Maybe ShouldHandle ?
-    internal bool CanHandleResult<TResult>(TResult result) 
+    internal bool ShouldHandleResult<TResult>(TResult result) 
         => ResultHandlers.CanHandle(result);
 }

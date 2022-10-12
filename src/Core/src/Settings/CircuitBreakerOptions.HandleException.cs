@@ -28,7 +28,6 @@ public partial class CircuitBreakerSettings
         return this;
     }
     
-    // TODO: Rename it to ShouldHandle ?
-    internal bool CanHandleException(Exception exception) 
+    internal bool ShouldHandleException(Exception exception) 
         => ExceptionHandlers.CanHandle(exception);
 }

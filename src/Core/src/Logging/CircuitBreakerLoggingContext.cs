@@ -2,7 +2,10 @@ using Core.Context;
 
 namespace Core.Logging;
 
-public sealed record CircuitBreakerLoggingContext
+/// <summary>
+/// Context that is used for logging only
+/// </summary>
+internal sealed record CircuitBreakerLoggingContext
 (
     string CircuitBreakerName, 
     CircuitBreakerState CircuitBreakerState, 

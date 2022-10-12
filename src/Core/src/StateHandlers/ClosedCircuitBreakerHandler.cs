@@ -2,8 +2,6 @@
 
 namespace Core.StateHandlers;
 
-// TODO: Add logging
-
 internal sealed class ClosedCircuitBreakerHandler : ICircuitBreakerStateHandler
 {
     public async Task<TResult> HandleAsync<TResult>(

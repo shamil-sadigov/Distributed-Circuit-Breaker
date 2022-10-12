@@ -13,11 +13,14 @@ public static class ThrowingExtensions
         return str;
     }
 
-    public static void ThrowIfNull<T>(
+    public static T ThrowIfNull<T>(
         this T obj,
         [CallerArgumentExpression("obj")] string argName = "")
     {
-        if (obj is null) throw new ArgumentNullException(argName);
+        if (obj is null) 
+            throw new ArgumentNullException(argName);
+        
+        return obj;
     }
 
     public static void ThrowIfDefault(

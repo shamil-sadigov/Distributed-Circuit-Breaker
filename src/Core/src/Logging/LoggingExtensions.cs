@@ -3,14 +3,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Core.Logging;
 
+/// <summary>
+/// Logging extensions that promotes high-performance logging
+/// </summary>
 public static partial class LoggingExtensions
 {
-    public static void LogCircuitBreakerContextCreated(this ILogger logger, CircuitBreakerContext context)
+    internal static void LogCircuitBreakerContextCreated(this ILogger logger, CircuitBreakerContext context)
     {
         NewCircuitBreakerContextCreated(logger,context.Name);
     }
     
-    public static void LogCircuitBreakerState(this ILogger logger, CircuitBreakerLoggingContext context)
+    internal static void LogCircuitBreakerState(this ILogger logger, CircuitBreakerLoggingContext context)
     {
         CircuitBreakerState(logger, context.CircuitBreakerName, context.CircuitBreakerState, context);
     }
