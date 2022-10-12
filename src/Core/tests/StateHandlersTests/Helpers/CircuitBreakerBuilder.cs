@@ -4,15 +4,15 @@ using FluentAssertions.Extensions;
 
 namespace Core.Tests.StateHandlersTests.Helpers;
 
-public class CircuitBreakerBuilder
+public sealed class CircuitBreakerBuilder
 {
     private CircuitBreakerSnapshot _snapshot;
     
     private readonly CircuitBreakerSettings? _settings;
     private ISystemClock? _systemClock;
     private readonly SystemClockStub _defaultSystemClock = new();
-    
-    public CircuitBreakerBuilder(CircuitBreakerSnapshot snapshot, CircuitBreakerSettings circuitBreakerSettings)
+
+    private CircuitBreakerBuilder(CircuitBreakerSnapshot snapshot, CircuitBreakerSettings circuitBreakerSettings)
     {
         _snapshot = snapshot;
         _settings = circuitBreakerSettings;

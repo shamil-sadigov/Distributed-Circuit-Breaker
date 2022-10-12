@@ -9,7 +9,7 @@ public static class Extensions
     /// <returns>Returns parent task <see cref="parentTask"/></returns>
     public static async Task<Task<T>> ContinueWithSavingContext<T>(
         this Task<T> parentTask,
-        CircuitBreakerContext context,
+        CircuitBreakerContext circuitBreaker,
         ICircuitBreakerStorage storage,
         CancellationToken token)
     {
@@ -18,7 +18,7 @@ public static class Extensions
             return parentTask;
         }
 
-        var snapshot = context.CreateSnapshot();
+        var snapshot = circuitBreaker.CreateSnapshot();
         await storage.SaveAsync(snapshot, token).ConfigureAwait(false);
         return parentTask;
     }

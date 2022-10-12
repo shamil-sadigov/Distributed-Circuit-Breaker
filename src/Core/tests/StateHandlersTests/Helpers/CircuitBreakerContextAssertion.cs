@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace Core.Tests.StateHandlersTests.Helpers;
 
-public class CircuitBreakerContextAssertion
+public sealed class CircuitBreakerContextAssertion
 {
     private readonly CircuitBreakerContext _context;
 
@@ -23,6 +23,12 @@ public class CircuitBreakerContextAssertion
         _context.State.Should().Be(CircuitBreakerState.Open);
         return this;
     }
+    
+    public CircuitBreakerContextAssertion HalfOpen()
+    {
+        _context.State.Should().Be(CircuitBreakerState.HalfOpen);
+        return this;
+    }
 
     public CircuitBreakerContextAssertion WithFailedTimes(int failedCount)
     {
@@ -36,7 +42,7 @@ public class CircuitBreakerContextAssertion
         return this;
     }
 
-    public CircuitBreakerContextAssertion WillTransitToHalfOpenStateAt(DateTime transitToHalfOpenStateDate)
+    public CircuitBreakerContextAssertion WillTransitToHalfOpenStateAt(DateTime? transitToHalfOpenStateDate)
     {
         _context.TimeToTransitToHalfOpenState.Should().Be(transitToHalfOpenStateDate);
         return this;

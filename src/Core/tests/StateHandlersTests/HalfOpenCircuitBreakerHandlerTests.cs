@@ -12,15 +12,14 @@ namespace Core.Tests.StateHandlersTests;
 public class HalfOpenCircuitBreakerHandlerTests
 {
     [Fact]
-    public void Can_handle_circuit_breaker_only_in_halfOpen_state()
+    public void Should_be_able_to_handle_circuit_breaker_only_in_open_state()
     {
-        var sut = new ClosedCircuitBreakerHandler();
+        var sut = new HalfOpenCircuitBreakerStateHandler();
 
         foreach (var circuitBreakerState in Enum.GetValues<CircuitBreakerState>())
-            if (circuitBreakerState is CircuitBreakerState.HalfOpen)
-                sut.CanHandle(circuitBreakerState).Should().BeTrue();
-            else
-                sut.CanHandle(circuitBreakerState).Should().BeFalse();
+            sut.CanHandle(circuitBreakerState)
+                .Should()
+                .Be(circuitBreakerState is CircuitBreakerState.HalfOpen);
     }
 
     [Theory]
@@ -65,61 +64,69 @@ public class HalfOpenCircuitBreakerHandlerTests
     public async Task HalfOpenCircuitBreaker_remain_half_open_when_exception_is_not_handled(int failedCount)
     {
         // Arrange
-        var saverSpy = new CircuitBreakerUpdaterSpy();
         var clock = new SystemClockStub();
-        var options = new TestCircuitBreakerSettings();
+
+        var settings = new TestCircuitBreakerSettings()
+        {
+            FailureAllowed = failedCount,
+            DurationOfBreak = 5.Seconds()
+        };
 
         clock.SetUtcDate(DateTime.UtcNow);
 
-        var circuitBreakerContext = HalfOpenCircuitBreakerWith()
+        var circuitBreakerContext = HalfOpenCircuitBreakerWith(settings)
             .WithFailedTimes(failedCount)
-            .WithAllowedNumberOfFailures(failedCount)
-            .UsingSystemClock(clock);
+            .UsingSystemClock(clock)
+            .Build();
 
-        var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
+        var sut = new HalfOpenCircuitBreakerStateHandler();
 
         // Act
-        await sut.Invoking(x => x.HandleAsync<CustomResult>(_ => throw new InvalidOperationException(),
-                circuitBreakerContext, options, CancellationToken.None))
+        await sut.Invoking(x => x.HandleAsync<CustomResult>(
+                _ => throw new InvalidOperationException(),
+                circuitBreakerContext, CancellationToken.None))
             .Should()
             .ThrowAsync<InvalidOperationException>();
 
-        // Assert
-        var savedCircuitBreaker = saverSpy.UpdatedCircuitBreaker;
 
-        savedCircuitBreaker.Should().BeNull();
+        circuitBreakerContext.ShouldBe()
+            .HalfOpen()
+            .WillTransitToHalfOpenStateAt(clock.CurrentUtcTime + settings.DurationOfBreak);
     }
 
     [Fact]
     public async Task CircuitBreaker_is_closed_when_no_failure_happened()
     {
         // Arrange
-        var saverSpy = new CircuitBreakerUpdaterSpy();
         var clock = new SystemClockStub();
-        var options = new TestCircuitBreakerSettings();
+        
+        var settings = new TestCircuitBreakerSettings()
+        {
+            FailureAllowed = 3,
+            DurationOfBreak = 5.Seconds()
+        };
 
-        options.HandleResult<CustomResult>(x => !x.IsSuccessful);
+        settings.HandleResult<CustomResult>(x => !x.IsSuccessful);
 
         clock.SetUtcDate(DateTime.UtcNow);
 
-        var circuitBreakerContext = HalfOpenCircuitBreakerWith()
-            .UsingSystemClock(clock);
+        var circuitBreakerContext = HalfOpenCircuitBreakerWith(settings)
+            .UsingSystemClock(clock)
+            .Build();
 
-        var sut = new HalfOpenCircuitBreakerStateHandler(clock, saverSpy);
+        var sut = new HalfOpenCircuitBreakerStateHandler();
 
         // Act
-        await sut.HandleAsync(_ => Task.FromResult(new CustomResult(true)),
-            circuitBreakerContext, options, CancellationToken.None);
+        await sut.HandleAsync(
+            _ => Task.FromResult(new CustomResult(true)),
+            circuitBreakerContext, CancellationToken.None);
 
         // Assert
-        var savedCircuitBreaker = saverSpy.UpdatedCircuitBreaker;
 
-        savedCircuitBreaker.Should().NotBeNull();
 
-        savedCircuitBreaker!.ShouldBe()
+        circuitBreakerContext!.ShouldBe()
             .Closed()
-            .LastTimeFailedAt(clock.CurrentUtcTime())
-            .WillNotTransitToHalfOpenState()
-            .WithFailedCount(0);
+            .WillTransitToHalfOpenStateAt(null)
+            .WithFailedTimes(0);
     }
 }

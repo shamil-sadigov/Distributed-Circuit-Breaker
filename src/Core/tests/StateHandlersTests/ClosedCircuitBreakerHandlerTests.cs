@@ -13,15 +13,14 @@ namespace Core.Tests.StateHandlersTests;
 public class ClosedCircuitBreakerStateTests
 {
     [Fact]
-    public void Can_handle_circuit_breaker_only_in_closed_state()
+    public void Should_be_able_to_handle_circuit_breaker_only_in_open_state()
     {
         var sut = new ClosedCircuitBreakerHandler();
 
         foreach (var circuitBreakerState in Enum.GetValues<CircuitBreakerState>())
-            if (circuitBreakerState is CircuitBreakerState.Closed)
-                sut.CanHandle(circuitBreakerState).Should().BeTrue();
-            else
-                sut.CanHandle(circuitBreakerState).Should().BeFalse();
+            sut.CanHandle(circuitBreakerState)
+                .Should()
+                .Be(circuitBreakerState is CircuitBreakerState.Closed);
     }
     
     // TODO: come up with better test name
