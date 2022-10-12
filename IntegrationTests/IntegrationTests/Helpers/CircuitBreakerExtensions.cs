@@ -2,7 +2,7 @@
 using Core.Context;
 using Core.Settings;
 
-namespace IntegrationTests;
+namespace IntegrationTests.Helpers;
 
 public static class CircuitBreakerExtensions
 {

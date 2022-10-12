@@ -1,6 +1,6 @@
 ﻿using Core.Settings;
 
-namespace IntegrationTests.WebAppConfiguration.Prometheus;
+namespace IntegrationTests.WebAppConfiguration.Shipment;
 
 public sealed class ShipmentServiceSettings:CircuitBreakerSettings
 {

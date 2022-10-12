@@ -1,4 +1,4 @@
-﻿namespace IntegrationTests.WebAppConfiguration.Prometheus.ShipmentStrategies;
+﻿namespace IntegrationTests.WebAppConfiguration.Shipment.ShipmentStrategies;
 
 public class ServiceUnavailableStrategy : IShipmentStrategy
 {

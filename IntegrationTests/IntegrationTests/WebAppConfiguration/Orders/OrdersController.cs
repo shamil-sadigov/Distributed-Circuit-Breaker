@@ -1,6 +1,6 @@
 using Core;
 using Core.Context;
-using IntegrationTests.WebAppConfiguration.Prometheus;
+using IntegrationTests.WebAppConfiguration.Shipment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

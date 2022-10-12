@@ -1,5 +1,5 @@
 ﻿using Extensions.Microsoft.DependencyInjection;
-using IntegrationTests.WebAppConfiguration.Prometheus;
+using IntegrationTests.WebAppConfiguration.Shipment;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

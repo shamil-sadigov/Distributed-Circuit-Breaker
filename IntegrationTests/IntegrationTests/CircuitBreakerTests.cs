@@ -2,11 +2,12 @@ using System.Net;
 using FluentAssertions;
 using IntegrationTests.Helpers;
 using IntegrationTests.WebAppConfiguration.Orders;
-using IntegrationTests.WebAppConfiguration.Prometheus;
-using IntegrationTests.WebAppConfiguration.Prometheus.ShipmentStrategies;
+using IntegrationTests.WebAppConfiguration.Shipment;
+using IntegrationTests.WebAppConfiguration.Shipment.ShipmentStrategies;
 using Microsoft.AspNetCore.TestHost;
 using MoreLinq;
 using MoreLinq.Experimental;
+using Xunit;
 
 namespace IntegrationTests;
 

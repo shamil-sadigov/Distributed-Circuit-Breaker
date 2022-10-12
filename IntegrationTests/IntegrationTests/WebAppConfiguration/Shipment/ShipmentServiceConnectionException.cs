@@ -1,4 +1,4 @@
-﻿namespace IntegrationTests.WebAppConfiguration.Prometheus;
+﻿namespace IntegrationTests.WebAppConfiguration.Shipment;
 
 public class ShipmentServiceConnectionException:Exception
 {
