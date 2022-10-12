@@ -32,8 +32,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             }).ToArray();
         
         // Act & Assert
-        
-        foreach (var server in RoundRobin(serverReplicas).Take(50)) // emulate 50 requests
+        foreach (var server in RoundRobin(serverReplicas).Take(50)) // emulate 50 requests across 5 replicas
         {
             var response = await server.PlaceOrderAsync<PlaceOrderResponse>(new PlaceOrderRequest()
             {
@@ -68,7 +67,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         
         // Act & Assert
         
-        foreach (var server in RoundRobin(serverReplicas).Take(10)) // emulate 10 failed requests
+        foreach (var server in RoundRobin(serverReplicas).Take(10)) // emulate 10 failed requests across 5 replicas
         {
             HttpResponseMessage response = await server.PlaceOrderAsync(new PlaceOrderRequest()
             {

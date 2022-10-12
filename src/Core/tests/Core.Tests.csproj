@@ -26,9 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Extensions.Mongo\src\Storage.Mongo.csproj" />
       <ProjectReference Include="..\..\Extensions\Microsoft.DependencyInjection\src\Extensions.Microsoft.DependencyInjection.csproj" />
-      <ProjectReference Include="..\..\Extensions\src\Extensions.Microsoft.DI.csproj" />
       <ProjectReference Include="..\src\Core.csproj" />
     </ItemGroup>
 

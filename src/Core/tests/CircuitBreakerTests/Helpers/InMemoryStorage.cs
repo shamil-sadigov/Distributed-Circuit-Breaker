@@ -1,10 +1,11 @@
+using System.Collections.Concurrent;
 using Core.Storage;
 
 namespace Core.Tests.CircuitBreakerTests.Helpers;
 
 public sealed class InMemoryStorage:ICircuitBreakerStorage
 {
-    private readonly Dictionary<string, CircuitBreakerSnapshot> _snapshotStorage = new();
+    private readonly ConcurrentDictionary<string, CircuitBreakerSnapshot> _snapshotStorage = new();
 
     public  Task<CircuitBreakerSnapshot?> GetAsync(string circuitBreakerName, CancellationToken token)
     {

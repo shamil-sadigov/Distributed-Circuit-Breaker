@@ -1,5 +1,6 @@
 using System.Reflection;
 using Core;
+using Core.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Extensions.Microsoft.DependencyInjection;

@@ -5,10 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Extensions.Microsoft.DependencyInjection;
 
+// TODO: Revise service lifetimes
+
 public static class DistributedCircuitBreakerRegistrationExtensions
 {
-    // TODO: Revise service lifetimes, they seem to be unreasonable
-    
     public static IServiceCollection AddDistributedCircuitBreaker(
         this IServiceCollection services,
         Action<CircuitBreakerStorageRegistration> configure)

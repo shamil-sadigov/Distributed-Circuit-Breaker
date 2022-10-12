@@ -2,7 +2,7 @@
 using Core.Exceptions;
 using Core.Storage;
 
-namespace Core;
+namespace Core.Helpers;
 
 public static class Extensions
 {

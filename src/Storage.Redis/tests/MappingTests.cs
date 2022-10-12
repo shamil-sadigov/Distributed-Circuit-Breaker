@@ -1,5 +1,6 @@
 using AutoMapper;
 using Core;
+using Core.Storage;
 using FluentAssertions;
 using Storage.Redis;
 

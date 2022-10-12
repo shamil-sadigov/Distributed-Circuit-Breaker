@@ -12,8 +12,7 @@ public sealed class ServerFactory: IAsyncDisposable
 {
     private const string ConfigFileName = "test-config.json";
     private RedisOptions RedisOptions { get; }
-
-
+    
     public ServerFactory()
     {
         RedisOptions = new RedisOptions()

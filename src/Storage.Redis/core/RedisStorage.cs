@@ -29,23 +29,20 @@ public sealed class RedisStorage : ICircuitBreakerStorage
     public async Task SaveAsync(CircuitBreakerSnapshot snapshot, CancellationToken token)
     {
         var dataModel = _mapper.Map<CircuitBreakerDataModel>(snapshot);
-
         var updatedPayload = JsonSerializer.Serialize(dataModel);
-        
         await SaveAsync(snapshot.Name, updatedPayload).ConfigureAwait(false);
     }
 
     private async Task SaveAsync(string circuitBreakerName, string payload)
     {
         var db = _multiplexer.GetDatabase();
-        bool isSet = await db.StringSetAsync(circuitBreakerName, payload).ConfigureAwait(false);
+        await db.StringSetAsync(circuitBreakerName, payload).ConfigureAwait(false);
     }
 
     private async Task<CircuitBreakerDataModel?> GetByNameAsync(string circuitBreakerName, CancellationToken token)
     {
         var db = _multiplexer.GetDatabase();
         string? payload = await db.StringGetAsync(circuitBreakerName);
-
         return payload is null ? null : JsonSerializer.Deserialize<CircuitBreakerDataModel>(payload);
     }
 }

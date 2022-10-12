@@ -3,6 +3,9 @@ using Core.Policy.Handlers.ResultHandlers;
 
 namespace Core.Policy;
 
+/// <summary>
+/// Base Policy class that should be inherited by client and configured   
+/// </summary>
 public abstract partial class CircuitBreakerPolicy
 {
     /// <summary>
@@ -21,12 +24,12 @@ public abstract partial class CircuitBreakerPolicy
     public abstract TimeSpan DurationOfBreak { get; set; }
     
     /// <summary>
-    /// Which exception should be handled
+    /// Which exception should be handled by circuit breaker
     /// </summary>
     private ExceptionHandlers ExceptionHandlers { get; } = new();
     
     /// <summary>
-    /// Which results should be handled
+    /// Which results should be handled by circuit breaker
     /// </summary>
     private ResultHandlers ResultHandlers { get; } = new();
 }

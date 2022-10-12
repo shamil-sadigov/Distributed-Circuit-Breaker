@@ -10,8 +10,6 @@ using static CircuitBreakerState;
 
 // TODO: Test uniqueness of circuti Breakers
 
-// TODO: Use 'handleable' word instead of 'specified'
-
 public class CircuitBreakerTests
 {
     [Theory]

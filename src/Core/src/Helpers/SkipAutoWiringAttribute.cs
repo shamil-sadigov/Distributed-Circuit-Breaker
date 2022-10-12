@@ -1,4 +1,4 @@
-namespace Core;
+namespace Core.Helpers;
 
 /// <summary>
 /// Just a marker attribute indicating than there is no need to register decorated object in DI container

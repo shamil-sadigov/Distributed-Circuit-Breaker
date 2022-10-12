@@ -1,8 +1,7 @@
 ﻿using Core.Context;
-using Core.StateHandlers;
 using Microsoft.Extensions.Logging;
 
-namespace Core;
+namespace Core.StateHandlers;
 
 public sealed class CircuitBreakerStateHandlerProvider
 {
@@ -22,23 +21,22 @@ public sealed class CircuitBreakerStateHandlerProvider
         _loggerFactory = loggerFactory;
     }
 
-    // TODO: Write test to ensure that StateMapper maps all necessary enums
 
     internal ICircuitBreakerStateHandler FindHandler(CircuitBreakerState circuitBreakerState)
     {
         // TODO: What to do if there is more than one handler ?
 
-        // It's O(n), but for now it's not harmful as with only have 3 handlers
+        // It's O(n), but for now it's not harmful as we only have 3 handlers
         // but still need to refactor
         var stateHandler = _stateHandlers.SingleOrDefault(x => x.CanHandle(circuitBreakerState));
 
         if (stateHandler is null)
-            throw new InvalidOperationException("No handler is found that can handle context");
+            throw new InvalidOperationException($"No handler is found that can handle state '{circuitBreakerState}'");
         
-        return InDecorator(stateHandler);
+        return WithDecorator(stateHandler);
     }
 
-    private ICircuitBreakerStateHandler InDecorator(ICircuitBreakerStateHandler stateHandler)
+    private ICircuitBreakerStateHandler WithDecorator(ICircuitBreakerStateHandler stateHandler)
     {
         return new CircuitBreakerStateHandlerLoggingDecorator(
             stateHandler,
