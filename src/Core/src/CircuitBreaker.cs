@@ -1,6 +1,8 @@
 ﻿using Core.Context;
+using Core.Logging;
 using Core.Settings;
 using Core.Storage;
+using Microsoft.Extensions.Logging;
 
 namespace Core;
 
@@ -10,18 +12,21 @@ public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSetti
     private readonly ICircuitBreakerStorage _circuitBreakerStorage;
     private readonly CircuitBreakerStateHandlerProvider _stateHandlerProvider;
     private readonly ISystemClock _systemClock;
+    private readonly ILogger<CircuitBreaker<TSettings>> _logger;
     private readonly TSettings _circuitBreakerSettings;
     
     public CircuitBreaker(
         ICircuitBreakerStorage circuitBreakerStorage,
         CircuitBreakerStateHandlerProvider stateHandlerProvider,
         TSettings circuitBreakerSettings,
-        ISystemClock systemClock)
+        ISystemClock systemClock,
+        ILogger<CircuitBreaker<TSettings>> logger)
     {
         _circuitBreakerStorage = circuitBreakerStorage;
         _stateHandlerProvider = stateHandlerProvider;
         _circuitBreakerSettings = circuitBreakerSettings;
         _systemClock = systemClock;
+        _logger = logger;
     }
     
     public async Task<TResult> ExecuteAsync<TResult>(
@@ -65,10 +70,13 @@ public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSetti
             .ConfigureAwait(false);
     }
     
-    private async Task<CircuitBreakerContext> GetOrCreateContextAsync(CancellationToken cancellationToken)
+    /// <summary>
+    /// Circuit breaker context will be crated only once, when first execution occured
+    /// </summary>
+    private async Task<CircuitBreakerContext> GetOrCreateContextAsync(CancellationToken token)
     {
         var circuitBreakerState = await _circuitBreakerStorage
-            .GetAsync(_circuitBreakerSettings.Name, cancellationToken)
+            .GetAsync(_circuitBreakerSettings.Name, token)
             .ConfigureAwait(false);
         
         if (circuitBreakerState is not null)
@@ -76,17 +84,13 @@ public class CircuitBreaker<TSettings> : ICircuitBreaker<TSettings> where TSetti
             return CircuitBreakerContext.BuildFromState(circuitBreakerState, _circuitBreakerSettings, _systemClock);
         }
         
-        // TODO: We should also consider concurrency. If two parallel requests will try to 
-        // create circuitbreaker then one of them will fail, so we need to handle it and just 
-        // return the one that is already exists in DB
-
-        return await CreateNewCircuitBreakerAsync(cancellationToken).ConfigureAwait(false);
-    }
-    
-    private async Task<CircuitBreakerContext> CreateNewCircuitBreakerAsync(CancellationToken token)
-    {
+        // In concurrent environment, if two parellel requests reached this point
+        // it's not harmful, because saving the same 'context' is idempotent, calm down...
+        
         var context = CircuitBreakerContext.CreateNew(_circuitBreakerSettings, _systemClock);
         await _circuitBreakerStorage.SaveAsync(context.CreateSnapshot(), token);
+        
+        _logger.LogCircuitBreakerContextCreated(context);
         return context;
     }
 }

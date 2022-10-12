@@ -33,6 +33,8 @@ public sealed partial class CircuitBreakerContext
 
     private CircuitBreakerSettings Settings { get; }
 
+    public int FailureAllowed => Settings.FailureAllowed;
+
     public bool IsClosed => FailedTimes < Settings.FailureAllowed;
     public bool IsOpen => !IsClosed && !IsTimeToGiveAChance;
     public bool IsHalfOpen => !IsClosed && IsTimeToGiveAChance;
