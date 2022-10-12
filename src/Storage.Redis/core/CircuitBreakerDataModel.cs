@@ -1,5 +1,5 @@
 ﻿#nullable disable
-// For dto it's ok, because we use serializers for settings values
+// For dto it's ok, because we use serializers for setting values
 
 namespace Storage.Redis;
 

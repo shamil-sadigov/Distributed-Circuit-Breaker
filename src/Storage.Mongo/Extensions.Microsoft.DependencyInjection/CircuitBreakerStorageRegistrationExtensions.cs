@@ -7,7 +7,7 @@ namespace Storage.Mongo.Extensions.Microsoft.DependencyInjection;
 // TODO: Test it
 public static class CircuitBreakerStorageRegistrationExtensions
 {
-    public static CircuitBreakerSettingsRegistration UseMongo(
+    public static CircuitBreakerPolicyRegistration UseMongo(
         this CircuitBreakerStorageRegistration storageRegistration,
         Action<MongoDbOptions> configure)
     {

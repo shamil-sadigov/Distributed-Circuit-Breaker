@@ -1,6 +1,6 @@
 using Helpers;
 
-namespace Core.Settings.Handlers.ResultHandlers;
+namespace Core.Policy.Handlers.ResultHandlers;
 
 public class ResultHandlers
 {

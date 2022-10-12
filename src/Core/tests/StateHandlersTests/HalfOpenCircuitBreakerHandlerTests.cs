@@ -27,15 +27,15 @@ public class HalfOpenCircuitBreakerHandlerTests
         var clock = new SystemClockStub();
         clock.SetUtcDate(DateTime.UtcNow);
 
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = failedTimes,
             DurationOfBreak = 5.Seconds()
         };
         
-        settings.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
+        policy.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
 
-        var circuitBreakerContext = HalfOpenCircuitBreakerWith(settings)
+        var circuitBreakerContext = HalfOpenCircuitBreakerWith(policy)
             .UsingSystemClock(clock)
             .Build();
 
@@ -62,7 +62,7 @@ public class HalfOpenCircuitBreakerHandlerTests
         // Arrange
         var clock = new SystemClockStub();
 
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = failedCount,
             DurationOfBreak = 5.Seconds()
@@ -70,7 +70,7 @@ public class HalfOpenCircuitBreakerHandlerTests
 
         clock.SetUtcDate(DateTime.UtcNow);
 
-        var circuitBreakerContext = HalfOpenCircuitBreakerWith(settings)
+        var circuitBreakerContext = HalfOpenCircuitBreakerWith(policy)
             .WithFailedTimes(failedCount)
             .UsingSystemClock(clock)
             .Build();
@@ -87,7 +87,7 @@ public class HalfOpenCircuitBreakerHandlerTests
 
         circuitBreakerContext.ShouldBe()
             .HalfOpen()
-            .WillTransitToHalfOpenStateAt(clock.CurrentUtcTime + settings.DurationOfBreak);
+            .WillTransitToHalfOpenStateAt(clock.CurrentUtcTime + policy.DurationOfBreak);
     }
 
     [Fact]
@@ -96,17 +96,17 @@ public class HalfOpenCircuitBreakerHandlerTests
         // Arrange
         var clock = new SystemClockStub();
         
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = 3,
             DurationOfBreak = 5.Seconds()
         };
 
-        settings.HandleResult<CustomResult>(x => !x.IsSuccessful);
+        policy.HandleResult<CustomResult>(x => !x.IsSuccessful);
 
         clock.SetUtcDate(DateTime.UtcNow);
 
-        var circuitBreakerContext = HalfOpenCircuitBreakerWith(settings)
+        var circuitBreakerContext = HalfOpenCircuitBreakerWith(policy)
             .UsingSystemClock(clock)
             .Build();
 

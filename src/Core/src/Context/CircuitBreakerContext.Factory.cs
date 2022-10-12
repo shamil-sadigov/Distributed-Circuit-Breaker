@@ -1,21 +1,21 @@
-using Core.Settings;
+using Core.Policy;
 using Helpers;
 
 namespace Core.Context;
 
 public partial class CircuitBreakerContext
 {
-    internal static CircuitBreakerContext CreateNew(CircuitBreakerSettings settings, ISystemClock systemClock)
+    internal static CircuitBreakerContext CreateNew(CircuitBreakerPolicy policy, ISystemClock systemClock)
     {
-        return new CircuitBreakerContext(settings, failedTimes: 0, null, systemClock);
+        return new CircuitBreakerContext(policy, failedTimes: 0, null, systemClock);
     }
     
     internal static CircuitBreakerContext BuildFromState(
         CircuitBreakerSnapshot snapshot,
-        CircuitBreakerSettings settings,
+        CircuitBreakerPolicy policy,
         ISystemClock systemClock)
     {
         snapshot.ThrowIfNull();
-        return new CircuitBreakerContext(settings, snapshot.FailedTimes, snapshot.LastTimeFailed, systemClock);
+        return new CircuitBreakerContext(policy, snapshot.FailedTimes, snapshot.LastTimeFailed, systemClock);
     }
 }

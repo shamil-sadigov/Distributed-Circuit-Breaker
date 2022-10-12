@@ -1,4 +1,4 @@
-using Core.Settings;
+using Core.Policy;
 using Helpers;
 
 namespace Core.Context;
@@ -13,12 +13,12 @@ public sealed partial class CircuitBreakerContext
     private readonly ISystemClock _clock;
 
     private CircuitBreakerContext(
-        CircuitBreakerSettings settings,
+        CircuitBreakerPolicy policy,
         int failedTimes,
         DateTime? lastTimeFailed,
         ISystemClock clock)
     {
-        settings.ThrowIfNull();
+        policy.ThrowIfNull();
         clock.ThrowIfNull();
         
         if (failedTimes < 0)
@@ -26,19 +26,19 @@ public sealed partial class CircuitBreakerContext
 
         FailedTimes = failedTimes;
         LastTimeFailed = lastTimeFailed;
-        Settings = settings;
+        Policy = policy;
         _clock = clock;
     }
 
-    public string Name => Settings.Name;
+    public string Name => Policy.Name;
     public int FailedTimes { get; private set; }
     public DateTime? LastTimeFailed { get; private set; }
 
-    private CircuitBreakerSettings Settings { get; }
+    private CircuitBreakerPolicy Policy { get; }
 
-    public int FailureAllowed => Settings.FailureAllowed;
+    public int FailureAllowed => Policy.FailureAllowed;
 
-    public bool IsClosed => FailedTimes < Settings.FailureAllowed;
+    public bool IsClosed => FailedTimes < Policy.FailureAllowed;
     public bool IsOpen => !IsClosed && !IsTimeToGiveAChance;
     public bool IsHalfOpen => !IsClosed && IsTimeToGiveAChance;
 
@@ -49,7 +49,7 @@ public sealed partial class CircuitBreakerContext
             : CircuitBreakerState.Open;
 
 
-    public DateTime? TimeToTransitToHalfOpenState => IsClosed ? null : LastTimeFailed + Settings.DurationOfBreak;
+    public DateTime? TimeToTransitToHalfOpenState => IsClosed ? null : LastTimeFailed + Policy.DurationOfBreak;
     
     private bool IsTimeToGiveAChance => TimeToTransitToHalfOpenState > _clock.CurrentUtcTime;
 
@@ -72,11 +72,11 @@ public sealed partial class CircuitBreakerContext
 
     public bool CanHandleResult<TResult>(TResult result)
     {
-        return Settings.ShouldHandleResult(result);
+        return Policy.ShouldHandleResult(result);
     }
 
     public bool CanHandleException(Exception exception)
     {
-        return Settings.ShouldHandleException(exception);
+        return Policy.ShouldHandleException(exception);
     }
 }

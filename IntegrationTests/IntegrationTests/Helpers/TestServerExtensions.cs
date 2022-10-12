@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Core;
-using Core.Settings;
+using Core.Policy;
 using IntegrationTests.WebAppConfiguration.Orders;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,10 +9,10 @@ namespace IntegrationTests.Helpers;
 
 public static class TestServerExtensions
 {
-    public static ICircuitBreaker<TSettings> GetCircuitBreaker<TSettings>(this TestServer server) 
-        where TSettings : CircuitBreakerSettings
+    public static ICircuitBreaker<TPolicy> GetCircuitBreaker<TPolicy>(this TestServer server) 
+        where TPolicy : CircuitBreakerPolicy
     {
-        return server.Services.GetRequiredService<ICircuitBreaker<TSettings>>();
+        return server.Services.GetRequiredService<ICircuitBreaker<TPolicy>>();
     }
     
     public static TService GetService<TService>(this TestServer server) where TService : notnull

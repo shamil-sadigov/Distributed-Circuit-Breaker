@@ -1,4 +1,4 @@
-﻿namespace Core.Settings.Handlers.ExceptionHandlers;
+﻿namespace Core.Policy.Handlers.ExceptionHandlers;
 
 public interface IExceptionHandler
 {

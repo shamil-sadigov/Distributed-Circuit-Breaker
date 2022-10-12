@@ -1,11 +1,11 @@
 ﻿using Core.Context;
-using Core.Settings;
+using Core.Policy;
 
 namespace Core;
 
-public interface ICircuitBreaker<out TSettings> where TSettings : CircuitBreakerSettings
+public interface ICircuitBreaker<out TPolicy> where TPolicy : CircuitBreakerPolicy
 {
-    TSettings Settings { get; }
+    TPolicy Policy { get; }
     Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken);
     
     Task ExecuteAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken);

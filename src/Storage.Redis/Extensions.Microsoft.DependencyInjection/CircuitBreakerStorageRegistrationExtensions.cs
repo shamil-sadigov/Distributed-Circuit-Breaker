@@ -6,7 +6,7 @@ namespace Storage.Redis.Extensions.Microsoft.DependencyInjection;
 // TODO: Test it
 public static class CircuitBreakerStorageRegistrationExtensions
 {
-    public static CircuitBreakerSettingsRegistration UseRedis(
+    public static CircuitBreakerPolicyRegistration UseRedis(
         this CircuitBreakerStorageRegistration storageRegistration,
         Action<RedisOptions> configure)
     {
@@ -20,7 +20,7 @@ public static class CircuitBreakerStorageRegistrationExtensions
         return UseRedis(storageRegistration, redisOptions);
     }
     
-    public static CircuitBreakerSettingsRegistration UseRedis(
+    public static CircuitBreakerPolicyRegistration UseRedis(
         this CircuitBreakerStorageRegistration storageRegistration,
         RedisOptions redisOptions)
     {

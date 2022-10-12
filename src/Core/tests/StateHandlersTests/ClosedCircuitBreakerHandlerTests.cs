@@ -30,15 +30,15 @@ public class ClosedCircuitBreakerStateTests
         int expectedFailedCount)
     {
         // Arrange
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = failureAllowedBeforeBreaking,
             DurationOfBreak = 5.Seconds()
         };
 
-        settings.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
+        policy.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
 
-        var circuitBreakerContext = ClosedCircuitBreakerWith(settings)
+        var circuitBreakerContext = ClosedCircuitBreakerWith(policy)
             .WithFailedTimes(currentFailedCount)
             .Build();
 
@@ -72,15 +72,15 @@ public class ClosedCircuitBreakerStateTests
         var clock = new SystemClockStub();
         clock.SetUtcDate(DateTime.UtcNow);
 
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = failureAllowedBeforeBreaking,
             DurationOfBreak = 5.Seconds()
         };
         
-        settings.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
+        policy.HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
 
-        var circuitBreakerContext = ClosedCircuitBreakerWith(settings)
+        var circuitBreakerContext = ClosedCircuitBreakerWith(policy)
             .WithFailedTimes(currentFailedCount)
             .UsingSystemClock(clock)
             .Build();
@@ -95,7 +95,7 @@ public class ClosedCircuitBreakerStateTests
             .Should()
             .ThrowAsync<CustomHttpException>();
         
-        var transitToHalfOpenStateDate = clock.CurrentUtcTime + settings.DurationOfBreak;
+        var transitToHalfOpenStateDate = clock.CurrentUtcTime + policy.DurationOfBreak;
 
         circuitBreakerContext!.ShouldBe()
             .Open()
@@ -111,13 +111,13 @@ public class ClosedCircuitBreakerStateTests
         var clock = new SystemClockStub();
         clock.SetUtcDate(DateTime.UtcNow);
         
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = 3,
             DurationOfBreak = 5.Seconds()
         };
 
-        var circuitBreakerContext = ClosedCircuitBreakerWith(settings)
+        var circuitBreakerContext = ClosedCircuitBreakerWith(policy)
             .WithFailedTimes(1, lastTimeFailedAt: clock.CurrentUtcTime)
             .UsingSystemClock(clock)
             .Build();
@@ -143,13 +143,13 @@ public class ClosedCircuitBreakerStateTests
     public void Cannot_handle_circuit_breaker_which_is_not_closed()
     {
         // Arrange
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = 2,
             DurationOfBreak = 20.Seconds()
         };
 
-        CircuitBreakerContext circuitBreakerContext = OpenCircuitBreakerWith(settings)
+        CircuitBreakerContext circuitBreakerContext = OpenCircuitBreakerWith(policy)
             .Build();
 
         var sut = new ClosedCircuitBreakerHandler();

@@ -11,11 +11,11 @@ namespace IntegrationTests.WebAppConfiguration.Orders;
 public class OrdersController : ControllerBase
 {
     private readonly ShipmentService _shipmentService;
-    private readonly ICircuitBreaker<ShipmentServiceSettings> _circuitBreaker;
+    private readonly ICircuitBreaker<ShipmentServicePolicy> _circuitBreaker;
 
     public OrdersController(
         ShipmentService shipmentService, 
-        ICircuitBreaker<ShipmentServiceSettings> circuitBreaker)
+        ICircuitBreaker<ShipmentServicePolicy> circuitBreaker)
     {
         _shipmentService = shipmentService;
         _circuitBreaker = circuitBreaker;

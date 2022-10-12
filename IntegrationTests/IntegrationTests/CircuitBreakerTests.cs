@@ -45,7 +45,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         
          // CircuitBreaker on all servers is closed
          serverReplicas
-             .Select(server => server.GetCircuitBreaker<ShipmentServiceSettings>())
+             .Select(server => server.GetCircuitBreaker<ShipmentServicePolicy>())
              .Pipe(circuitBreaker =>
              {
                  circuitBreaker.IsClosed()
@@ -62,7 +62,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             .Pipe(server =>
             {
                 server.Configure<ShipmentService>(x => x.ShipmentStrategy = new ServiceUnavailableStrategy());
-                server.Configure<ShipmentServiceSettings>(x => x.FailureAllowed = 10);
+                server.Configure<ShipmentServicePolicy>(x => x.FailureAllowed = 10);
             })
             .ToArray();
         
@@ -79,7 +79,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         }
         
         serverReplicas
-            .Select(server => server.GetCircuitBreaker<ShipmentServiceSettings>())
+            .Select(server => server.GetCircuitBreaker<ShipmentServicePolicy>())
             .Pipe(circuitBreaker =>
             {
                 circuitBreaker.IsOpen().Should().BeTrue(
@@ -98,7 +98,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             .Pipe(server =>
             {
                 server.Configure<ShipmentService>(x => x.ShipmentStrategy = new RateLimitedStrategy());
-                server.Configure<ShipmentServiceSettings>(x => x.FailureAllowed = 10);
+                server.Configure<ShipmentServicePolicy>(x => x.FailureAllowed = 10);
             })
             .ToArray();
         
@@ -115,7 +115,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         }
         
         serverReplicas
-            .Select(server => server.GetCircuitBreaker<ShipmentServiceSettings>())
+            .Select(server => server.GetCircuitBreaker<ShipmentServicePolicy>())
             .Pipe(circuitBreaker =>
             {
                 circuitBreaker.IsClosed().Should().BeTrue(
@@ -134,7 +134,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             .Pipe(server =>
             {
                 server.Configure<ShipmentService>(x => x.ShipmentStrategy = new ServiceUnavailableStrategy());
-                server.Configure<ShipmentServiceSettings>(x => x.FailureAllowed = 10);
+                server.Configure<ShipmentServicePolicy>(x => x.FailureAllowed = 10);
             })
             .ToArray();
         
@@ -151,7 +151,7 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         }
         
         serverReplicas
-            .Select(x => x.GetCircuitBreaker<ShipmentServiceSettings>())
+            .Select(x => x.GetCircuitBreaker<ShipmentServicePolicy>())
             .Pipe(circuitBreaker =>
             {
                 circuitBreaker.IsClosed().Should().BeTrue(

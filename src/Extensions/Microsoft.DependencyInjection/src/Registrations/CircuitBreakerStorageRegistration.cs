@@ -5,22 +5,22 @@ namespace Extensions.Microsoft.DependencyInjection.Registrations;
 
 public class CircuitBreakerStorageRegistration
 {
-    private readonly CircuitBreakerSettingsRegistration _settingsRegistration;
+    private readonly CircuitBreakerPolicyRegistration _policyRegistration;
     public CircuitBreakerStorageRegistration(
         IServiceCollection services, 
-        CircuitBreakerSettingsRegistration settingsRegistration)
+        CircuitBreakerPolicyRegistration policyRegistration)
     {
-        _settingsRegistration = settingsRegistration;
+        _policyRegistration = policyRegistration;
         Services = services;
     }
 
     public IServiceCollection Services { get; }
 
-    public CircuitBreakerSettingsRegistration UseStorage<TStorage>()
+    public CircuitBreakerPolicyRegistration UseStorage<TStorage>()
         where TStorage : class, ICircuitBreakerStorage
     {
         Services.AddSingleton<ICircuitBreakerStorage, TStorage>();
 
-        return _settingsRegistration;
+        return _policyRegistration;
     }
 }

@@ -1,9 +1,9 @@
-﻿using Core.Settings.Handlers.ExceptionHandlers;
-using Core.Settings.Handlers.ResultHandlers;
+﻿using Core.Policy.Handlers.ExceptionHandlers;
+using Core.Policy.Handlers.ResultHandlers;
 
-namespace Core.Settings;
+namespace Core.Policy;
 
-public abstract partial class CircuitBreakerSettings
+public abstract partial class CircuitBreakerPolicy
 {
     /// <summary>
     /// Unique name of circuit breaker. Should not be greater than 256

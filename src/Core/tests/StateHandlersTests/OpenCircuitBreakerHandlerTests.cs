@@ -22,17 +22,17 @@ public class OpenCircuitBreakerStateTests
     public async Task When_circuit_breaker_is_open_then_action_is_impossible_to_invoke()
     {
         // Arrange
-        var settings = new TestCircuitBreakerSettings()
+        var policy = new TestCircuitBreakerPolicy()
         {
             FailureAllowed = 3,
             DurationOfBreak = 5.Seconds()
         };
 
-        settings
+        policy
             .HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable)
             .HandleResult<CustomResult>(x => !x.IsSuccessful);
 
-        var circuitBreakerContext = OpenCircuitBreakerWith(settings)
+        var circuitBreakerContext = OpenCircuitBreakerWith(policy)
             .Build();
 
         var sut = new OpenCircuitBreakerHandler();

@@ -1,4 +1,4 @@
-﻿using Core.Settings;
+﻿using Core.Policy;
 using Extensions.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,42 +6,42 @@ namespace Core.Tests.CircuitBreakerTests.Helpers;
 
 public static class TestExtensions
 {
-    public static async Task ShouldBeInStateAsync<TSettings>(
-        this ICircuitBreaker<TSettings> circuitBreaker,
+    public static async Task ShouldBeInStateAsync<TPolicy>(
+        this ICircuitBreaker<TPolicy> circuitBreaker,
         CircuitBreakerState expectedState)
-        where TSettings : CircuitBreakerSettings
+        where TPolicy : CircuitBreakerPolicy
     {
         CircuitBreakerState state = await circuitBreaker.GetStateAsync(CancellationToken.None);
         state.Should().Be(expectedState);
     }
 
-    public static ICircuitBreaker<TSettings> ConfigureAndGetCircuitBreaker<TSettings>(this ServiceCollection services) 
-        where TSettings : CircuitBreakerSettings, new()
+    public static ICircuitBreaker<TPolicy> ConfigureAndGetCircuitBreaker<TPolicy>(this ServiceCollection services) 
+        where TPolicy : CircuitBreakerPolicy, new()
     {
         services.AddDistributedCircuitBreaker(ops =>
         {
             ops.UseInMemoryStorage()
-                .AddCircuitBreaker<TSettings>();
+                .AddCircuitBreaker<TPolicy>();
         });
 
         return services
             .BuildServiceProvider()
-            .GetRequiredService<ICircuitBreaker<TSettings>>();
+            .GetRequiredService<ICircuitBreaker<TPolicy>>();
     }
     
-    public static ICircuitBreaker<TSettings> ConfigureAndGetCircuitBreaker<TSettings>(
+    public static ICircuitBreaker<TPolicy> ConfigureAndGetCircuitBreaker<TPolicy>(
         this ServiceCollection services, 
-        TSettings options) 
-        where TSettings : CircuitBreakerSettings
+        TPolicy policy) 
+        where TPolicy : CircuitBreakerPolicy
     {
         services.AddDistributedCircuitBreaker(ops =>
         {
             ops.UseInMemoryStorage()
-                .AddCircuitBreaker(options);
+                .AddCircuitBreaker(policy);
         });
 
         return services
             .BuildServiceProvider()
-            .GetRequiredService<ICircuitBreaker<TSettings>>();
+            .GetRequiredService<ICircuitBreaker<TPolicy>>();
     }
 }

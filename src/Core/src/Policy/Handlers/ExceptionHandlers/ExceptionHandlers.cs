@@ -1,6 +1,6 @@
 using Helpers;
 
-namespace Core.Settings.Handlers.ExceptionHandlers;
+namespace Core.Policy.Handlers.ExceptionHandlers;
 
 /// <summary>
 ///     TODO: Write unit tests

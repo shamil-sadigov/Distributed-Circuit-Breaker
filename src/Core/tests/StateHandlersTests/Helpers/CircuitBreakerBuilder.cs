@@ -1,4 +1,4 @@
-﻿using Core.Settings;
+﻿using Core.Policy;
 
 namespace Core.Tests.StateHandlersTests.Helpers;
 
@@ -6,40 +6,40 @@ public sealed class CircuitBreakerBuilder
 {
     private CircuitBreakerSnapshot _snapshot;
     
-    private readonly CircuitBreakerSettings? _settings;
+    private readonly CircuitBreakerPolicy? _policy;
     private ISystemClock? _systemClock;
     private readonly SystemClockStub _defaultSystemClock = new();
 
-    private CircuitBreakerBuilder(CircuitBreakerSnapshot snapshot, CircuitBreakerSettings circuitBreakerSettings)
+    private CircuitBreakerBuilder(CircuitBreakerSnapshot snapshot, CircuitBreakerPolicy circuitBreakerPolicy)
     {
         _snapshot = snapshot;
-        _settings = circuitBreakerSettings;
+        _policy = circuitBreakerPolicy;
     }
 
-    public static CircuitBreakerBuilder ClosedCircuitBreakerWith(CircuitBreakerSettings settings)
+    public static CircuitBreakerBuilder ClosedCircuitBreakerWith(CircuitBreakerPolicy policy)
     {
         var snapshot = new CircuitBreakerSnapshot("Default", 0, null);
-        return new CircuitBreakerBuilder(snapshot, settings);
+        return new CircuitBreakerBuilder(snapshot, policy);
     }
     
-    public static CircuitBreakerBuilder OpenCircuitBreakerWith(CircuitBreakerSettings settings)
+    public static CircuitBreakerBuilder OpenCircuitBreakerWith(CircuitBreakerPolicy policy)
     {
         var snapshot = new CircuitBreakerSnapshot(
             Name: "Default", 
-            FailedTimes: settings.FailureAllowed + 1, 
+            FailedTimes: policy.FailureAllowed + 1, 
             DateTime.UtcNow);
         
-        return new CircuitBreakerBuilder(snapshot, settings);
+        return new CircuitBreakerBuilder(snapshot, policy);
     }
 
-    public static CircuitBreakerBuilder HalfOpenCircuitBreakerWith(CircuitBreakerSettings settings)
+    public static CircuitBreakerBuilder HalfOpenCircuitBreakerWith(CircuitBreakerPolicy policy)
     {
         var snapshot = new CircuitBreakerSnapshot(
             "Default", 
-            FailedTimes: settings.FailureAllowed, 
-            LastTimeFailed: DateTime.UtcNow - settings.DurationOfBreak - 1.Seconds());
+            FailedTimes: policy.FailureAllowed, 
+            LastTimeFailed: DateTime.UtcNow - policy.DurationOfBreak - 1.Seconds());
         
-        return new CircuitBreakerBuilder(snapshot, settings);
+        return new CircuitBreakerBuilder(snapshot, policy);
     }
 
   
@@ -63,7 +63,7 @@ public sealed class CircuitBreakerBuilder
     {
         return CircuitBreakerContext.BuildFromState(
             _snapshot, 
-            _settings ?? throw new InvalidOperationException("_settings was not set"), 
+            _policy ?? throw new InvalidOperationException("_policy was not set"), 
             _systemClock ?? _defaultSystemClock);
     }
 }

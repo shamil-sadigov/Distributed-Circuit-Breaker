@@ -1,14 +1,14 @@
-﻿using Core.Settings;
+﻿using Core.Policy;
 
 namespace Core.Tests;
 
-public class TestCircuitBreakerSettings : CircuitBreakerSettings
+public class TestCircuitBreakerPolicy : CircuitBreakerPolicy
 {
     public override string Name => "Test";
     public override int FailureAllowed { get; set; }
     public override TimeSpan DurationOfBreak { get; set; }
 
-    public static TestCircuitBreakerSettings Default = new TestCircuitBreakerSettings()
+    public static TestCircuitBreakerPolicy Default = new TestCircuitBreakerPolicy()
     {
         DurationOfBreak = 5.Seconds(),
         FailureAllowed = 3

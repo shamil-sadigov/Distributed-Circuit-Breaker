@@ -1,11 +1,11 @@
-﻿using Core.Settings.Handlers.ExceptionHandlers;
+﻿using Core.Policy.Handlers.ExceptionHandlers;
 using Helpers;
 
-namespace Core.Settings;
+namespace Core.Policy;
 
-public partial class CircuitBreakerSettings
+public partial class CircuitBreakerPolicy
 {
-    public CircuitBreakerSettings HandleException<TException>()
+    public CircuitBreakerPolicy HandleException<TException>()
         where TException : Exception
     {
         var handler = new DelegateBasedExceptionHandler(ex => ex is TException);
@@ -13,7 +13,7 @@ public partial class CircuitBreakerSettings
         return this;
     }
 
-    public CircuitBreakerSettings HandleException<TException>(Func<TException, bool> exceptionHandler)
+    public CircuitBreakerPolicy HandleException<TException>(Func<TException, bool> exceptionHandler)
         where TException : Exception
     {
         exceptionHandler.ThrowIfNull();
@@ -21,7 +21,7 @@ public partial class CircuitBreakerSettings
         return this;
     }
     
-    public CircuitBreakerSettings HandleException(IExceptionHandler exceptionHandler)
+    public CircuitBreakerPolicy HandleException(IExceptionHandler exceptionHandler)
     {
         exceptionHandler.ThrowIfNull();
         ExceptionHandlers.Handle(exceptionHandler);

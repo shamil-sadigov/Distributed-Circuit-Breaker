@@ -1,18 +1,18 @@
-﻿using Core.Settings.Handlers.ResultHandlers;
+﻿using Core.Policy.Handlers.ResultHandlers;
 using Helpers;
 
-namespace Core.Settings;
+namespace Core.Policy;
 
-public partial class CircuitBreakerSettings
+public partial class CircuitBreakerPolicy
 {
-    public CircuitBreakerSettings HandleResult<TResult>(Func<TResult, bool> resultHandler)
+    public CircuitBreakerPolicy HandleResult<TResult>(Func<TResult, bool> resultHandler)
     {
         resultHandler.ThrowIfNull();
         ResultHandlers.Handle(resultHandler);
         return this;
     }
 
-    public CircuitBreakerSettings HandleResult<TResult>(IResultHandler<TResult> resultHandler)
+    public CircuitBreakerPolicy HandleResult<TResult>(IResultHandler<TResult> resultHandler)
     {
         resultHandler.ThrowIfNull();
         ResultHandlers.Handle(resultHandler);

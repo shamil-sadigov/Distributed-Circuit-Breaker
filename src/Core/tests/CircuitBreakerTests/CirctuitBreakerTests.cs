@@ -24,8 +24,8 @@ public class CircuitBreakerTests
         // Arrange
         var executedTimes = 0;
         
-        ICircuitBreaker<ExternalServiceSettings> circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(ExternalServiceSettings.WithDefaultTestValues);
+        ICircuitBreaker<ExternalServicePolicy> circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(ExternalServicePolicy.WithDefaultTestValues);
         
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
@@ -51,7 +51,7 @@ public class CircuitBreakerTests
     {
         // Arrange
         var circuitBreaker =  new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(ExternalServiceSettings.WithDefaultTestValues);
+            .ConfigureAndGetCircuitBreaker(ExternalServicePolicy.WithDefaultTestValues);
         
         // Act & Assert
         for (var i = 0; i < executionCount; i++)
@@ -76,10 +76,10 @@ public class CircuitBreakerTests
     public async Task CircuitBreaker_is_open_when_thrown_exception__is_handleable(int failureAllowedBeforeBreaking)
     {
         // Arrange
-        var settings = new ExternalServiceSettings(failureAllowedBeforeBreaking, durationOfBreak: 5.Seconds());
+        var policy = new ExternalServicePolicy(failureAllowedBeforeBreaking, durationOfBreak: 5.Seconds());
 
-        ICircuitBreaker<ExternalServiceSettings> circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(settings);
+        ICircuitBreaker<ExternalServicePolicy> circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(policy);
         
         // Act and Assert
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)
@@ -110,10 +110,10 @@ public class CircuitBreakerTests
     [InlineData(10)]
     public async Task CircuitBreaker_is_open_when_action_result_is_handleable(int failureAllowedBeforeBreaking)
     {
-        var settings = new ExternalServiceSettings(failureAllowedBeforeBreaking, durationOfBreak: 10.Seconds());
+        var policy = new ExternalServicePolicy(failureAllowedBeforeBreaking, durationOfBreak: 10.Seconds());
 
-        ICircuitBreaker<ExternalServiceSettings> circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(settings);
+        ICircuitBreaker<ExternalServicePolicy> circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(policy);
         
         // Act and Assert
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)
@@ -143,10 +143,10 @@ public class CircuitBreakerTests
         // Arrange
         const int failureAllowedBeforeBreaking = 3;
 
-        var settings = new ExternalServiceSettings(failureAllowedBeforeBreaking, durationOfBreak.Seconds());
+        var policy = new ExternalServicePolicy(failureAllowedBeforeBreaking, durationOfBreak.Seconds());
 
-        ICircuitBreaker<ExternalServiceSettings> circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(settings);
+        ICircuitBreaker<ExternalServicePolicy> circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(policy);
         
         await BringTillOpenState(circuitBreaker, failureAllowedBeforeBreaking);
         
@@ -169,10 +169,10 @@ public class CircuitBreakerTests
         const int failureAllowedBeforeBreaking = 3;
         var actionInvokedTimes = 0;
 
-        var settings = new ExternalServiceSettings(failureAllowedBeforeBreaking, durationOfBreak.Seconds());
+        var policy = new ExternalServicePolicy(failureAllowedBeforeBreaking, durationOfBreak.Seconds());
 
-        ICircuitBreaker<ExternalServiceSettings> circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(settings);
+        ICircuitBreaker<ExternalServicePolicy> circuitBreaker = new ServiceCollection()
+            .ConfigureAndGetCircuitBreaker(policy);
         
         await BringTillOpenState(circuitBreaker, failureAllowedBeforeBreaking);
 
@@ -205,10 +205,10 @@ public class CircuitBreakerTests
         const int failureAllowedBeforeBreaking = 3;
         var actionInvokedTimes = 0;
 
-        var settings = new ExternalServiceSettings(failureAllowedBeforeBreaking, durationOfBreak.Seconds());
+        var policy = new ExternalServicePolicy(failureAllowedBeforeBreaking, durationOfBreak.Seconds());
         
         var circuitBreaker = new ServiceCollection()
-            .ConfigureAndGetCircuitBreaker(settings);
+            .ConfigureAndGetCircuitBreaker(policy);
         
         await BringTillOpenState(circuitBreaker, failureAllowedBeforeBreaking);
 
@@ -232,7 +232,7 @@ public class CircuitBreakerTests
     }
     
     private static async Task BringTillOpenState(
-        ICircuitBreaker<ExternalServiceSettings> circuitBreaker, 
+        ICircuitBreaker<ExternalServicePolicy> circuitBreaker, 
         int failureAllowedBeforeBreaking)
     {
         for (var i = 0; i < failureAllowedBeforeBreaking; i++)

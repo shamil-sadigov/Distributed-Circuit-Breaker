@@ -22,7 +22,7 @@ public class TestStartup : StartupBase
     {
         services.AddDistributedCircuitBreaker(ops => ops
                 .UseRedis(_redisOptions)
-                .AddCircuitBreaker<ShipmentServiceSettings>())
+                .AddCircuitBreaker<ShipmentServicePolicy>())
         .AddSingleton<ShipmentService>()
         .AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy())

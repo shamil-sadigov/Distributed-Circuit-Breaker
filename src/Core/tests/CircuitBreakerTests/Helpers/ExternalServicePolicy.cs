@@ -1,24 +1,24 @@
 using System.Net;
-using Core.Settings;
+using Core.Policy;
 using Core.Tests.ResultHandlerTests.Helpers;
 
 namespace Core.Tests.CircuitBreakerTests.Helpers;
 
-public sealed class ExternalServiceSettings : CircuitBreakerSettings
+public sealed class ExternalServicePolicy : CircuitBreakerPolicy
 {
-    public static ExternalServiceSettings WithDefaultTestValues => new()
+    public static ExternalServicePolicy WithDefaultTestValues => new()
     {
         FailureAllowed = 3,
         DurationOfBreak = 5.Seconds()
     };
 
-    public ExternalServiceSettings(int failureAllowed, TimeSpan durationOfBreak):this()
+    public ExternalServicePolicy(int failureAllowed, TimeSpan durationOfBreak):this()
     {
         FailureAllowed = failureAllowed;
         DurationOfBreak = durationOfBreak;
     }
     
-    private ExternalServiceSettings()
+    private ExternalServicePolicy()
     {
         HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.ServiceUnavailable);
         HandleException<CustomHttpException>(x => x.HttpStatus == HttpStatusCode.TooManyRequests);

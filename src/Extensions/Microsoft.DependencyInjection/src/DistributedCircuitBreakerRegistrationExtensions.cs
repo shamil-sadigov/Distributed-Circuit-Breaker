@@ -13,8 +13,8 @@ public static class DistributedCircuitBreakerRegistrationExtensions
         this IServiceCollection services,
         Action<CircuitBreakerStorageRegistration> configure)
     {
-        CircuitBreakerSettingsRegistration settingsRegistration = new(services);
-        CircuitBreakerStorageRegistration storageRegistration = new (services, settingsRegistration);
+        CircuitBreakerPolicyRegistration policyRegistration = new(services);
+        CircuitBreakerStorageRegistration storageRegistration = new (services, policyRegistration);
         
         configure(storageRegistration);
         
