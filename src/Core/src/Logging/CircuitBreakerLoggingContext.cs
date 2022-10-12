@@ -11,12 +11,13 @@ public sealed record CircuitBreakerLoggingContext
     DateTime? TransitionToHalfOpenStateDate
 )
 {
-    public static implicit operator CircuitBreakerLoggingContext(CircuitBreakerContext context)
-    {
-        return new CircuitBreakerLoggingContext(context.Name,
+    public static implicit operator CircuitBreakerLoggingContext(CircuitBreakerContext context) =>
+        new
+        (
+            context.Name,
             context.State,
             context.FailedTimes,
             context.FailureAllowed,
-            context.TimeToTransitToHalfOpenState);
-    }
+            context.TimeToTransitToHalfOpenState
+        );
 }
