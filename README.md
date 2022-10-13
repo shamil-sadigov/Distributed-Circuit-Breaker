@@ -1,9 +1,9 @@
 # Distributed-Circuit-Breaker
 
 ## Description
-This repo is just a proof of concept of distributed circuit breaker. 
+This library is just a proof of concept of distributed circuit breaker and is not ready to be used in production....yet.
 
-Distributed Circuit Breaker can be helpful if you need to share a circuit breaker instance across multiple services (or multiple instances of the same service), which implies that circuit breaker's state is kept in some external storage (Redis, Mongo and so on...) as opposed to service instance memory. 
+Distributed Circuit Breaker can be helpful if you need to share a circuit breaker state across multiple services (or multiple instances of the same service), which implies that circuit breaker's state is kept in some external storage (Redis, Mongo and so on...) as opposed to service instance memory. 
 
 ## Context
 
