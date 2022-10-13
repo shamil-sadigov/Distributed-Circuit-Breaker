@@ -14,9 +14,6 @@ Goto solution for applying circuit breakers is lovely [Polly](https://github.com
 
 What if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
-// TODO: Add reference for circuit breaker
-
-
 ## Singleton Circuit breaker approach
 
 Let's say that we have some order service that can place order.
