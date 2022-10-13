@@ -13,7 +13,10 @@ Goto solution for applying circuit breakers is lovely [Polly](https://github.com
 
 What if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
-## In-Memory Circuit breaker usesage scenario (without this library)
+// TODO: Add reference for circuit breaker
+
+
+## Singleton Circuit breaker approach
 
 Let's say that we have some order service that can place order.
 
@@ -38,53 +41,25 @@ OrderService uses in-memory singleton Circuit Breaker when it deals with Shipmen
 ![order-service-with-circuit-breaker-in-open-state](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-with-circuit-breaker-in-open-state.jpg)
 
 
-### Scaling shallenge
+### Problem of scaling
 
-In distributed system you can scale OrderService up to multiple instances. With an In-Memory circuit breaker you will end up having circuit breaker in each instance of OrderService, which means that each instance of OrderService need to make 5 failed attempts to make ShipmentService circuit breaker opened.
+In distributed system you can scale OrderService up to multiple instances. With an singleton circuit breaker you will end up having circuit breaker in each instance of OrderService, which means that each instance of OrderService need to make at keast 5 failed attempts to realize that ShipmentService is unhealthy and circuit breaker becomes opened. 
+If you have 10 replicas of your services, you will end up making 50 failed attempt (instead of 5) to speak to ShipmentService. 45 redundant requests and unnecessary resource consumption! 
+This stems from the fact that singleton circuit breaker is shared only withing a single instance and cannot be shared across multiple services.
 
 ![order-service-with-circuit-breaker-in-open-state](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-distributed.jpg)
 
+## Solution 1. Distributed Circuit breaker approach
 
+Here we introduce distributed Circuit Breaker that can be access by multiple services. State of that Circuit Breaker is now not in instance's memory but in some shared storage (e.g Redis).
 
-
-
-// TODO: Add reference for circuit breaker
-
-
-
-
-But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, which means that Critical-Log-saver also have to make the same amount of failed attempts in order to realize that Log Storage is unhealthy and turn CircuitBreaker to Open state. But why do these redundant requests to Log Storage ?
-
-
-
-PS: Well, not the best example, but acceptable for conveying a concept
-
-## Solution
-
-Here we introduce stateful Circuit Breaker that is shared among Trace-log-saver and Critical-log-saver. 
-
-It means that:
-- If Log Storage goes down.
-- Trace-log-saver will notice it after several failed attempts when trying to send logs to Log Storage
-- As a resultm Trace-log-saver switches CircuitBreaker to Open state.
-
-And since CircuitBreaker state is globally available, Critical-Log-saver can access this CircuitBreaker and be aware of Log Storage unhealthy state. No need for redundant requests, unnecessary resource consumption and other things!
-
-![stateful-circuit-breakers](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/stateful-circuit-breaker.jpg)
-
-Especially it can come handy when replicating servies sharing the same Circuit Breaker
-
-![replicated-services](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/replication.jpg)
-
+![shared-circuit-breaker](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-distributed-circuit-breaker.jpg)
 
 So, this repo implements this solution.
 
 ## Solution 2
 
-Another approach is to place Log Storage behind a Proxy service (aka [Sidecar pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar)) that can keep Circuit Breaker. But this repo doesn't implement this solution
-
-![proxy-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/circuit-breaker-via-side-card.jpg)
-
+Another approach is to place ShipmentService behind a Proxy service (aka [Sidecar pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar) or Service Mesh) that can keep Circuit Breaker. But this repo doesn't implement this solution.
 
 ## How to use
 
