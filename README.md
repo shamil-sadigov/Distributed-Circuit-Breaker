@@ -91,11 +91,10 @@ public sealed class ShipmentServicePolicy : CircuitBreakerPolicy
 
 Then configure distributed circuit breaker by registering previous option in Micsoroft.DependencyInjection ServiceCollection and specify storage (Redis or Mongo) 
 
-Example with Redis storage
 ```cs
 builder.Services.AddDistributedCircuitBreaker(ops =>
 {
-    ops.UseMongo(x =>
+    ops.UseRedis(x =>
     {
         // required
         x.ConnectionString = "localhost";
