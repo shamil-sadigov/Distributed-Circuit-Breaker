@@ -1,10 +1,10 @@
 using Core;
 using Core.Context;
-using IntegrationTests.WebAppConfiguration.Shipment;
+using FunctionalTests.WebAppConfiguration.Shipment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IntegrationTests.WebAppConfiguration.Orders;
+namespace FunctionalTests.WebAppConfiguration.Orders;
 
 [ApiController]
 [Route("[controller]")]

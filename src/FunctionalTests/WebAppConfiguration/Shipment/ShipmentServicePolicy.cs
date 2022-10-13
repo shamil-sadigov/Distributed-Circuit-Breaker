@@ -1,6 +1,6 @@
 ﻿using Core.Policy;
 
-namespace IntegrationTests.WebAppConfiguration.Shipment;
+namespace FunctionalTests.WebAppConfiguration.Shipment;
 
 public sealed class ShipmentServicePolicy:CircuitBreakerPolicy
 {

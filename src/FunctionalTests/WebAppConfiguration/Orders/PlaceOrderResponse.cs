@@ -1,4 +1,4 @@
-﻿namespace IntegrationTests.WebAppConfiguration.Orders;
+﻿namespace FunctionalTests.WebAppConfiguration.Orders;
 
 public class PlaceOrderResponse
 {

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using FluentAssertions;
 
-namespace IntegrationTests.Helpers;
+namespace FunctionalTests.Helpers;
 
 public static class HttpExtensions
 {

@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Json;
 using Core;
 using Core.Policy;
-using IntegrationTests.WebAppConfiguration.Orders;
+using FunctionalTests.WebAppConfiguration.Orders;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IntegrationTests.Helpers;
+namespace FunctionalTests.Helpers;
 
 public static class TestServerExtensions
 {

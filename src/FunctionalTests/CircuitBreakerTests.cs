@@ -1,15 +1,21 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
-using IntegrationTests.Helpers;
-using IntegrationTests.WebAppConfiguration.Orders;
-using IntegrationTests.WebAppConfiguration.Shipment;
-using IntegrationTests.WebAppConfiguration.Shipment.ShipmentStrategies;
+using FunctionalTests.Helpers;
+using FunctionalTests.WebAppConfiguration.Orders;
+using FunctionalTests.WebAppConfiguration.Shipment;
+using FunctionalTests.WebAppConfiguration.Shipment.ShipmentStrategies;
 using Microsoft.AspNetCore.TestHost;
 using MoreLinq;
 using MoreLinq.Experimental;
 using Xunit;
 
-namespace IntegrationTests;
+namespace FunctionalTests;
+
+// TODO: Add tests over HalfOpen state scenarios
 
 public class CircuitBreakerTests:IClassFixture<ServerFactory>
 {
@@ -49,6 +55,9 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
              {
                  circuitBreaker.IsClosed()
                      .Should().BeTrue("Because shipment service was available");
+
+                 circuitBreaker.GetFailedTimes()
+                     .Should().Be(0);
              });
     }
     
@@ -84,6 +93,9 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
                 circuitBreaker.IsOpen().Should().BeTrue(
                         "Because CircuitBreaker handles cases when shipment service is unavailable, " +
                         "and eventually (after 10 failures) becomes opened");
+                
+                circuitBreaker.GetFailedTimes()
+                    .Should().Be(10);
             });
     }
     
@@ -119,6 +131,9 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             {
                 circuitBreaker.IsClosed().Should().BeTrue(
                     "Because failures relate to shipment service rate limitation is not handled by CircuitBreaker");
+                
+                circuitBreaker.GetFailedTimes()
+                    .Should().Be(0);
             });
     }
     
@@ -155,6 +170,9 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
             {
                 circuitBreaker.IsClosed().Should().BeTrue(
                     "Because 10 number of failures is not reached yet");
+                
+                circuitBreaker.GetFailedTimes()
+                    .Should().Be(8);
             });
     }
     
@@ -163,8 +181,6 @@ public class CircuitBreakerTests:IClassFixture<ServerFactory>
         while (true)
             foreach (var server in testServers)
                 yield return server;
-        
-        // ReSharper disable once IteratorNeverReturns
     }
     
     private IEnumerable<TestServer> CreateServerReplicas(int numberOfReplicas) =>

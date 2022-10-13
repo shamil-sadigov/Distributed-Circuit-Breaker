@@ -1,6 +1,6 @@
-﻿using IntegrationTests.WebAppConfiguration.Shipment.ShipmentStrategies;
+﻿using FunctionalTests.WebAppConfiguration.Shipment.ShipmentStrategies;
 
-namespace IntegrationTests.WebAppConfiguration.Shipment;
+namespace FunctionalTests.WebAppConfiguration.Shipment;
 
 /// <summary>
 /// Mock service for saving metrics into Prometheus.

@@ -26,16 +26,16 @@
         </PackageReference>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Extensions\Microsoft.DependencyInjection\src\Extensions.Microsoft.DependencyInjection.csproj" />
-      <ProjectReference Include="..\..\src\Storage.Redis\Extensions.Microsoft.DependencyInjection\Storage.Redis.Extensions.Microsoft.DependencyInjection.csproj" />
-      <ProjectReference Include="..\Client.Shared\Client.Shared.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
       <None Update="test-config.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\Storage.Redis\Extensions.Microsoft.DependencyInjection\Storage.Redis.Extensions.Microsoft.DependencyInjection.csproj" />
     </ItemGroup>
 
 </Project>

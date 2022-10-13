@@ -1,5 +1,5 @@
 ﻿using Extensions.Microsoft.DependencyInjection;
-using IntegrationTests.WebAppConfiguration.Shipment;
+using FunctionalTests.WebAppConfiguration.Shipment;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Storage.Redis;
 using Storage.Redis.Extensions.Microsoft.DependencyInjection;
 
-namespace IntegrationTests.WebAppConfiguration;
+namespace FunctionalTests.WebAppConfiguration;
 
 public class TestStartup : StartupBase
 {

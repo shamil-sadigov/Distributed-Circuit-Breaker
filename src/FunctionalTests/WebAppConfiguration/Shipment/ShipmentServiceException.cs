@@ -1,4 +1,4 @@
-﻿namespace IntegrationTests.WebAppConfiguration.Shipment;
+﻿namespace FunctionalTests.WebAppConfiguration.Shipment;
 
 public class ShipmentServiceException:Exception
 {

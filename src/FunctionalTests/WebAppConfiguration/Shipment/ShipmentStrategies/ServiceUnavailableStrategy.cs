@@ -1,4 +1,4 @@
-﻿namespace IntegrationTests.WebAppConfiguration.Shipment.ShipmentStrategies;
+﻿namespace FunctionalTests.WebAppConfiguration.Shipment.ShipmentStrategies;
 
 public class ServiceUnavailableStrategy : IShipmentStrategy
 {

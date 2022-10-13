@@ -1,4 +1,4 @@
-﻿using IntegrationTests.WebAppConfiguration;
+﻿using FunctionalTests.WebAppConfiguration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +6,7 @@ using MoreLinq;
 using StackExchange.Redis;
 using Storage.Redis;
 
-namespace IntegrationTests.Helpers;
+namespace FunctionalTests.Helpers;
 
 public sealed class ServerFactory: IAsyncDisposable
 {

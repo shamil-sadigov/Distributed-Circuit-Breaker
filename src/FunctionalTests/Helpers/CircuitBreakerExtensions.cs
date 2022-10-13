@@ -2,7 +2,7 @@
 using Core.Context;
 using Core.Policy;
 
-namespace IntegrationTests.Helpers;
+namespace FunctionalTests.Helpers;
 
 public static class CircuitBreakerExtensions
 {
@@ -13,6 +13,12 @@ public static class CircuitBreakerExtensions
         where TPolicy : CircuitBreakerPolicy
     {
         return circuitBreaker.GetStateAsync(CancellationToken.None).Result == CircuitBreakerState.Closed;
+    }
+    
+    public static int GetFailedTimes<TPolicy>(this ICircuitBreaker<TPolicy> circuitBreaker)
+        where TPolicy : CircuitBreakerPolicy
+    {
+        return circuitBreaker.GetFailedTimesAsync(CancellationToken.None).Result;
     }
     
     public static bool IsOpen<TPolicy>(this ICircuitBreaker<TPolicy> circuitBreaker)
