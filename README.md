@@ -29,14 +29,16 @@ OrderService uses in-memory singleton Circuit Breaker when it deals with Shipmen
 Scenario #1:
 - ShipmentService goes down.
 - OrderService will notice it after several failed attempts trying to ship order.
-- As a result, OrderService switches CircuitBreaker to Open state.
+- As a result, CircuitBreaker is switched Open state.
 
 // HERE IMAGE OF single instance with CircuitBreaker
+
+![order-service](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service.jpg)
 
 
 But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, which means that Critical-Log-saver also have to make the same amount of failed attempts in order to realize that Log Storage is unhealthy and turn CircuitBreaker to Open state. But why do these redundant requests to Log Storage ?
 
-![stateless-circuit-breaker](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/blob/main/docs/images/Small%20ones/problem-of-in-memory-circuit-breaker.jpg)
+
 
 PS: Well, not the best example, but acceptable for conveying a concept
 
