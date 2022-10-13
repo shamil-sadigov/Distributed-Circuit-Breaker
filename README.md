@@ -87,7 +87,7 @@ public sealed class ShipmentServicePolicy : CircuitBreakerPolicy
 }
 ```
 
-Then configure distributed circuit breaker by registering previous option in Micsoroft.DependencyInjection ServiceCollection and specify storage (Redis or Mongo) 
+Then configure distributed circuit breaker by registering previous policy in Micsoroft.DependencyInjection ServiceCollection and specify storage (Redis or Mongo) 
 
 ```cs
 builder.Services.AddDistributedCircuitBreaker(ops =>
