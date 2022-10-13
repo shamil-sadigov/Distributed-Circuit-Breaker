@@ -1,6 +1,7 @@
 using System.Net;
 using Core.Exceptions;
 using Core.Tests.ResultHandlerTests.Helpers;
+using Core.Tests.StateHandlersTests.Helpers;
 using static Core.Tests.StateHandlersTests.Helpers.CircuitBreakerBuilder;
 
 namespace Core.Tests.StateHandlersTests;

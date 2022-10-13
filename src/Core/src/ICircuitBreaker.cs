@@ -8,6 +8,11 @@ public interface ICircuitBreaker<out TPolicy> where TPolicy : CircuitBreakerPoli
     TPolicy Policy { get; }
     Task<CircuitBreakerState> GetStateAsync(CancellationToken cancellationToken);
     
+    /// <summary>
+    /// How many times action execution failed
+    /// </summary>
+    Task<int> GetFailedTimesAsync(CancellationToken cancellationToken);
+    
     Task ExecuteAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken);
     
     Task<TResult> ExecuteAsync<TResult>(

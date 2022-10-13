@@ -1,6 +1,6 @@
 ﻿using Core.Policy;
 
-namespace Core.Tests;
+namespace Core.Tests.StateHandlersTests.Helpers;
 
 public class TestCircuitBreakerPolicy : CircuitBreakerPolicy
 {

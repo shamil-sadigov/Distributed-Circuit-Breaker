@@ -10,6 +10,8 @@ using Void = Core.Helpers.Void;
 
 namespace Core;
 
+
+/// <inheritdoc cref="ICircuitBreaker{TPolicy}"/>
 public class CircuitBreaker<TPolicy> : ICircuitBreaker<TPolicy> where TPolicy : CircuitBreakerPolicy
 {
     private readonly ICircuitBreakerStorage _circuitBreakerStorage;
@@ -52,6 +54,12 @@ public class CircuitBreaker<TPolicy> : ICircuitBreaker<TPolicy> where TPolicy : 
     {
         var context = await GetOrCreateContextAsync(cancellationToken).ConfigureAwait(false);
         return context.State;
+    }
+
+    public async Task<int> GetFailedTimesAsync(CancellationToken cancellationToken)
+    {
+        var context = await GetOrCreateContextAsync(cancellationToken).ConfigureAwait(false);
+        return context.FailedTimes;
     }
 
     public async Task ExecuteAsync(
