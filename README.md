@@ -1,4 +1,4 @@
-In case you are not familiar with circuit breakek pattern, you can easily fix it by reading [article](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
+In case you are not familiar with circuit breaker pattern, you can easily fix it by reading [article](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
 
 # Distributed-Circuit-Breaker
 
