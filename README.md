@@ -63,92 +63,80 @@ Another approach is to place ShipmentService behind a Proxy service (aka [Sideca
 
 ## How to use
 
-First create circuit breaker option
+First define a policy for Circuit Breaker
 
 ```cs
-// Circuit breaker for remote log storage
-public sealed class LogStorageCircuitBreakerOptions : CircuitBreakerOptions
+// Circuit breaker for ShipmentService
+public sealed class ShipmentServicePolicy : CircuitBreakerPolicy
 {
-    public LogStorageCircuitBreakerOptions()
+    public ShipmentServicePolicy()
     {
         // Exception and results that circuit breaker should handle
-        HandleException<EventStoreConnectionException>(x => x.FailureReason == LogStorageFailureReason.Overwhelmed);
-        HandleException<EventStoreConnectionException>(x => x.FailureReason == LogStorageFailureReason.Unavailable);
+        HandleException<ShipmentServiceException>(x => x.FailureReason == FailureReason.RateLimited);
+        HandleException<ShipmentServiceException>(x => x.FailureReason == FailureReason.Unavailable);
         
-        HandleResult<SavedLogResult>(x => !x.IsLogSaved);
+        HandleResult<ShipmentResult>(x => !x.IsShipmentAccepted);
     }
 
-    // circuit breaker name that should be unique across all circuit breakers
-    public override string Name => "LogStorage";
+    // Circuit breaker name that should be unique across all circuit breakers and no longer than 256 characters
+    public override string Name => "Shipment-Service";
 
-    // number of failed allowed before switching circuit breaker to Open state
-    public override int FailureAllowedBeforeBreaking => 5;
+    // Number of failures allowed before breaking circuit breaker (moving to Open state)
+    public override int FailureAllowed { get; set; } = 10;
 
-    // how long it will take to switch from Open to HalfOpen state
-    public override TimeSpan DurationOfBreak => TimeSpan.FromSeconds(5);
+    // How long does circuit breaker is allowed to be in Open state
+    public override TimeSpan DurationOfBreak { get; set; } = TimeSpan.FromSeconds(5);
 }
 ```
 
-Then configure distributed circuit breaker by registering previous option in ServiceCollection and specify storage (Mongo or MSSQL) 
+Then configure distributed circuit breaker by registering previous option in Micsoroft.DependencyInjection ServiceCollection and specify storage (Redis or Mongo) 
 
-Example with Mongo storage
+Example with Redis storage
 ```cs
 builder.Services.AddDistributedCircuitBreaker(ops =>
 {
     ops.UseMongo(x =>
     {
         // required
-        x.ConnectionString = "mongodb://localhost:27017";
-
-        // optional
-        x.CollectionName = "CircuitBreakers"; // default value
-        x.DatabaseName = "DistributedCircuitBreaker"; // default value
+        x.ConnectionString = "localhost";
     })
     .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
 });
 ```
 
-Example with SqlServer
-```cs
-builder.Services.AddDistributedCircuitBreaker(ops =>
-{
-    ops.UseSqlServer(x =>
-    {
-        // required
-        x.ConnectionString = "...";
-    })
-    .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
-});
-```
+You can configure as many circuit breaker policies as you want
 
-You can configure as many circuit breaker options as you want
 ```cs
 builder.Services.AddDistributedCircuitBreaker(ops =>
 {
-    ops.UseSqlServer(x =>
+    ops.UseMongo(x =>
         {
             // required
-            x.ConnectionString = "...";
+            x.ConnectionString = "mongodb://localhost:27017";
+
+            // optional
+            x.CollectionName = "CircuitBreakers"; // default value
+            x.DatabaseName = "DistributedCircuitBreaker"; // default value
         })
-        .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
-        .AddCircuitBreaker<NotificationServiceCircuitBreakerOptions>();
-        .AddCircuitBreaker<AnotherExternalServiceCircuitBreakerOptions>();
+        .AddCircuitBreaker<ShipmentServicePolicy>();
+        .AddCircuitBreaker<NotificationServiceCircuitBreakerPolicy>();
+        .AddCircuitBreaker<AnotherExternalServiceCircuitBreakerPolicy>();
 });
 ```
 
-Then just inject circuit breaker in constructor by specifying CircuitBreakerOptions that was registered on previous step
+Then just inject circuit breaker in constructor by specifying CircuitBreakerPolicy that was registered on previous step
 
 ```cs
-public class CriticalLogsController : ControllerBase
+public class OrdersController : ControllerBase
 {
     ...
-    private readonly ICircuitBreaker<LogStorageCircuitBreakerOptions> _logStorageCircuitBreaker;
+    private readonly ICircuitBreaker<ShipmentServicePolicy> _shipmentServiceCircuitBreaker;
     
-    public CriticalLogsController(
+    public OrdersController(
         ... ,
-        ICircuitBreaker<LogStorageCircuitBreakerOptions> logStorageCircuitBreaker)
+        ICircuitBreaker<ShipmentServicePolicy> shipmentServiceCircuitBreaker)
     {
-        _logStorageCircuitBreaker = logStorageCircuitBreaker;
+        _shipmentServiceCircuitBreaker = shipmentServiceCircuitBreaker;
     }
 ```
 
@@ -156,53 +144,50 @@ public class CriticalLogsController : ControllerBase
 And use
 
 ```cs
-[HttpPost]
-public async Task<ActionResult<SavedLogResponse>> Post(SaveCriticalLogRequest request, CancellationToken token)
-{
-    if (await _circuitBreaker.IsOpenAsync(token))
+  [HttpPost]
+    public async Task<ActionResult<PlaceOrderResponse>> Post(PlaceOrderRequest orderRequest, CancellationToken token)
     {
-        // Fallback logic
-        return StatusCode((int) HttpStatusCode.ServiceUnavailable);
+        if (await _circuitBreaker.GetStateAsync(token) == CircuitBreakerState.Open)
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, PlaceOrderResponse.Failed);
+
+        try
+        {
+            {
+                // Place order, charge user, and other useful stuff...
+            }
+            
+            // Well, now it's time to ship our order
+            
+            var shipmentResult = await _circuitBreaker.ExecuteAsync(async _ => 
+                await _shipmentService.ShipOrderAsync(orderRequest.OrderId), token);
+
+            if (shipmentResult.IsShipmentAccepted)
+                return PlaceOrderResponse.Successful;
+            
+            return StatusCode(StatusCodes.Status409Conflict, PlaceOrderResponse.Failed);
+
+        }
+        catch (ShipmentServiceException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, PlaceOrderResponse.Failed);
+        }
     }
-
-    try
-    {
-        var result = await _circuitBreaker.ExecuteAsync(async _ => 
-            await _logStorage.SaveLogAsync(request.LogMessage), token);
-
-        if (result.IsLogSaved)
-            return Ok(SavedLogResponse.Successful);
-
-        return SavedLogResponse.Failed(LogStorageFailureReason.Unknown);
-
-    }
-    catch (EventStoreConnectionException exception)
-    {
-        return SavedLogResponse.Failed(exception.FailureReason);
-    }
-}
 ```
 
 
 ## Concurrency conflict resolution
 What happens if there are two requests that simultaniously update circuit breaker state ?
-Well, for now chosen strategy is Last-Update-Wins, because it's easier and reasonable enough (but of course not the best option).
+Well, for now chosen strategy is Last-Update-Wins, because it's easier and not that harmful (but of course not the best option).
 
 ## Circuit Breaker Storage
 
 Currently available storages are
 - MongoDB
-- MSSQL
-
-Redis is coming soon.
+- Redis
 
 ## Technical debt
 - Wrap unit tests into docker-compose
-- Add comments in code
-- Add logging in CircuitBreaker state handlers
-- Consider renaming of some classes
 - Add unit tests for untested components 
-- Add Redis implementation
 
 ## Future improvements
 - Ability to forcefully swtich Circuit Breaker to Open State
