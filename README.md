@@ -1,6 +1,7 @@
+In case you are not familiar with circuit breakek pattern, you can easily fix it by reading [article](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
+
 # Distributed-Circuit-Breaker
 
-## Description
 This library is just a proof of concept of distributed circuit breaker and is not ready to be used in production....yet.
 
 Distributed Circuit Breaker can be helpful if you need to share a circuit breaker state across multiple services (or multiple instances of the same service), which implies that circuit breaker's state is kept in some external storage (Redis, Mongo and so on...) as opposed to service instance memory. 
