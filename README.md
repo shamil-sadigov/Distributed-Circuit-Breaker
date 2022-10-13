@@ -13,7 +13,7 @@ Goto solution for applying circuit breakers is lovely [Polly](https://github.com
 
 What if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
-## Circuit breaker simple usesage scenario (without this library)
+## In-Memory Circuit breaker usesage scenario (without this library)
 
 Let's say that we have some order service that can place order.
 
@@ -38,7 +38,14 @@ OrderService uses in-memory singleton Circuit Breaker when it deals with Shipmen
 ![order-service-with-circuit-breaker-in-open-state](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-with-circuit-breaker-in-open-state.jpg)
 
 
-### Problem: in distributed system
+### Scaling shallenge
+
+In distributed system you can scale OrderService up to multiple instances. With an In-Memory circuit breaker you will end up having circuit breaker in each instance of OrderService, which means that each instance of OrderService need to make 5 failed attempts to make ShipmentService circuit breaker opened.
+
+![order-service-with-circuit-breaker-in-open-state](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-distributed.jpg)
+
+
+
 
 
 // TODO: Add reference for circuit breaker
