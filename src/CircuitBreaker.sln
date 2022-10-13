@@ -19,12 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage.Mongo", "Storage.Mongo", "{06B7B828-A367-47C6-8A48-9DD49A12F342}"
 	ProjectSection(SolutionItems) = preProject
-		Storage.Mongo\README.md = Storage.Mongo\README.md
+		Storage.Mongo\Readme.md = Storage.Mongo\Readme.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{6B693A51-EE0B-466D-B1A6-13CAB57F41B0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6B693A51-EE0B-466D-B1A6-13CAB57F41B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\src\Helpers.csproj", "{03046BC8-C8C4-4549-83D2-23E36202C571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Helpers\src\Shared.csproj", "{03046BC8-C8C4-4549-83D2-23E36202C571}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.Microsoft.DependencyInjection", "Extensions\Microsoft.DependencyInjection\src\Extensions.Microsoft.DependencyInjection.csproj", "{7F3735DF-5814-4D2C-9E54-C5493C23D543}"
 EndProject
@@ -35,6 +35,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.Mongo.Tests", "Storage.Mongo\tests\Storage.Mongo.Tests.csproj", "{135B7003-4C71-45B6-928E-65F0D8F73EAA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage.Redis", "Storage.Redis", "{3D683121-724C-431A-A1FE-F6967CC90EC4}"
+	ProjectSection(SolutionItems) = preProject
+		Storage.Redis\Readme.md = Storage.Redis\Readme.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage.Redis", "Storage.Redis\core\Storage.Redis.csproj", "{EA9389D5-1491-4B6B-BDE7-541D82D88221}"
 EndProject

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Helpers;
+using Shared;
 
 namespace Storage.Redis;
 

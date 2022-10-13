@@ -1,1 +1,1 @@
-
+﻿Here we have a storage implementation that allows you to persist/retrieve the state of the circuit breaker in Redis.

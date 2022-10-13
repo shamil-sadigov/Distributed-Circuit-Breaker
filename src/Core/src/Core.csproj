@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Helpers\src\Helpers.csproj" />
+      <ProjectReference Include="..\..\Helpers\src\Shared.csproj" />
     </ItemGroup>
     
 </Project>

@@ -1,4 +1,4 @@
-namespace Helpers;
+namespace Shared;
 
 public static class StringExtensions
 {

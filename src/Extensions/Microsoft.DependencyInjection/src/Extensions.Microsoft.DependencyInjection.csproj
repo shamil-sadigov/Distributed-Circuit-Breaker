@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Core\src\Core.csproj" />
-      <ProjectReference Include="..\..\..\Helpers\src\Helpers.csproj" />
+      <ProjectReference Include="..\..\..\Helpers\src\Shared.csproj" />
     </ItemGroup>
     
 </Project>

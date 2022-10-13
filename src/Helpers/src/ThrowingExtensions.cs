@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Helpers;
+namespace Shared;
 
 public static class ThrowingExtensions
 {
