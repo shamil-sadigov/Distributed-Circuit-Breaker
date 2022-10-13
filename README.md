@@ -25,7 +25,7 @@ Here is the flow
 
 ![order-service-with-circuit-breaker](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-with-circuit-breakerjpg.jpg)
 
-OrderService uses in-memory singleton Circuit Breaker when it deals with ShipmentService(for example [Polly Circuit Breaker](https://github.com/App-vNext/Polly#circuit-breaker)) .
+OrderService uses in-memory singleton Circuit Breaker when it deals with ShipmentService (for example [Polly Circuit Breaker](https://github.com/App-vNext/Polly#circuit-breaker)) .
 
 ### Example detailed flow:
 - At some sunny day (usually Friday the 13th), ShipmentService decided to break down, become unhealthy, unavailbe, just died!
