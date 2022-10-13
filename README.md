@@ -1,5 +1,3 @@
-## [WIP]
-
 # Distributed-Circuit-Breaker
 
 ## Description
