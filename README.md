@@ -1,29 +1,38 @@
 # Distributed-Circuit-Breaker
 
 ## Description
-This repo is a proof of concept of distributed circuit breaker. 
+This repo is just a proof of concept of distributed circuit breaker. 
 
-Distributed Circuit Breaker can be helpful if you need to share a circuit breaker across multiple services (or multiple instances of the same service), which means that circuit breaker's state is kept in external storage (Redis, Mongo and so on...) as opposed to service instance memory. 
+Distributed Circuit Breaker can be helpful if you need to share a circuit breaker instance across multiple services (or multiple instances of the same service), which implies that circuit breaker's state is kept in some external storage (Redis, Mongo and so on...) as opposed to service instance memory. 
 
 ## Context
-Goto solution for applying circuit breakers is lovely [Polly](https://github.com/App-vNext/Polly) library. It allows you to nicely create/reuse circuit breakers that can be shared across the application code. But Circuit Breaker of Polly is in-memory, its state is available only within one application instance.
 
-Circuit breaker can be thought as a resilient wrapper of the external system state which allows you to prevent any overwheming external system with redundant request and fail fast or fallback when the system is not healthy.
+Circuit breaker can be thought as a resilient wrapper of the an external system state which allows you to prevent overwheming external system with redundant request and fail fast or fallback when the external system is not healthy.
+
+Goto solution for applying circuit breakers is lovely [Polly](https://github.com/App-vNext/Polly) library. It allows you to nicely create/reuse circuit breakers that can be shared across the application code. But Circuit Breaker of Polly is in-memory, its state is available only within one application instance.
 
 What if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
-## Problem
+## Example
 
-In below image, we have two services.
-- Trace-log-saver (saves all trace-level logs in centralized log storage)
-- Critical-log-saver (does the same thing but only for critical-level logs)
+Let's say that we have some order service that can place order.
 
-Both of these services use in-memory Circuit Breaker when dealing with Log Storage.
+Here is the flow
+- Send 'Place order' command to OrderService
+- OrderService charge user for order, by communicating with PatementGateway
+- OrderService asks ShipmentService to ship the order
 
-And let say that:
-- Log Storage goes down.
-- Trace-log-saver will notice it after several failed attempts trying to send logs to Log Storage.
-- As a result, Trace-log-saver switches CircuitBreaker to Open state.
+// HERE IMAGE OF OVERAL SYSTEM
+
+OrderService uses in-memory singleton Circuit Breaker when it deals with ShipmentService.
+
+Scenario #1:
+- ShipmentService goes down.
+- OrderService will notice it after several failed attempts trying to ship order.
+- As a result, OrderService switches CircuitBreaker to Open state.
+
+// HERE IMAGE OF single instance with CircuitBreaker
+
 
 But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, which means that Critical-Log-saver also have to make the same amount of failed attempts in order to realize that Log Storage is unhealthy and turn CircuitBreaker to Open state. But why do these redundant requests to Log Storage ?
 
