@@ -173,6 +173,7 @@ And use
     }
 ```
 
+You may find useful example in [functional tests](https://github.com/shamil-sadigov/Distributed-Circuit-Breaker/tree/main/src/FunctionalTests)
 
 ## Concurrency conflict resolution
 What happens if there are two requests that simultaniously update circuit breaker state ?
