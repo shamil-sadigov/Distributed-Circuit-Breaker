@@ -25,7 +25,10 @@ public class OrdersController : ControllerBase
     public async Task<ActionResult<PlaceOrderResponse>> Post(PlaceOrderRequest orderRequest, CancellationToken token)
     {
         if (await _circuitBreaker.GetStateAsync(token) == CircuitBreakerState.Open)
+        {
+            // Hmm, seems like ShipmentService is not healthy, let's fail fast 
             return StatusCode(StatusCodes.Status503ServiceUnavailable, PlaceOrderResponse.Failed);
+        }
 
         try
         {
