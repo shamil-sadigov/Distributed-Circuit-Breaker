@@ -13,7 +13,7 @@ Goto solution for applying circuit breakers is lovely [Polly](https://github.com
 
 What if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
-## Circuit breaker simple usesage scenario
+## Circuit breaker simple usesage scenario (without this library)
 
 Let's say that we have some order service that can place order.
 
@@ -26,16 +26,25 @@ Here is the flow
 
 OrderService uses in-memory singleton Circuit Breaker when it deals with ShipmentService(for example [Polly Circuit Breaker](https://github.com/App-vNext/Polly#circuit-breaker)) .
 
-### This is how it works:
-- ShipmentService goes down.
-- OrderService will notice it after several failed attempts trying to ship order.
-- As a result, CircuitBreaker will be broken, and switched to **Open state** for configured **duration of break** (let's say it's 10 seconds) .
-- Any subsequent requests withing 10 seconds will not be allowed to communicate with ShipmentService
+### Example detailed flow:
+- At some sunny day (usually Friday the 13th), ShipmentService decided to break down, become unhealthy, unavailbe, just died!
+- 'Place order' command arrived to OrderService
+- After a 5 failed attempts to ship order OrderService will figure out that ShipmentService is unhealthy, and probably there is no any point to try to ship order at least the next 10 seconds, because ShipmentService is for sure will be unhealthy. 
+- As a result, CircuitBreaker of ShipmentService is be broken, and moved to **Open state** for configured **duration of break** (10 seconds) .
+- Withing **duraion of break** (10 seconds) no any request to ShipmentService will be allowed in OrderService
 - Once **duration of break** is elapsed, CircuitBreaker moves to **HalfOpen state** which allow to talk to ShipmentService in order to find out wether ShipmentService recovered or not.
 - If ShipmentService is recovered (e.g responded successfully), then CircuitBreaker will switch to **Closed** state, otherwise it will return to **Open state** and again will prevent any subsequent request so ShipmentService withing **duration of break** (10 seconds) 
 
+![order-service-with-circuit-breaker-in-open-state](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-with-circuit-breaker-in-open-state.jpg)
+
+
+### Problem: in distributed system
+
 
 // TODO: Add reference for circuit breaker
+
+
+
 
 But Critical-Log-saver is not aware yet about unhealthy state of Log Storage, which means that Critical-Log-saver also have to make the same amount of failed attempts in order to realize that Log Storage is unhealthy and turn CircuitBreaker to Open state. But why do these redundant requests to Log Storage ?
 
