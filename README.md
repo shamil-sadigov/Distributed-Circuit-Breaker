@@ -1,6 +1,6 @@
 In case you are not familiar with circuit breaker pattern, you can easily fix it by reading [article](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
 
-# Distributed-Circuit-Breaker
+## Distributed-Circuit-Breaker
 
 This library is just a proof of concept of distributed circuit breaker and is not ready to be used in production....yet.
 
@@ -8,13 +8,13 @@ Distributed Circuit Breaker can be helpful if you need to share a circuit breake
 
 ## Context
 
-Circuit breaker can be thought as a resilient wrapper of the an external system state which allows you to prevent overwheming external system with redundant request and fail fast or fallback when the external system is not healthy.
+Circuit breaker can be thought as a resilient wrapper of the an external system state which allows you to prevent overwheming external system with redundant request , save from unnecessary resource consumption and fail fast/fallback when the external system is not healthy.
 
 Goto solution for applying circuit breakers is lovely [Polly](https://github.com/App-vNext/Polly) library. It allows you to nicely create/reuse circuit breakers that can be shared across the application code. But Circuit Breaker of Polly is in-memory, its state is available only within one application instance.
 
 What if we want to share the same circuit breaker with other services in order for them to be also aware of that the external system unhealthiness ? 
 
-## Singleton Circuit breaker approach
+## Common approach. Singleton Circuit breaker
 
 Let's say that we have some order service that can place order.
 
@@ -53,11 +53,11 @@ Here we introduce distributed Circuit Breaker that can be access by multiple ser
 
 ![shared-circuit-breaker](https://raw.githubusercontent.com/shamil-sadigov/Distributed-Circuit-Breaker/main/docs/images/Small%20ones/order-service-distributed-circuit-breaker.jpg)
 
-So, this repo implements this solution.
+So, this library provide this solution.
 
 ## Solution 2
 
-Another approach is to place ShipmentService behind a Proxy service (aka [Sidecar pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar) or Service Mesh) that can keep Circuit Breaker. But this repo doesn't implement this solution.
+Another approach is to place ShipmentService behind a Proxy service (aka [Sidecar pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/sidecar) or Service Mesh) that can keep Circuit Breaker. But this library doesn't implement this solution.
 
 ## How to use
 
@@ -97,7 +97,7 @@ builder.Services.AddDistributedCircuitBreaker(ops =>
         // required
         x.ConnectionString = "localhost";
     })
-    .AddCircuitBreaker<LogStorageCircuitBreakerOptions>();
+    .AddCircuitBreaker<ShipmentServicePolicy>();
 });
 ```
 
@@ -144,8 +144,12 @@ And use
   [HttpPost]
     public async Task<ActionResult<PlaceOrderResponse>> Post(PlaceOrderRequest orderRequest, CancellationToken token)
     {
+        
         if (await _circuitBreaker.GetStateAsync(token) == CircuitBreakerState.Open)
+        {
+            // Hmm, seems like ShipmentService is not healthy, let's fail fast 
             return StatusCode(StatusCodes.Status503ServiceUnavailable, PlaceOrderResponse.Failed);
+        }
 
         try
         {
